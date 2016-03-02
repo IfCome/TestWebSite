@@ -1,0 +1,166 @@
+﻿@{
+    Layout = null;
+}
+
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加用户</title>
+    <meta name="description" content="添加用户">
+    <meta name="keywords" content="添加用户">
+    @Html.Partial("~/Views/Common/SharePart.cshtml")
+</head>
+<body>
+    <header class="am-topbar admin-header">
+        @Html.Partial("~/Views/Common/TopBar.cshtml")
+    </header>
+    <div class="am-cf admin-main">
+        <!-- sidebar start -->
+        @*@Html.Partial("~/Views/Common/SideBar.cshtml")*@
+        <!-- sidebar end -->
+        <!-- content start -->
+        <div class="admin-content">
+            <ol class="am-breadcrumb">
+                <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
+                <li><a href="#">用户管理</a></li>
+                <li class="am-active">添加用户</li>
+            </ol>
+            <hr />
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+                    <div class="am-panel am-panel-default">
+                        <div class="am-panel-bd">
+                            <div class="am-g">
+                                <div class="am-u-md-4">
+                                    <img class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
+                                </div>
+                                <div class="am-u-md-8">
+                                    <p>你可以使用<a href="#">gravatar.com</a>提供的头像或者使用本地上传头像。 </p>
+                                    <form class="am-form">
+                                        <div class="am-form-group am-form-file">
+                                            <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm">
+                                                <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                                            </button>
+                                            <input id="doc-form-file" type="file" accept="image/gif, image/jpeg, image/png">
+
+                                            <button id="uploadImg" type="button" style="display:none" class="am-btn am-btn-danger am-btn-sm">
+                                                <i class="am-icon-cloud-upload"></i> 开始上传
+                                            </button>
+                                            <button id="exitUpload" type="button" style="display:none" class="am-btn am-btn-danger am-btn-sm">
+                                                <i class="am-icon-remove"></i> 取消
+                                            </button>
+                                        </div>
+                                        <div id="file-list"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+                    <form class="am-form am-form-horizontal">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">姓名 / Name</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="user-name" placeholder="姓名 / Name">
+                                <small>输入你的名字，让我们记住你。</small>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-3 am-form-label">电子邮件 / Email</label>
+                            <div class="am-u-sm-9">
+                                <input type="email" id="user-email" placeholder="输入你的电子邮件 / Email">
+                                <small>邮箱你懂得...</small>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-phone" class="am-u-sm-3 am-form-label">电话 / Telephone</label>
+                            <div class="am-u-sm-9">
+                                <input type="email" id="user-phone" placeholder="输入你的电话号码 / Telephone">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-QQ" class="am-u-sm-3 am-form-label">QQ</label>
+                            <div class="am-u-sm-9">
+                                <input type="email" id="user-QQ" placeholder="输入你的QQ号码">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-weibo" class="am-u-sm-3 am-form-label">微博 / Twitter</label>
+                            <div class="am-u-sm-9">
+                                <input type="email" id="user-weibo" placeholder="输入你的微博 / Twitter">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-intro" class="am-u-sm-3 am-form-label">简介 / Intro</label>
+                            <div class="am-u-sm-9">
+                                <textarea class="" rows="5" id="user-intro" placeholder="输入个人简介"></textarea>
+                                <small>250字以内写出你的一生...</small>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button type="button" class="am-btn am-btn-primary">保存修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- content end -->
+    </div>
+    @Html.Partial("~/Views/Common/FootPart.cshtml")
+</body>
+</html>
+<script>
+
+    $(function () {
+        bindFunction();
+
+    });
+
+    function bindFunction() {
+        // 选择图片
+        $('#doc-form-file').on('change', function () {
+            if (this.files.length == 0) {
+                return false;
+            }
+            var fileName = this.files[0].name;
+            if (fileName && fileName.length > 15) {
+                fileName = fileName.substr(0, 14) + "..."
+            }
+            $('#file-list').html('<span class="am-badge" maxlength=5>' + fileName + '</span> ');
+
+            $('#doc-form-file').hide();
+            $('#uploadFileButton').hide();
+            $('#uploadImg').show();
+            $('#exitUpload').show();
+        });
+
+        // 上传图片
+        $('#uploadImg').click(function () {
+            showUploadFileButton()
+        });
+        // 取消上传
+        $('#exitUpload').click(function () {
+            showUploadFileButton()
+        });
+
+        function showUploadFileButton() {
+            $('#uploadImg').hide();
+            $('#exitUpload').hide();
+            $('#doc-form-file').show();
+            $('#uploadFileButton').show();
+            // 清空文件域【这有bug,】
+            var file = $("#doc-form-file");
+            file.after(file.clone(true).val(""));
+            file.remove();
+            $("#doc-form-file").click(function () {
+
+            });
+            $('#file-list').html('');
+        }
+    }
+</script>
