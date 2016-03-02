@@ -11,6 +11,35 @@
     <meta name="description" content="添加用户">
     <meta name="keywords" content="添加用户">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
+
+    <style>
+        #vld-tooltip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 5px 10px;
+            background: #F37B1D;
+            min-width: 150px;
+            color: #fff;
+            transition: all 0.15s;
+            box-shadow: 0 0 5px rgba(0,0,0,.15);
+            /*display: none;*/
+        }
+
+            #vld-tooltip:before {
+                position: absolute;
+                top: -8px;
+                left: 50%;
+                width: 0;
+                height: 0;
+                margin-left: -8px;
+                content: "";
+                border-width: 0 8px 8px;
+                border-color: transparent transparent #F37B1D;
+                border-style: none inset solid;
+            }
+    </style>
 </head>
 <body>
     <header class="am-topbar admin-header">
@@ -24,7 +53,7 @@
         <div class="admin-content">
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
-                <li><a href="#">用户管理</a></li>
+                <li><a href="~/UserInfo/IndexPage">用户管理</a></li>
                 <li class="am-active">添加用户</li>
             </ol>
             <hr />
@@ -60,49 +89,64 @@
                     </div>
                 </div>
                 <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
-                    <form class="am-form am-form-horizontal">
+                    <form class="am-form am-form-horizontal" id="formAddUserInfo">
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label">姓名 / Name</label>
+                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 角色</label>
                             <div class="am-u-sm-9">
-                                <input type="text" id="user-name" placeholder="姓名 / Name">
-                                <small>输入你的名字，让我们记住你。</small>
+                                <label class="am-radio-inline">
+                                    <input type="radio" value="1" name="userRole" checked="checked"> 普通用户
+                                </label>
+                                <label class="am-radio-inline">
+                                    <input type="radio" value="2" name="userRole"> 管理员
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group am-form-warning">
+                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 用户名</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="required" id="user-name" placeholder="登录系统时使用的帐号名" data-foolish-msg="该用户名已存在！">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-form-error">
+                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 登录密码</label>
+                            <div class="am-u-sm-9">
+                                <input type="password" class="required am-field-error" id="user-password" placeholder="设置一个密码吧">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-form-warning">
+                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 确认密码</label>
+                            <div class="am-u-sm-9">
+                                <input type="password" class="required am-form-field" id="user-repassword" placeholder="请再输入一次密码" data-foolish-msg="两次输入的密码不一致！">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-email" class="am-u-sm-3 am-form-label">电子邮件 / Email</label>
+                            <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
                             <div class="am-u-sm-9">
-                                <input type="email" id="user-email" placeholder="输入你的电子邮件 / Email">
-                                <small>邮箱你懂得...</small>
+                                <input type="text" id="user-realname" placeholder="用户真实姓名">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-phone" class="am-u-sm-3 am-form-label">电话 / Telephone</label>
+                            <label for="user-email" class="am-u-sm-3 am-form-label">电子邮件</label>
                             <div class="am-u-sm-9">
-                                <input type="email" id="user-phone" placeholder="输入你的电话号码 / Telephone">
+                                <input type="email" id="user-email" placeholder="用户的电子邮件">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-QQ" class="am-u-sm-3 am-form-label">QQ</label>
                             <div class="am-u-sm-9">
-                                <input type="email" id="user-QQ" placeholder="输入你的QQ号码">
+                                <input type="text" id="user-QQ" placeholder="用户的QQ号码">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-weibo" class="am-u-sm-3 am-form-label">微博 / Twitter</label>
+                            <label for="user-phone" class="am-u-sm-3 am-form-label">手机号</label>
                             <div class="am-u-sm-9">
-                                <input type="email" id="user-weibo" placeholder="输入你的微博 / Twitter">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="user-intro" class="am-u-sm-3 am-form-label">简介 / Intro</label>
-                            <div class="am-u-sm-9">
-                                <textarea class="" rows="5" id="user-intro" placeholder="输入个人简介"></textarea>
-                                <small>250字以内写出你的一生...</small>
+                                <input type="tel" id="user-phone" placeholder="用户的手机号" data-foolish-msg="手机号格式不正确！">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button type="button" class="am-btn am-btn-primary">保存修改</button>
+                                <button id="btncommit" type="button" class="am-btn am-btn-primary">确认添加</button>
                             </div>
                         </div>
                     </form>
@@ -116,11 +160,15 @@
 </html>
 <script>
 
+    var $tooltip = $('<div id="vld-tooltip">提示信息！</div>');
     $(function () {
+        $tooltip.appendTo(document.body);
+        $tooltip.hide();
         bindFunction();
 
     });
 
+    // 绑定事件
     function bindFunction() {
         // 选择图片
         $('#doc-form-file').on('change', function () {
@@ -141,26 +189,48 @@
 
         // 上传图片
         $('#uploadImg').click(function () {
-            showUploadFileButton()
+            $('#uploadImg>i').attr('class', "am-icon-spinner am-animation-spin");
+            $('#exitUpload').hide();
+            $('#uploadImg').attr("disabled", true);
+
+            // 这里写访问服务器事件
+            //showUploadFileButton()
         });
+
         // 取消上传
         $('#exitUpload').click(function () {
             showUploadFileButton()
         });
+    }
 
-        function showUploadFileButton() {
-            $('#uploadImg').hide();
-            $('#exitUpload').hide();
-            $('#doc-form-file').show();
-            $('#uploadFileButton').show();
-            // 清空文件域【这有bug,】
-            var file = $("#doc-form-file");
-            file.after(file.clone(true).val(""));
-            file.remove();
-            $("#doc-form-file").click(function () {
+    // 显示提示信息
+    function showToolTips($obj, msg) {
+        var offset = $obj.offset();
+        var msg = msg || $obj.data('foolishMsg');
 
-            });
-            $('#file-list').html('');
-        }
+        $tooltip.text(msg).show().css({
+            left: offset.left + 10,
+            top: offset.top + $tooltip.outerHeight() + 10
+        });
+    }
+
+    // 隐藏提示信息
+    function hideToolTips() {
+        $tooltip.text("提示信息").hide();
+    }
+
+    // 显示上传和取消按钮
+    function showUploadFileButton() {
+        $('#uploadImg>i').attr('class', "am-icon-cloud-upload");
+        $('#uploadImg').hide();
+        $('#exitUpload').hide();
+        $('#doc-form-file').show();
+        $('#uploadFileButton').show();
+        // 清空文件域
+        var file = $("#doc-form-file");
+        file.after(file.clone(true).val(""));
+        file.remove();
+
+        $('#file-list').html('');
     }
 </script>

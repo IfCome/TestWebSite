@@ -16,5 +16,9 @@ namespace AmazeUITest.Controllers
             return View();
         }
 
+        public ActionResult IndexPage()
+        {
+            return View();
+        }
     }
 }
