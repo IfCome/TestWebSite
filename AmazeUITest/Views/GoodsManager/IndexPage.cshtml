@@ -6,9 +6,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>用户管理</title>
-    <meta name="description" content="用户管理">
-    <meta name="keywords" content="用户管理 TestWebSite 测试站点">
+    <title>商品管理</title>
+    <meta name="description" content="商品管理">
+    <meta name="keywords" content="商品管理 TestWebSite 测试站点">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
     <style>
         .am-progress {
@@ -22,39 +22,73 @@
     </header>
     <div class="am-cf admin-main">
         <!-- sidebar start -->
-        @*@Html.Partial("~/Views/Common/SideBar.cshtml")*@
+        <div id="doc-oc-demo1" class="am-offcanvas">
+            <div class="am-offcanvas-bar">
+                <ul class="am-list admin-sidebar-list">
+                    <li><a href="~/Home/IndexPage"><span></span> 全部</a></li>
+                    <li class="admin-parent">
+                        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span></span> 手机数码 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+                            <li><a href="admin-user.html" class="am-cf"><span></span> 手机</a></li>
+                            <li><a href="admin-help.html"><span></span> 台式机</a></li>
+                            <li><a href="admin-gallery.html"><span></span> 笔记本</a></li>
+                            <li><a href="admin-log.html"><span></span> 电脑周边</a></li>
+                            <li><a href="admin-404.html"><span></span> 手机周边</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="admin-table.html"><span></span> 电器电脑</a></li>
+                    <li><a href="admin-form.html"><span></span> 家居日用</a></li>
+                    <li><a href="#"><span></span>  衣服鞋帽</a></li>
+                    <li><a href="#"><span></span>  图书音像</a></li>
+                </ul>
+                <div class="am-panel am-panel-default admin-sidebar-panel">
+                    <button id="btncommit" style="width:100%" type="button" class="am-btn am-btn-primary">编辑分类</button>
+                </div>
+            </div>
+        </div>
         <!-- sidebar end -->
         <!-- content start -->
         <div class="admin-content">
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
-                <li class="am-active">用户管理</li>
+                <li class="am-active">商品管理</li>
             </ol>
             <hr />
             <div class="am-g">
-                <div class="am-u-sm-12 am-u-md-6">
-                    <div class="am-btn-toolbar">
-                        <div class="am-btn-group am-btn-group-xs">
-                            <button type="button" onclick="window.location.href='AddUser'" class="am-btn am-btn-success"><span class="am-icon-plus"></span> 新增</button>
-                        </div>
-                    </div>
+                <div class="am-u-sm-12 am-u-md-12">
+                    <ol class="am-breadcrumb">
+                        <li><a href="#doc-oc-demo1" data-am-offcanvas>所有分类</a></li>
+                        <li><a href="#doc-oc-demo1" data-am-offcanvas>手机数码</a></li>
+                        <li class="am-active">手机</li>
+                    </ol>
+
                 </div>
-                <div class="am-u-sm-12 am-u-md-3">
-                    <div class="am-form-group">
-                        <select data-am-selected="{btnSize: 'sm'}">
-                            <option value="all">所有用户</option>
-                            <option value="com">普通用户</option>
-                            <option value="adm">管理员</option>
-                        </select>
-                    </div>
+            </div>
+            <div class="am-u-sm-12 am-u-md-3  am-fr">
+                <div class="am-input-group am-input-group-sm">
+                    <input type="text" class="am-form-field">
+                    <span class="am-input-group-btn">
+                        <button class="am-btn am-btn-default" type="button">搜索</button>
+                    </span>
                 </div>
-                <div class="am-u-sm-12 am-u-md-3">
-                    <div class="am-input-group am-input-group-sm">
-                        <input type="text" class="am-form-field">
-                        <span class="am-input-group-btn">
-                            <button class="am-btn am-btn-default" type="button">搜索</button>
-                        </span>
-                    </div>
+            </div>
+            <div class="am-u-sm-12 am-u-md-3  am-fr">
+                <div class="am-form-group">
+                    <select data-am-selected="{btnSize: 'sm'}">
+                        <option value="all">所有商品</option>
+                        <option value="com">众筹中</option>
+                        <option value="adm">未开奖</option>
+                        <option value="adm">已开奖</option>
+                    </select>
+                </div>
+            </div>
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-6 am-fr">
+                    <a href="#"><span class="am-badge am-badge-secondary"> 默认排序</span></a>
+                    <a href="#"><span class="am-badge am-badge-secondary am-icon-unsorted"> 价格</span></a>
+                    <a href="#"><span class="am-badge am-badge-secondary am-icon-sort-desc"> 价格</span></a>
+                    <a href="#"><span class="am-badge am-badge-secondary am-icon-sort-alpha-asc"> 商品名称</span></a>
+                    <a href="#"><span class="am-badge am-badge-secondary am-icon-sort-numeric-desc"> 参与人数</span></a>
                 </div>
             </div>
             <div class="am-g">
@@ -74,7 +108,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">1</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -92,7 +126,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">2</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -110,7 +144,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">3</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -128,7 +162,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">4</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -146,7 +180,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">5</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -164,7 +198,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">6</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -182,7 +216,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">7</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -200,7 +234,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">8</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -218,7 +252,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">9</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -236,7 +270,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">10</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -254,7 +288,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">11</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -272,7 +306,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">12</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -290,7 +324,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">13</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -308,7 +342,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">14</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
@@ -326,7 +360,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    
+
                                     <td class="am-text-center">15</td>
                                     <td><a href="#">Business management</a></td>
                                     <td>default</td>
