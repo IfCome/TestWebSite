@@ -217,6 +217,20 @@
   <ItemGroup>
     <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CrowdFundingShop.BLL\CrowdFundingShop.BLL.csproj">
+      <Project>{d0eb798b-d022-4859-ae71-9aba648879cf}</Project>
+      <Name>CrowdFundingShop.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CrowdFundingShop.Model\CrowdFundingShop.Model.csproj">
+      <Project>{fe889e64-cd78-4cd7-bce4-da0de5a259a7}</Project>
+      <Name>CrowdFundingShop.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CrowdFundingShop.Utility\CrowdFundingShop.Utility.csproj">
+      <Project>{feabc3d1-5ac1-4f9b-8e9c-7a2501e5066e}</Project>
+      <Name>CrowdFundingShop.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

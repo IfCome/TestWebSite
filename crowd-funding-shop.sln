@@ -5,6 +5,14 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdFundingShop.UI", "CrowdFundingShop.UI\CrowdFundingShop.UI.csproj", "{E1AC14FB-67E1-4AED-BACF-0A149604CDC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdFundingShop.BLL", "CrowdFundingShop.BLL\CrowdFundingShop.BLL.csproj", "{D0EB798B-D022-4859-AE71-9ABA648879CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdFundingShop.DAL", "CrowdFundingShop.DAL\CrowdFundingShop.DAL.csproj", "{4FC255FE-5CE3-4751-A8D9-29047C557E44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdFundingShop.Model", "CrowdFundingShop.Model\CrowdFundingShop.Model.csproj", "{FE889E64-CD78-4CD7-BCE4-DA0DE5A259A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdFundingShop.Utility", "CrowdFundingShop.Utility\CrowdFundingShop.Utility.csproj", "{FEABC3D1-5AC1-4F9B-8E9C-7A2501E5066E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{E1AC14FB-67E1-4AED-BACF-0A149604CDC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1AC14FB-67E1-4AED-BACF-0A149604CDC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1AC14FB-67E1-4AED-BACF-0A149604CDC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0EB798B-D022-4859-AE71-9ABA648879CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0EB798B-D022-4859-AE71-9ABA648879CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0EB798B-D022-4859-AE71-9ABA648879CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0EB798B-D022-4859-AE71-9ABA648879CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FC255FE-5CE3-4751-A8D9-29047C557E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FC255FE-5CE3-4751-A8D9-29047C557E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FC255FE-5CE3-4751-A8D9-29047C557E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FC255FE-5CE3-4751-A8D9-29047C557E44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE889E64-CD78-4CD7-BCE4-DA0DE5A259A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE889E64-CD78-4CD7-BCE4-DA0DE5A259A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE889E64-CD78-4CD7-BCE4-DA0DE5A259A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE889E64-CD78-4CD7-BCE4-DA0DE5A259A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEABC3D1-5AC1-4F9B-8E9C-7A2501E5066E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEABC3D1-5AC1-4F9B-8E9C-7A2501E5066E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEABC3D1-5AC1-4F9B-8E9C-7A2501E5066E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEABC3D1-5AC1-4F9B-8E9C-7A2501E5066E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
