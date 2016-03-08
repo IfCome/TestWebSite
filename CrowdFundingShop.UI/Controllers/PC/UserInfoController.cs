@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CrowdFundingShop.UI.Controllers
+namespace CrowdFundingShop.UI.Controllers.PC
 {
-    public class UserInfoController : Controller
+    public class UserInfoController : PCBaseController
     {
         //
         // GET: /UserInfo/

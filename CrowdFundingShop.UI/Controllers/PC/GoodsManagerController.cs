@@ -4,12 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CrowdFundingShop.UI.Controllers
+namespace CrowdFundingShop.UI.Controllers.PC
 {
-    public class HomeController : Controller
+    public class GoodsManagerController : PCBaseController
     {
         //
-        // GET: /Home/
+        // GET: /GoodsManager/
 
         public ActionResult IndexPage()
         {

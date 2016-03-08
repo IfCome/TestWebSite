@@ -112,10 +112,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\GoodsManagerController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\UserInfoController.cs" />
+    <Compile Include="Controllers\PC\GoodsManagerController.cs" />
+    <Compile Include="Controllers\PC\HomeController.cs" />
+    <Compile Include="Controllers\PC\LoginController.cs" />
+    <Compile Include="Controllers\PC\PCBaseController.cs" />
+    <Compile Include="Controllers\PC\UserInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
