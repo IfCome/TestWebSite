@@ -157,7 +157,6 @@
     <Content Include="Resources\amazeuiassets\js\app.js" />
     <Content Include="Resources\amazeuiassets\js\handlebars.min.js" />
     <Content Include="Resources\amazeuiassets\js\jquery.min.js" />
-    <Content Include="Resources\css\normalize.css" />
     <Content Include="Resources\images\hand.png" />
     <Content Include="Resources\images\left-handing.png" />
     <Content Include="Resources\images\left_hand.png" />

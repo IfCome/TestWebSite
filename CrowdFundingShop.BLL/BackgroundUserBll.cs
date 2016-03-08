@@ -14,10 +14,15 @@ namespace CrowdFundingShop.BLL
         /// <summary>
         /// 登陆检测
         /// </summary>
-        public static  Model.BackgroundUserInfo Login(string UseName, string password)
+        public static Model.BackgroundUserInfo Login(string UseName, string password)
         {
             password = Security.getMD5ByStr(password);
             return DAL.BackgroundUserInfoDal.GetInfoByUserNameAndPwd(UseName, password);
+        }
+
+        public static Model.BackgroundUserInfo GetLoginUserInfo(long userId)
+        {
+            return DAL.BackgroundUserInfoDal.GetUserInfoByID(userId);
         }
     }
 }
