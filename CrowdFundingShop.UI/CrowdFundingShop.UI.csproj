@@ -112,6 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\WAP\GoodsListController.cs" />
     <Compile Include="Controllers\PC\GoodsManagerController.cs" />
     <Compile Include="Controllers\PC\HomeController.cs" />
     <Compile Include="Controllers\PC\LoginController.cs" />
@@ -158,6 +159,7 @@
     <Content Include="Resources\amazeuiassets\js\app.js" />
     <Content Include="Resources\amazeuiassets\js\handlebars.min.js" />
     <Content Include="Resources\amazeuiassets\js\jquery.min.js" />
+    <Content Include="Resources\css\amazeui.touch.min.css" />
     <Content Include="Resources\images\hand.png" />
     <Content Include="Resources\images\left-handing.png" />
     <Content Include="Resources\images\left_hand.png" />
@@ -166,6 +168,7 @@
     <Content Include="Resources\images\right_handing.png" />
     <Content Include="Resources\images\tou.png" />
     <Content Include="Resources\images\username.png" />
+    <Content Include="Resources\js\app.min.js" />
     <Content Include="Resources\js\jqPaginator.js" />
     <Content Include="Resources\css\LoginStyle.css" />
     <Content Include="Resources\js\jquery-1.9.1.min.js" />
@@ -234,6 +237,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Common\TipsTool.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GoodsList\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
