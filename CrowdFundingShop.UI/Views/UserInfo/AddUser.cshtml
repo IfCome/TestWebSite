@@ -125,7 +125,6 @@
     @Html.Partial("~/Views/Common/TipsTool.cshtml")
 </body>
 </html>
-
 <script>
 
     $(function () {
@@ -211,7 +210,7 @@
             $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "AddUserCallBack" })', data, function (result) {
                 if (result && result.Message == 'OK') {
                     alert("添加成功");
-                    location.href = '@Url.Action("IndexPage", "UserInfo")';
+                    location.href = '/UserInfo/IndexPage';
                 }
                 else {
                     if (result.ErrorType == 'UserName') {
@@ -222,6 +221,7 @@
                         tipInput = $('#user-repassword');
                     } else {
                         tipInput = null;
+                        alert(result.Message);
                         return;
                     }
                     showToolTips(tipInput, result.Message);
@@ -232,7 +232,6 @@
     }
 
     function checkData() {
-        return true;
         var reg = /^[A-Za-z0-9]+$/;
         // 验证用户名
         if (!data.UserName || data.UserName.length == 0) {
@@ -249,6 +248,12 @@
         }
 
         // 验证密码
+        if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
+            tipInput = $('#user-password');
+            showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
         if (!data.Password || data.Password.length == 0) {
             tipInput = $('#user-password');
             showToolTips(tipInput, "请输入密码");
@@ -258,12 +263,6 @@
         if (data.Password != data.RePassword) {
             tipInput = $('#user-repassword');
             showToolTips(tipInput, "两次输入的密码不一致");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-        if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }

@@ -112,6 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\PC\GetUserInfoListIn.cs" />
     <Compile Include="Controllers\PC\GoodsManagerController.cs" />
     <Compile Include="Controllers\PC\HomeController.cs" />
     <Compile Include="Controllers\PC\LoginController.cs" />
@@ -234,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Common\TipsTool.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\TestPublishWeb.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
