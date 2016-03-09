@@ -8,6 +8,7 @@ namespace CrowdFundingShop.Model
     /// <summary>
     /// BackgroundUserInfo
     /// </summary>
+    [Serializable]
     public class BackgroundUserInfo
     {
 
