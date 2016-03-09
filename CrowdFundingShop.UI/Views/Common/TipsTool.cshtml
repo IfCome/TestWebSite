@@ -1,0 +1,56 @@
+﻿
+<style>
+    #vld-tooltip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        padding: 5px 10px;
+        background: #F37B1D;
+        min-width: 150px;
+        color: #fff;
+        transition: all 0.15s;
+        box-shadow: 0 0 5px rgba(0,0,0,.15);
+        /*display: none;*/
+    }
+
+        #vld-tooltip:before {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            margin-left: -8px;
+            content: "";
+            border-width: 0 8px 8px;
+            border-color: transparent transparent #F37B1D;
+            border-style: none inset solid;
+        }
+</style>
+
+<script>
+    var $tooltip = $('<div id="vld-tooltip">提示信息！</div>');
+    $(function () {
+        $tooltip.appendTo(document.body);
+        $tooltip.hide();
+    });
+
+    // 显示提示信息
+    function showToolTips($obj, msg) {
+        if ($obj && $obj.length > 0) {
+            var offset = $obj.offset();
+            var msg = msg || $obj.data('foolishMsg');
+
+            $tooltip.text(msg).show().css({
+                left: offset.left + 10,
+                top: offset.top + $tooltip.outerHeight() + 10
+            });
+        }
+    }
+
+    // 隐藏提示信息
+    function hideToolTips() {
+        $tooltip.text("提示信息").hide();
+    }
+
+</script>

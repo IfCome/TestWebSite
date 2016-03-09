@@ -41,7 +41,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
         }
 
         [HttpPost]
-        public string Login(string UserName, string Pwd)
+        public ActionResult Login(string UserName, string Pwd)
         {
             string result = "用户名或密码错误";
             Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.Login(UserName, Pwd);
@@ -50,7 +50,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
                 Security.SetUserLoginCookies(userInfo.ID.ToString(), this.Response);
                 result = "ok";
             }
-            return result;
+            return Content(result); ;
         }
 
         public ActionResult Logout()
