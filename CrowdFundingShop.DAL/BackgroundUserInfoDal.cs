@@ -301,5 +301,37 @@ namespace CrowdFundingShop.DAL
             return i > 0 ? true : false;
         }
         #endregion
+
+        /// <summary>
+        /// 通过ID更新实体
+        /// </summary>
+        public static bool UpdateByID(Model.BackgroundUserInfo entity)
+        {
+            var sql = @"
+                        UPDATE [BackgroundUserInfo]
+                            SET
+                                [RealName] = @RealName
+                                ,[RoleType] = @RoleType
+                                ,[Phone] = @Phone
+                                ,[Email] = @Email
+                                ,[QQ] = @QQ
+                                ,[HeadIcon] = @HeadIcon
+                            WHERE 
+                                [ID] = @ID
+                    ";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = entity.ID });
+            parameters.Add(new SqlParameter() { ParameterName = "@RealName", Value = entity.RealName });
+            parameters.Add(new SqlParameter() { ParameterName = "@RoleType", Value = entity.RoleType });
+            parameters.Add(new SqlParameter() { ParameterName = "@Phone", Value = entity.Phone });
+            parameters.Add(new SqlParameter() { ParameterName = "@Email", Value = entity.Email });
+            parameters.Add(new SqlParameter() { ParameterName = "@QQ", Value = entity.QQ });
+            parameters.Add(new SqlParameter() { ParameterName = "@HeadIcon", Value = entity.HeadIcon });
+
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
+
+
     }
 }

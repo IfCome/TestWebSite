@@ -71,6 +71,7 @@ ul {
   overflow: hidden;
   height: 100%;
   background: #fff;
+  padding-bottom: 80px;
 }
 
 .admin-content-list {

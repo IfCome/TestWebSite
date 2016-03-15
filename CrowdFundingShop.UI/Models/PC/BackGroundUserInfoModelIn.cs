@@ -8,6 +8,11 @@ namespace CrowdFundingShop.UI.Models.PC
     public class BackGroundUserInfoModelIn
     {
         /// <summary>
+        /// 用户ID
+        /// </summary>
+        public long ID { get; set; }
+
+        /// <summary>
         /// 用户名
         /// </summary>
         public string UserName { get; set; }

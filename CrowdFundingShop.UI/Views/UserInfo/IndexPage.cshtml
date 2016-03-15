@@ -28,7 +28,7 @@
         <!-- content start -->
         <div class="admin-content">
             <ol class="am-breadcrumb">
-                <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
+                <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
                 <li class="am-active">用户管理</li>
             </ol>
             <hr />
@@ -96,11 +96,11 @@
                 <td>
                     <div class="am-btn-toolbar">
                         <div class="am-btn-group am-btn-group-xs">
-                            <button onclick="ShowUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
+                            <button type="button" onclick="ShowUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
                             @if (Identity.LoginUserInfo.RoleType == 10)
                             {
-                                <button onclick="EditUserDetails('{ID}');" class="">编辑</button>
-                                <button onclick="DeleteUser('{ID}','{RealName}');" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                <button type="button" onclick="EditUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
+                                <button type="button" onclick="DeleteUser('{ID}','{RealName}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
                             }
                         </div>
                     </div>
@@ -203,12 +203,11 @@
         }
 
         function ShowUserDetails(id) {
-
+            window.location.href = 'UserDetails.html?id=' + id;
         }
 
         function EditUserDetails(id) {
-            alert(id);
-            window.location.href = 'EditUser?id=' + id;
+            window.location.href = 'EditUser.html?id=' + id;
         }
 
         function DeleteUser(id) {

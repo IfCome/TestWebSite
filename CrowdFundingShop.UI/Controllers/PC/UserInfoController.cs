@@ -29,16 +29,6 @@ namespace CrowdFundingShop.UI.Controllers.PC
             return View();
         }
 
-        // 编辑用户页面
-        public ActionResult EditUser(long id)
-        {
-            if (Identity.LoginUserInfo.RoleType != 10)
-            {
-                return Content("只有管理员才能编辑用户");
-            }
-            return View();
-        }
-
         // 提交用户信息
         [HttpPost]
         public ActionResult AddUserCallBack(Models.PC.BackGroundUserInfoModelIn InModel)
@@ -102,6 +92,76 @@ namespace CrowdFundingShop.UI.Controllers.PC
             }
             return Json(new { Message = msg, ErrorType = errorType });
         }
+
+
+        // 编辑用户页面
+        public ActionResult EditUser(long id)
+        {
+            if (Identity.LoginUserInfo.RoleType != 10)
+            {
+                return Content("只有管理员才能编辑用户");
+            }
+            // 查询用户信息
+            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(id);
+            if (userInfo == null)
+            {
+                return Content("该用户不存在！！");
+            }
+            return View(userInfo);
+        }
+
+
+        [HttpPost]
+        public ActionResult EditUserCallBack(Models.PC.BackGroundUserInfoModelIn InModel)
+        {
+            string errorType = "";
+            string msg = "OK";
+            if (Identity.LoginUserInfo.RoleType != 10)
+            {
+                errorType = "alert";
+                msg = "只有管理员才能修改用户信息";
+            }
+            // 验证参数
+            else if (InModel.ID == 0)
+            {
+                errorType = "alert";
+                msg = "用户信息无效";
+            }
+            else
+            {
+                // 查询用户原信息
+                Model.BackgroundUserInfo oldUserInfo = BLL.BackgroundUserBll.GetSingleUserInfo(InModel.ID);
+
+                // 整理用户新信息
+                Model.BackgroundUserInfo newUserInfo = new Model.BackgroundUserInfo()
+                {
+                    ID = InModel.ID,
+                    RoleType = Converter.TryToInt32(InModel.RoleType, 20),
+                    RealName = InModel.RealName ?? "",
+                    Phone = InModel.Phone ?? "",
+                    Email = InModel.Email ?? "",
+                    QQ = InModel.QQ ?? "",
+                    HeadIcon = InModel.HeadIcon ?? ""
+                };
+
+                if (BLL.BackgroundUserBll.UpdateUserInfo(newUserInfo) == false)
+                {
+                    errorType = "alert";
+                    msg = "保存失败，请刷新用户列表重试";
+                }
+                else
+                {
+                    // 比较新旧用户信息，整理日志内容
+                    string diffContent = BLL.BackgroundUserBll.GetDiffContent(newUserInfo, oldUserInfo);
+                    // 记录日志
+                    string logTitle = "修改后台用户";
+                    string logMsg = string.Format("修改用户信息：用户名【{0}】，修改信息【{1}】", oldUserInfo.UserName, diffContent);
+                    BLL.BackgroundUserBll_log.AddLog(logTitle, logMsg, Request.UserHostAddress);
+                }
+            }
+            return Json(new { Message = msg, ErrorType = errorType });
+        }
+
 
         [HttpGet]
         public ActionResult GetUserInfoList(Models.PC.GetUserInfoListIn InModel)

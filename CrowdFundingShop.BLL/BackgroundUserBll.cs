@@ -61,5 +61,49 @@ namespace CrowdFundingShop.BLL
             }
             return userInfoList;
         }
+
+        public static Model.BackgroundUserInfo GetSingleUserInfo(long id)
+        {
+            return DAL.BackgroundUserInfoDal.GetUserInfoByID(id);
+        }
+
+        public static bool UpdateUserInfo(BackgroundUserInfo userInfo)
+        {
+            return DAL.BackgroundUserInfoDal.UpdateByID(userInfo);
+        }
+
+        /// <summary>
+        /// 比较新旧用户信息，返回修改的字段内容
+        /// </summary>
+        public static string GetDiffContent(BackgroundUserInfo newUserInfo, BackgroundUserInfo oldUserInfo)
+        {
+            StringBuilder diffContent = new StringBuilder("");
+            // 逐一比较
+            if (newUserInfo.RoleType != oldUserInfo.RoleType)
+            {
+                diffContent.Append(string.Format("角色由\"{0}\"改为\"{1}\";", (oldUserInfo.RoleType == 10 ? "管理员" : "普通员工"), (newUserInfo.RoleType == 10 ? "管理员" : "普通员工")));
+            }
+            if (newUserInfo.RealName != oldUserInfo.RealName)
+            {
+                diffContent.Append(string.Format("姓名由\"{0}\"改为\"{1}\";", oldUserInfo.RealName, newUserInfo.RealName));
+            }
+            if (newUserInfo.Phone != oldUserInfo.Phone)
+            {
+                diffContent.Append(string.Format("手机由\"{0}\"改为\"{1}\";", oldUserInfo.Phone, newUserInfo.Phone));
+            }
+            if (newUserInfo.Email != oldUserInfo.Email)
+            {
+                diffContent.Append(string.Format("电子邮箱由\"{0}\"改为\"{1}\";", oldUserInfo.Email, newUserInfo.Email));
+            }
+            if (newUserInfo.QQ != oldUserInfo.QQ)
+            {
+                diffContent.Append(string.Format("QQ由\"{0}\"改为\"{1}\";", oldUserInfo.QQ, newUserInfo.QQ));
+            }
+            if (newUserInfo.HeadIcon != oldUserInfo.HeadIcon)
+            {
+                diffContent.Append("修改头像");
+            }
+            return diffContent.ToString();
+        }
     }
 }
