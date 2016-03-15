@@ -13,8 +13,9 @@ namespace CrowdFundingShop.UI.Controllers.PC
         // GET: /UserInfo/
 
         // 用户管理页面
-        public ActionResult IndexPage()
+        public ActionResult IndexPage(string keyWords)
         {
+            ViewBag.KeyWords = Converter.TryToString(keyWords, "");
             return View();
         }
 
@@ -24,6 +25,16 @@ namespace CrowdFundingShop.UI.Controllers.PC
             if (Identity.LoginUserInfo.RoleType != 10)
             {
                 return Content("只有管理员才能添加用户");
+            }
+            return View();
+        }
+
+        // 编辑用户页面
+        public ActionResult EditUser(long id)
+        {
+            if (Identity.LoginUserInfo.RoleType != 10)
+            {
+                return Content("只有管理员才能编辑用户");
             }
             return View();
         }
@@ -84,26 +95,20 @@ namespace CrowdFundingShop.UI.Controllers.PC
                 else
                 {
                     // 记录日志
-                    Model.BackgroundUserInfo_log logEntity = new Model.BackgroundUserInfo_log()
-                    {
-                        UserID = Identity.LoginUserInfo.ID,
-                        OperateTile = "添加后台用户",
-                        OperateDetail = string.Format("添加用户信息：用户名【{0}】，角色【{1}】", userInfo.UserName, userInfo.RoleType == 10 ? "管理员" : "普通用户"),
-                        OperateTime = DateTime.Now,
-                        IpAddress = Request.UserHostAddress
-                    };
-                    BLL.BackgroundUserBll_log.AddLog(logEntity);
+                    string logTitle = "添加后台用户";
+                    string logMsg = string.Format("添加用户信息：用户名【{0}】，角色【{1}】", userInfo.UserName, userInfo.RoleType == 10 ? "管理员" : "普通用户");
+                    BLL.BackgroundUserBll_log.AddLog(logTitle, logMsg, Request.UserHostAddress);
                 }
             }
             return Json(new { Message = msg, ErrorType = errorType });
         }
 
-
+        [HttpGet]
         public ActionResult GetUserInfoList(Models.PC.GetUserInfoListIn InModel)
         {
-            InModel.PageSize = InModel.PageSize ?? 15;
-            InModel.CurrentPage = InModel.CurrentPage ?? 1;
-            InModel.RoleType = InModel.RoleType ?? 0;
+            InModel.PageSize = Converter.TryToInt32(InModel.PageSize, 15);
+            InModel.CurrentPage = Converter.TryToInt32(InModel.CurrentPage, 1);
+            InModel.RoleType = Converter.TryToInt32(InModel.RoleType, -1);
             InModel.KeyWords = InModel.KeyWords ?? "";
 
             List<Model.BackgroundUserInfo> userInfoList = new List<Model.BackgroundUserInfo>();

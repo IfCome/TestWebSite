@@ -238,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\TestPublishWeb.pubxml" />
+    <Content Include="Views\UserInfo\EditUser.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

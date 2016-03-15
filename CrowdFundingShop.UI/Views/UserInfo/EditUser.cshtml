@@ -7,8 +7,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>添加用户</title>
-    <meta name="description" content="添加用户">
-    <meta name="keywords" content="添加用户">
+    <meta name="description" content="编辑用户">
+    <meta name="keywords" content="编辑用户">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
 </head>
 <body>
@@ -21,7 +21,7 @@
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
                 <li><a href="~/UserInfo/IndexPage">用户管理</a></li>
-                <li class="am-active">添加用户</li>
+                <li class="am-active">编辑用户</li>
             </ol>
             <hr />
             <div class="am-g">
@@ -74,7 +74,7 @@
                                 <input type="text" class="required" id="user-name" placeholder="登录系统时使用的帐号名" data-foolish-msg="该用户名已存在！">
                             </div>
                         </div>
-                        <div class="am-form-group">
+                        @*<div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 登录密码</label>
                             <div class="am-u-sm-9">
                                 <input type="password" class="required" id="user-password" placeholder="设置一个密码吧">
@@ -85,7 +85,7 @@
                             <div class="am-u-sm-9">
                                 <input type="password" class="required" id="user-repassword" placeholder="请再输入一次密码" data-foolish-msg="两次输入的密码不一致！">
                             </div>
-                        </div>
+                        </div>*@
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
                             <div class="am-u-sm-9">
@@ -247,25 +247,25 @@
             return false;
         }
 
-        // 验证密码
-        if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-        if (!data.Password || data.Password.length == 0) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "请输入密码");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-        if (data.Password != data.RePassword) {
-            tipInput = $('#user-repassword');
-            showToolTips(tipInput, "两次输入的密码不一致");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
+        //// 验证密码
+        //if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
+        //    tipInput = $('#user-password');
+        //    showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
+        //    tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+        //    return false;
+        //}
+        //if (!data.Password || data.Password.length == 0) {
+        //    tipInput = $('#user-password');
+        //    showToolTips(tipInput, "请输入密码");
+        //    tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+        //    return false;
+        //}
+        //if (data.Password != data.RePassword) {
+        //    tipInput = $('#user-repassword');
+        //    showToolTips(tipInput, "两次输入的密码不一致");
+        //    tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+        //    return false;
+        //}
         return true;
     }
 </script>
