@@ -170,6 +170,7 @@
     <Content Include="Resources\js\jqPaginator.js" />
     <Content Include="Resources\css\LoginStyle.css" />
     <Content Include="Resources\js\jquery-1.9.1.min.js" />
+    <Content Include="Resources\js\jquery.form.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

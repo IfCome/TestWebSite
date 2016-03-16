@@ -188,5 +188,38 @@ namespace CrowdFundingShop.UI.Controllers.PC
                 AllCount = allCount
             }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult UploadIcon()
+        {
+            Response.ContentType = "text/html;";
+            if (Request.Files.Count == 0)
+            {
+                return Json(new { Message = "请选择文件！" });
+            }
+            HttpPostedFileBase imgFile = Request.Files[0];  // 获取上传文件
+            #region 校验文件格式是否正确
+
+            // 根据文件后缀名判断文件类型
+            String extendname = imgFile.FileName.Substring(imgFile.FileName.LastIndexOf('.') + 1).ToLower();
+            if (extendname != "jpg" && extendname != "jpeg" && extendname != "bmp" &&
+                extendname != "gif" && extendname != "tiff" && extendname != "png")
+            {
+                return Json(new { Message = "文件类型错误！" });
+            }
+
+            #endregion
+
+            // 上传图片到服务器
+            FileUpToImg file = new FileUpToImg(imgFile.InputStream, extendname, "UserIcons");
+
+            String imgUrl = String.Empty;       // 图片在服务器端的保存地址
+            imgUrl = file.uploadUrl;
+            if (String.IsNullOrEmpty(imgUrl))
+            {
+                return Json(new { Message = "文件上传失败！" });
+            }
+            return Json(new { Message = "OK", ImgUrl = imgUrl });
+        }
     }
 }
