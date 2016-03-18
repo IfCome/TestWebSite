@@ -31,7 +31,7 @@
                         <div class="am-panel-bd">
                             <div class="am-g">
                                 <div class="am-u-md-4">
-                                    <img id="userIcon" class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
+                                    <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
                                 </div>
                                 <div class="am-u-md-8">
                                     <p>你可以使用<a href="#">gravatar.com</a>提供的头像或者使用本地上传头像。 </p>
@@ -184,17 +184,22 @@
             // 这里写访问服务器事件
 
             $("#fileForm").ajaxSubmit({
+                dataType: 'text/html',
                 type: 'post',
                 url: 'UploadIcon.do',
-                success: function (data) {
-                    alert(data);
-                    data = eval('({' + data + '})');
+                success: function (result) {
+                    var reg = /<pre.+?>(.+)<\/pre>/g;
+                    var result = result.match(reg);
+                    result = RegExp.$1;
+                    alert(result);
+                    data = eval('(' + result + ')');
                     if (data && data.Message == "OK") {
                         // 替换头像
                         $('#userIcon').attr('src', data.ImgUrl);
                     } else {
                         alert(data.Message);
                     }
+                    $('#uploadImg').removeAttr("disabled");
                     showUploadFileButton();
                 }
             });

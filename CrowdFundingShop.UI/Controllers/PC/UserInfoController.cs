@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.HtmlControls;
 using CrowdFundingShop.Utility;
 
 namespace CrowdFundingShop.UI.Controllers.PC
@@ -192,12 +193,16 @@ namespace CrowdFundingShop.UI.Controllers.PC
         [HttpPost]
         public ActionResult UploadIcon()
         {
-            Response.ContentType = "text/html;";
             if (Request.Files.Count == 0)
             {
                 return Json(new { Message = "请选择文件！" });
             }
             HttpPostedFileBase imgFile = Request.Files[0];  // 获取上传文件
+            if (imgFile.ContentLength == 0)
+            {
+
+                return Json(new { Message = "请选择文件！" });
+            }
             #region 校验文件格式是否正确
 
             // 根据文件后缀名判断文件类型
@@ -211,10 +216,12 @@ namespace CrowdFundingShop.UI.Controllers.PC
             #endregion
 
             // 上传图片到服务器
-            FileUpToImg file = new FileUpToImg(imgFile.InputStream, extendname, "UserIcons");
+            FileUpToImg file = new FileUpToImg();
 
             String imgUrl = String.Empty;       // 图片在服务器端的保存地址
             imgUrl = file.uploadUrl;
+            file.UpLoadImage(imgFile, "/images/", "s_", 150, 150);
+
             if (String.IsNullOrEmpty(imgUrl))
             {
                 return Json(new { Message = "文件上传失败！" });
