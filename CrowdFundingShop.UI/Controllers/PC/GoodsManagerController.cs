@@ -16,5 +16,9 @@ namespace CrowdFundingShop.UI.Controllers.PC
             return View();
         }
 
+        public ActionResult Edit()
+        {
+            return View();
+        }
     }
 }

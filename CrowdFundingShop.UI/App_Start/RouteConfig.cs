@@ -13,6 +13,10 @@ namespace CrowdFundingShop.UI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute(name: "html", url: "{controller}/{action}.html");
+            routes.MapRoute(name: "do", url: "{controller}/{action}.do");
+            routes.MapRoute(name: "api", url: "{controller}/{action}.api");
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

@@ -7,9 +7,9 @@ namespace CrowdFundingShop.UI.Models.PC
 {
     public class GetUserInfoListIn
     {
-        public int? PageSize;
-        public int? CurrentPage;
-        public int? RoleType;
-        public string KeyWords;
+        public int PageSize { get; set; }
+        public int CurrentPage { get; set; }
+        public int RoleType { get; set; }
+        public string KeyWords { get; set; }
     }
 }

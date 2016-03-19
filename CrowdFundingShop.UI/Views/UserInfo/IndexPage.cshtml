@@ -1,4 +1,5 @@
-﻿@{
+﻿@using CrowdFundingShop.Utility
+@{
     Layout = null;
 }
 <!doctype html>
@@ -27,7 +28,7 @@
         <!-- content start -->
         <div class="admin-content">
             <ol class="am-breadcrumb">
-                <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
+                <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
                 <li class="am-active">用户管理</li>
             </ol>
             <hr />
@@ -41,18 +42,18 @@
                 </div>
                 <div class="am-u-sm-12 am-u-md-3">
                     <div class="am-form-group">
-                        <select data-am-selected="{btnSize: 'sm'}">
-                            <option value="all">所有用户</option>
-                            <option value="com">普通用户</option>
-                            <option value="adm">管理员</option>
+                        <select id="selRoleType" data-am-selected="{btnSize: 'sm'}">
+                            <option value="-1">所有用户</option>
+                            <option value="20">普通用户</option>
+                            <option value="10">管理员</option>
                         </select>
                     </div>
                 </div>
                 <div class="am-u-sm-12 am-u-md-3">
                     <div class="am-input-group am-input-group-sm">
-                        <input type="text" class="am-form-field">
+                        <input id="txtKeyWords" type="text" class="am-form-field" placeholder="用户名/真实姓名" value="@ViewBag.KeyWords">
                         <span class="am-input-group-btn">
-                            <button class="am-btn am-btn-default" type="button">搜索</button>
+                            <button id="btnSearch" class="am-btn am-btn-default" type="button">搜索</button>
                         </span>
                     </div>
                 </div>
@@ -60,7 +61,7 @@
             <div class="am-g">
                 <div class="am-u-sm-12">
                     <form class="am-form">
-                        <table class="am-table am-table-striped am-table-hover table-main">
+                        <table id="tableData" class="am-table am-table-striped am-table-hover table-main">
                             <thead>
                                 <tr>
                                     <th class="table-id am-text-center">ID</th>
@@ -72,281 +73,10 @@
                                     <th class="table-set">操作</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    
-                                    <td class="am-text-center">1</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">2</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">3</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">4</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">5</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">6</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">7</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">8</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">9</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">10</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">11</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">12</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">13</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">14</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试14号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    
-                                    <td class="am-text-center">15</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                         <div class="am-cf">
-                            共 <span id="recordCount">123</span> 个用户
+                            共 <span id="recordCount"></span> 个用户
                             <div class="am-fr">
                                 <ul id="pagination" class="am-pagination"></ul>
                             </div>
@@ -355,23 +85,49 @@
                 </div>
             </div>
         </div>
+        <table id="dataTableTemplet" style="display:none">
+            <tr>
+                <td class="am-text-center">{Index}</td>
+                <td><a href="javascript:void(0)" onclick="ShowUserDetails('{ID}');">{UserName}</a></td>
+                <td>{RealName}</td>
+                <td class="am-hide-sm-only">{RoleType}</td>
+                <td class="am-hide-sm-only">{CreateTime}</td>
+                <td class="am-hide-sm-only">{LastLoginTime}</td>
+                <td>
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button type="button" onclick="ShowUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
+                            @if (Identity.LoginUserInfo.RoleType == 10)
+                            {
+                                <button type="button" onclick="EditUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
+                                <button type="button" onclick="DeleteUser('{ID}','{RealName}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                            }
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
         <!-- content end -->
     </div>
     @Html.Partial("~/Views/Common/FootPart.cshtml")
-
     <script type="text/javascript" src="/Resources/js/jqPaginator.js"></script>
     <script>
+
+        var pageSize = 15;
+        var pageIndex = 1;
+        var isSearching = false;
+
         // 分页配置
         var pageOptions = {
             totalPages: 1,
             currentPage: 1,
             visiblePages: 5,
             onPageChange: function (num, type) {
-                if (type == 'init' || num < 1) {
+                if (type == 'init' || num < 1 || isSearching) {
                     return false;
                 }
-                alert(num);
-                //search(num);
+                pageIndex = num;
+                search(false);
             }
         }
 
@@ -387,12 +143,75 @@
         }
 
         function bindFunction() {
+            $('#selRoleType').change(function () {
+                search(true);
+            });
+            $('#btnSearch').click(function () {
+                search(true);
+            });
         }
 
         function loadData() {
-            pageOptions.totalPages = 5;
-            pageOptions.currentPage = 1;
-            $.jqPaginator('#pagination', pageOptions);
+            search(true);
+        }
+
+        function search(isFirst) {
+            // 正在查询
+            if (isSearching) {
+                return;
+            }
+            if (isFirst) {
+                pageIndex = 1;
+            }
+            // 整理参数
+            var data = {
+                PageSize: pageSize,
+                CurrentPage: pageIndex,
+                RoleType: $('#selRoleType').val(),
+                KeyWords: $('#txtKeyWords').val()
+            };
+            isSearching = true;
+            $.get('@Url.RouteUrl(new { controller = "UserInfo", action = "GetUserInfoList" })', data, function (result) {
+                if (result) {
+                    $('#recordCount').text(parseInt(result.AllCount));
+                    // 清空数据
+                    $("#tableData>tbody").html('');
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            var rowHtml = $("#dataTableTemplet>tbody").html();
+                            rowHtml = rowHtml.replace("{Index}", i + 1);
+                            rowHtml = rowHtml.replace(/{UserName}/g, row.UserName);
+                            rowHtml = rowHtml.replace("{RealName}", row.RealName);
+                            rowHtml = rowHtml.replace("{RoleType}", row.RoleType);
+                            rowHtml = rowHtml.replace("{CreateTime}", row.CreateTime);
+                            rowHtml = rowHtml.replace("{LastLoginTime}", row.LastLoginTime);
+                            rowHtml = rowHtml.replace(/{ID}/g, row.ID);
+                            $("#tableData>tbody").append($(rowHtml));
+                        }
+                    }
+
+                    pageOptions.totalPages = Math.ceil(parseInt(result.AllCount) / pageSize);
+                    pageOptions.currentPage = pageIndex;
+                    $.jqPaginator('#pagination', pageOptions);
+                }
+                else {
+                    alert("查询出错");
+                }
+                isSearching = false;
+            }, 'json');
+        }
+
+        function ShowUserDetails(id) {
+            window.location.href = 'UserDetails.html?id=' + id;
+        }
+
+        function EditUserDetails(id) {
+            window.location.href = 'EditUser.html?id=' + id;
+        }
+
+        function DeleteUser(id) {
+
         }
     </script>
 </body>

@@ -10,6 +10,9 @@ namespace CrowdFundingShop.DAL
 {
     public static class BackgroundUserInfoDal
     {
+
+        #region 查询
+
         /// <summary>
         /// 通过UserName和password查询实体（不存在时，返回null）
         /// </summary>
@@ -122,6 +125,9 @@ namespace CrowdFundingShop.DAL
             }
         }
 
+        /// <summary>
+        /// 获取指定用户名的用户量
+        /// </summary>
         public static int GetCountByUserName(string userName)
         {
             var sql = @"
@@ -137,50 +143,15 @@ namespace CrowdFundingShop.DAL
             return Converter.TryToInt32(count);
         }
 
-        public static bool Add(Model.BackgroundUserInfo entity)
-        {
-            var sql = @"
-                        INSERT INTO [BackgroundUserInfo]
-                               (
-                                [UserName]
-                                ,[PassWord]
-                                ,[RealName]
-                                ,[RoleType]
-                                ,[Phone]
-                                ,[Email]
-                                ,[QQ]
-                                ,[HeadIcon]
-                                ,[CreateTime]
-                               )
-                         VALUES
-                               (
-                                @UserName
-                                ,@PassWord
-                                ,@RealName
-                                ,@RoleType
-                                ,@Phone
-                                ,@Email
-                                ,@QQ
-                                ,@HeadIcon
-                                ,@CreateTime
-                               )
-                    ";
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter() { ParameterName = "@UserName", Value = entity.UserName });
-            parameters.Add(new SqlParameter() { ParameterName = "@PassWord", Value = entity.PassWord });
-            parameters.Add(new SqlParameter() { ParameterName = "@RealName", Value = entity.RealName });
-            parameters.Add(new SqlParameter() { ParameterName = "@RoleType", Value = entity.RoleType });
-            parameters.Add(new SqlParameter() { ParameterName = "@Phone", Value = entity.Phone });
-            parameters.Add(new SqlParameter() { ParameterName = "@Email", Value = entity.Email });
-            parameters.Add(new SqlParameter() { ParameterName = "@QQ", Value = entity.QQ });
-            parameters.Add(new SqlParameter() { ParameterName = "@HeadIcon", Value = entity.HeadIcon });
-            parameters.Add(new SqlParameter() { ParameterName = "@CreateTime", Value = entity.CreateTime });
 
-            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
-            return i > 0 ? true : false;
-        }
-
-
+        /// <summary>
+        /// 根据指定条件分页查询用户数据
+        /// </summary>
+        /// <param name="pageSize">每页数据量</param>
+        /// <param name="currentPage">页码</param>
+        /// <param name="roleType">角色</param>
+        /// <param name="allCount">用户总量</param>
+        /// <param name="keyWords">搜索关键字</param>
         public static List<Model.BackgroundUserInfo> GetPageListByCondition(int pageSize, int currentPage, int roleType, out int allCount, string keyWords = "")
         {
             var sql = @"
@@ -199,7 +170,7 @@ namespace CrowdFundingShop.DAL
                                     ,[CreateTime]
                                     ,[LastLoginTime]
                                     ,[IsDelete]
-                                    ,ROW_NUMBER() OVER (ORDER BY CreateTime DESC) AS [RowNumber] 
+                                    ,ROW_NUMBER() OVER (ORDER BY LastLoginTime DESC) AS [RowNumber] 
 	                        FROM [BackgroundUserInfo] WITH (NOLOCK)
                             {0}
                         )
@@ -260,6 +231,107 @@ namespace CrowdFundingShop.DAL
                 return null;
             }
         }
+
+        #endregion
+
+        #region 添加
+
+        public static bool Add(Model.BackgroundUserInfo entity)
+        {
+            var sql = @"
+                        INSERT INTO [BackgroundUserInfo]
+                               (
+                                [UserName]
+                                ,[PassWord]
+                                ,[RealName]
+                                ,[RoleType]
+                                ,[Phone]
+                                ,[Email]
+                                ,[QQ]
+                                ,[HeadIcon]
+                                ,[CreateTime]
+                               )
+                         VALUES
+                               (
+                                @UserName
+                                ,@PassWord
+                                ,@RealName
+                                ,@RoleType
+                                ,@Phone
+                                ,@Email
+                                ,@QQ
+                                ,@HeadIcon
+                                ,@CreateTime
+                               )
+                    ";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@UserName", Value = entity.UserName });
+            parameters.Add(new SqlParameter() { ParameterName = "@PassWord", Value = entity.PassWord });
+            parameters.Add(new SqlParameter() { ParameterName = "@RealName", Value = entity.RealName });
+            parameters.Add(new SqlParameter() { ParameterName = "@RoleType", Value = entity.RoleType });
+            parameters.Add(new SqlParameter() { ParameterName = "@Phone", Value = entity.Phone });
+            parameters.Add(new SqlParameter() { ParameterName = "@Email", Value = entity.Email });
+            parameters.Add(new SqlParameter() { ParameterName = "@QQ", Value = entity.QQ });
+            parameters.Add(new SqlParameter() { ParameterName = "@HeadIcon", Value = entity.HeadIcon });
+            parameters.Add(new SqlParameter() { ParameterName = "@CreateTime", Value = entity.CreateTime });
+
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
+
+        #endregion
+
+        #region 更新
+
+        /// <summary>
+        /// 通过ID更新LastLoginTime
+        /// </summary>
+        public static bool UpdateLastLoginTimeByID(DateTime lastLoginTime, long id)
+        {
+            var sql = @"
+                        UPDATE [BackgroundUserInfo] SET [LastLoginTime]=@LastLoginTime
+                        WHERE 
+                            [ID] = @ID
+                    ";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@LastLoginTime", Value = lastLoginTime });
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = id });
+
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
+        #endregion
+
+        /// <summary>
+        /// 通过ID更新实体
+        /// </summary>
+        public static bool UpdateByID(Model.BackgroundUserInfo entity)
+        {
+            var sql = @"
+                        UPDATE [BackgroundUserInfo]
+                            SET
+                                [RealName] = @RealName
+                                ,[RoleType] = @RoleType
+                                ,[Phone] = @Phone
+                                ,[Email] = @Email
+                                ,[QQ] = @QQ
+                                ,[HeadIcon] = @HeadIcon
+                            WHERE 
+                                [ID] = @ID
+                    ";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = entity.ID });
+            parameters.Add(new SqlParameter() { ParameterName = "@RealName", Value = entity.RealName });
+            parameters.Add(new SqlParameter() { ParameterName = "@RoleType", Value = entity.RoleType });
+            parameters.Add(new SqlParameter() { ParameterName = "@Phone", Value = entity.Phone });
+            parameters.Add(new SqlParameter() { ParameterName = "@Email", Value = entity.Email });
+            parameters.Add(new SqlParameter() { ParameterName = "@QQ", Value = entity.QQ });
+            parameters.Add(new SqlParameter() { ParameterName = "@HeadIcon", Value = entity.HeadIcon });
+
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
+
 
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CrowdFundingShop.Model.BackgroundUserInfo
+@{
     Layout = null;
 }
 <!doctype html>
@@ -7,8 +8,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>添加用户</title>
-    <meta name="description" content="添加用户">
-    <meta name="keywords" content="添加用户">
+    <meta name="description" content="编辑用户">
+    <meta name="keywords" content="编辑用户">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
 </head>
 <body>
@@ -21,7 +22,7 @@
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
                 <li><a href="~/UserInfo/IndexPage.html">用户管理</a></li>
-                <li class="am-active">添加用户</li>
+                <li class="am-active">编辑用户</li>
             </ol>
             <hr />
             <div class="am-g">
@@ -31,16 +32,16 @@
                         <div class="am-panel-bd">
                             <div class="am-g">
                                 <div class="am-u-md-4">
-                                    <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
+                                    <img class="am-img-circle am-img-thumbnail" src="@(Model.HeadIcon.IsEmpty() ? "http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" : Model.HeadIcon)" alt="" />
                                 </div>
                                 <div class="am-u-md-8">
                                     <p>你可以使用<a href="#">gravatar.com</a>提供的头像或者使用本地上传头像。 </p>
-                                    <form id="fileForm" class="am-form" enctype="multipart/form-data" method="post">
+                                    <form class="am-form">
                                         <div class="am-form-group am-form-file">
                                             <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件
                                             </button>
-                                            <input id="doc-form-file" name="userIcon" type="file" accept="image/gif, image/jpeg, image/png">
+                                            <input id="doc-form-file" type="file" accept="image/gif, image/jpeg, image/png">
                                             <button id="uploadImg" type="button" style="display:none" class="am-btn am-btn-danger am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 开始上传
                                             </button>
@@ -61,58 +62,46 @@
                             <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 角色</label>
                             <div class="am-u-sm-9">
                                 <label class="am-radio-inline">
-                                    <input type="radio" value="20" name="userRole" checked="checked"> 普通用户
+                                    <input type="radio" value="20" name="userRole" @(Model.RoleType == 20 ? "checked=\"checked\"" : "")> 普通用户
                                 </label>
                                 <label class="am-radio-inline">
-                                    <input type="radio" value="10" name="userRole"> 管理员
+                                    <input type="radio" value="10" name="userRole" @(Model.RoleType == 10 ? "checked=\"checked\"" : "")> 管理员
                                 </label>
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 用户名</label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="required" id="user-name" placeholder="登录系统时使用的帐号名" data-foolish-msg="该用户名已存在！">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 登录密码</label>
-                            <div class="am-u-sm-9">
-                                <input type="password" class="required" id="user-password" placeholder="设置一个密码吧">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 确认密码</label>
-                            <div class="am-u-sm-9">
-                                <input type="password" class="required" id="user-repassword" placeholder="请再输入一次密码" data-foolish-msg="两次输入的密码不一致！">
+                                <input type="text" class="required" id="user-name" value="@(Model.UserName)" placeholder="登录系统时使用的帐号名" data-foolish-msg="该用户名已存在！" readonly="readonly">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
                             <div class="am-u-sm-9">
-                                <input type="text" id="user-realname" placeholder="用户真实姓名">
+                                <input type="text" id="user-realname" placeholder="用户真实姓名" value="@(Model.RealName)">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-email" class="am-u-sm-3 am-form-label">电子邮件</label>
                             <div class="am-u-sm-9">
-                                <input type="email" id="user-email" placeholder="用户的电子邮件">
+                                <input type="email" id="user-email" placeholder="用户的电子邮件" value="@(Model.Email)">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-QQ" class="am-u-sm-3 am-form-label">QQ</label>
                             <div class="am-u-sm-9">
-                                <input type="text" id="user-QQ" placeholder="用户的QQ号码">
+                                <input type="text" id="user-QQ" placeholder="用户的QQ号码" value="@(Model.QQ)">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-phone" class="am-u-sm-3 am-form-label">手机号</label>
                             <div class="am-u-sm-9">
-                                <input type="tel" id="user-phone" placeholder="用户的手机号" data-foolish-msg="手机号格式不正确！">
+                                <input type="tel" id="user-phone" placeholder="用户的手机号" data-foolish-msg="手机号格式不正确！" value="@(Model.Phone)">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button id="btncommit" type="button" class="am-btn am-btn-primary">确认添加</button>
+                                <button id="btncommit" type="button" class="am-btn am-btn-primary">保存修改</button>
                             </div>
                         </div>
                     </form>
@@ -125,8 +114,6 @@
     @Html.Partial("~/Views/Common/TipsTool.cshtml")
 </body>
 </html>
-
-<script src="~/Resources/js/jquery.form.js"></script>
 <script>
 
     $(function () {
@@ -151,19 +138,9 @@
         // 选择图片
         $('#doc-form-file').on('change', function () {
             if (this.files.length == 0) {
-                // 清空文件域
-                clearFileList();
                 return false;
             }
             var fileName = this.files[0].name;
-            var fileType = this.files[0].type;
-
-            if (!fileName || (fileType != 'image/jpeg' && fileType != 'image/gif' && fileType != 'image/png')) {
-                // 清空文件域
-                alert(fileType);
-                clearFileList();
-                return false;
-            }
             if (fileName && fileName.length > 15) {
                 fileName = fileName.substr(0, 14) + "..."
             }
@@ -182,28 +159,7 @@
             $('#uploadImg').attr("disabled", true);
 
             // 这里写访问服务器事件
-
-            $("#fileForm").ajaxSubmit({
-                dataType: 'text/html',
-                type: 'post',
-                url: 'UploadIcon.do',
-                success: function (result) {
-                    var reg = /<pre.+?>(.+)<\/pre>/g;
-                    var result = result.match(reg);
-                    result = RegExp.$1;
-                    alert(result);
-                    data = eval('(' + result + ')');
-                    if (data && data.Message == "OK") {
-                        // 替换头像
-                        $('#userIcon').attr('src', data.ImgUrl);
-                    } else {
-                        alert(data.Message);
-                    }
-                    $('#uploadImg').removeAttr("disabled");
-                    showUploadFileButton();
-                }
-            });
-
+            //showUploadFileButton()
         });
 
         // 取消上传
@@ -211,7 +167,6 @@
             showUploadFileButton()
         });
     }
-
 
     // 显示上传和取消按钮
     function showUploadFileButton() {
@@ -221,43 +176,33 @@
         $('#doc-form-file').show();
         $('#uploadFileButton').show();
         // 清空文件域
-        clearFileList();
-
-        $('#file-list').html('');
-    }
-
-    // 清空文件域
-    function clearFileList() {
         var file = $("#doc-form-file");
         file.after(file.clone(true).val(""));
         file.remove();
+
+        $('#file-list').html('');
     }
 
     var data = {};
     var tipInput;
     function commitUserInfo() {
+        data.ID = '@(Model.ID)';
         data.RoleType = $('input[name=userRole]:checked').val();
-        data.UserName = $.trim($('#user-name').val());
-        data.Password = $.trim($('#user-password').val());
-        data.RePassword = $.trim($('#user-repassword').val());
+        data.UserName = $.trim($('#user-name').val()); 
         data.RealName = $.trim($('#user-realname').val());
         data.Email = $.trim($('#user-email').val());
         data.QQ = $.trim($('#user-QQ').val());
         data.Phone = $.trim($('#user-phone').val());
         if (checkData()) {
             // 提交数据
-            $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "AddUserCallBack" })', data, function (result) {
+            $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "EditUserCallBack" })', data, function (result) {
                 if (result && result.Message == 'OK') {
-                    alert("添加成功");
+                    alert("修改成功");
                     location.href = '/UserInfo/IndexPage.html?keyWords=' + data.UserName;
                 }
                 else {
                     if (result.ErrorType == 'UserName') {
                         tipInput = $('#user-name');
-                    } else if (result.ErrorType == 'Password') {
-                        tipInput = $('#user-password');
-                    } else if (result.ErrorType == 'RePassword') {
-                        tipInput = $('#user-repassword');
                     } else {
                         tipInput = null;
                         alert(result.Message);
@@ -282,26 +227,6 @@
         if (!reg.test(data.UserName)) {
             tipInput = $('#user-name');
             showToolTips(tipInput, "用户名由数字、字母或下划线组成");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-
-        // 验证密码
-        if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-        if (!data.Password || data.Password.length == 0) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "请输入密码");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-        if (data.Password != data.RePassword) {
-            tipInput = $('#user-repassword');
-            showToolTips(tipInput, "两次输入的密码不一致");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }

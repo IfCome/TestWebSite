@@ -6,9 +6,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>添加用户</title>
-    <meta name="description" content="添加用户">
-    <meta name="keywords" content="添加用户">
+    <title>新增商品</title>
+    <meta name="description" content="新增商品">
+    <meta name="keywords" content="新增商品">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
 </head>
 <body>
@@ -19,9 +19,9 @@
         <!-- content start -->
         <div class="admin-content">
             <ol class="am-breadcrumb">
-                <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
-                <li><a href="~/UserInfo/IndexPage.html">用户管理</a></li>
-                <li class="am-active">添加用户</li>
+                <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
+                <li><a href="~/UserInfo/IndexPage">商品管理</a></li>
+                <li class="am-active">新增商品</li>
             </ol>
             <hr />
             <div class="am-g">
@@ -31,16 +31,16 @@
                         <div class="am-panel-bd">
                             <div class="am-g">
                                 <div class="am-u-md-4">
-                                    <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
+                                    <img class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
                                 </div>
                                 <div class="am-u-md-8">
                                     <p>你可以使用<a href="#">gravatar.com</a>提供的头像或者使用本地上传头像。 </p>
-                                    <form id="fileForm" class="am-form" enctype="multipart/form-data" method="post">
+                                    <form class="am-form">
                                         <div class="am-form-group am-form-file">
                                             <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件
                                             </button>
-                                            <input id="doc-form-file" name="userIcon" type="file" accept="image/gif, image/jpeg, image/png">
+                                            <input id="doc-form-file" type="file" accept="image/gif, image/jpeg, image/png">
                                             <button id="uploadImg" type="button" style="display:none" class="am-btn am-btn-danger am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 开始上传
                                             </button>
@@ -58,56 +58,56 @@
                 <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
                     <form class="am-form am-form-horizontal" id="formAddUserInfo">
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 角色</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 类别</label>
                             <div class="am-u-sm-9">
-                                <label class="am-radio-inline">
-                                    <input type="radio" value="20" name="userRole" checked="checked"> 普通用户
-                                </label>
-                                <label class="am-radio-inline">
-                                    <input type="radio" value="10" name="userRole"> 管理员
-                                </label>
+                                <select data-am-selected="{btnSize: 'sm'}">
+                                    <option value="all">所有用户</option>
+                                    <option value="com">普通用户</option>
+                                    <option value="adm">管理员</option>
+                                </select>
+                                <select data-am-selected="{btnSize: 'sm'}">
+                                    <option value="all">所有用户</option>
+                                    <option value="com">普通用户</option>
+                                    <option value="adm">管理员</option>
+                                </select>
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 用户名</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 商品名</label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="required" id="user-name" placeholder="登录系统时使用的帐号名" data-foolish-msg="该用户名已存在！">
+                                <input type="text" class="required" id="goods-name" placeholder="该商品名称" data-foolish-msg="该商品已存在！">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 登录密码</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 商品描述</label>
                             <div class="am-u-sm-9">
-                                <input type="password" class="required" id="user-password" placeholder="设置一个密码吧">
+                                <input type="text" class="required" id="goods-describe" placeholder="对该商品的详尽描述">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 确认密码</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span>价格</label>
                             <div class="am-u-sm-9">
-                                <input type="password" class="required" id="user-repassword" placeholder="请再输入一次密码" data-foolish-msg="两次输入的密码不一致！">
+                                <input type="text" id="goods-price" placeholder="该商品众筹价格">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span>详情页图片</label>
                             <div class="am-u-sm-9">
-                                <input type="text" id="user-realname" placeholder="用户真实姓名">
+                                <input type="text" id="goods-realname" placeholder="详情页介绍商品的图片">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-email" class="am-u-sm-3 am-form-label">电子邮件</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span>展示图片</label>
                             <div class="am-u-sm-9">
-                                <input type="email" id="user-email" placeholder="用户的电子邮件">
+                                <input type="text" id="goods-realname" placeholder="商品列表页图片">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-QQ" class="am-u-sm-3 am-form-label">QQ</label>
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span>展示图片</label>
                             <div class="am-u-sm-9">
-                                <input type="text" id="user-QQ" placeholder="用户的QQ号码">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="user-phone" class="am-u-sm-3 am-form-label">手机号</label>
-                            <div class="am-u-sm-9">
-                                <input type="tel" id="user-phone" placeholder="用户的手机号" data-foolish-msg="手机号格式不正确！">
+                                <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm">
+                                    <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                                </button>
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -125,8 +125,6 @@
     @Html.Partial("~/Views/Common/TipsTool.cshtml")
 </body>
 </html>
-
-<script src="~/Resources/js/jquery.form.js"></script>
 <script>
 
     $(function () {
@@ -151,19 +149,9 @@
         // 选择图片
         $('#doc-form-file').on('change', function () {
             if (this.files.length == 0) {
-                // 清空文件域
-                clearFileList();
                 return false;
             }
             var fileName = this.files[0].name;
-            var fileType = this.files[0].type;
-
-            if (!fileName || (fileType != 'image/jpeg' && fileType != 'image/gif' && fileType != 'image/png')) {
-                // 清空文件域
-                alert(fileType);
-                clearFileList();
-                return false;
-            }
             if (fileName && fileName.length > 15) {
                 fileName = fileName.substr(0, 14) + "..."
             }
@@ -182,28 +170,7 @@
             $('#uploadImg').attr("disabled", true);
 
             // 这里写访问服务器事件
-
-            $("#fileForm").ajaxSubmit({
-                dataType: 'text/html',
-                type: 'post',
-                url: 'UploadIcon.do',
-                success: function (result) {
-                    var reg = /<pre.+?>(.+)<\/pre>/g;
-                    var result = result.match(reg);
-                    result = RegExp.$1;
-                    alert(result);
-                    data = eval('(' + result + ')');
-                    if (data && data.Message == "OK") {
-                        // 替换头像
-                        $('#userIcon').attr('src', data.ImgUrl);
-                    } else {
-                        alert(data.Message);
-                    }
-                    $('#uploadImg').removeAttr("disabled");
-                    showUploadFileButton();
-                }
-            });
-
+            //showUploadFileButton()
         });
 
         // 取消上传
@@ -211,7 +178,6 @@
             showUploadFileButton()
         });
     }
-
 
     // 显示上传和取消按钮
     function showUploadFileButton() {
@@ -221,27 +187,22 @@
         $('#doc-form-file').show();
         $('#uploadFileButton').show();
         // 清空文件域
-        clearFileList();
-
-        $('#file-list').html('');
-    }
-
-    // 清空文件域
-    function clearFileList() {
         var file = $("#doc-form-file");
         file.after(file.clone(true).val(""));
         file.remove();
+
+        $('#file-list').html('');
     }
 
     var data = {};
     var tipInput;
     function commitUserInfo() {
         data.RoleType = $('input[name=userRole]:checked').val();
-        data.UserName = $.trim($('#user-name').val());
-        data.Password = $.trim($('#user-password').val());
-        data.RePassword = $.trim($('#user-repassword').val());
-        data.RealName = $.trim($('#user-realname').val());
-        data.Email = $.trim($('#user-email').val());
+        data.GoodsName = $.trim($('#goods-name').val());
+        data.Describe = $.trim($('#goods-describe').val());
+        data.Price = $.trim($('#goods-price').val());
+        data.RealName = $.trim($('#goods-realname').val());
+        data.Email = $.trim($('#goods-email').val());
         data.QQ = $.trim($('#user-QQ').val());
         data.Phone = $.trim($('#user-phone').val());
         if (checkData()) {
@@ -249,7 +210,7 @@
             $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "AddUserCallBack" })', data, function (result) {
                 if (result && result.Message == 'OK') {
                     alert("添加成功");
-                    location.href = '/UserInfo/IndexPage.html?keyWords=' + data.UserName;
+                    location.href = '/UserInfo/IndexPage';
                 }
                 else {
                     if (result.ErrorType == 'UserName') {
@@ -273,34 +234,27 @@
     function checkData() {
         var reg = /^[A-Za-z0-9]+$/;
         // 验证用户名
-        if (!data.UserName || data.UserName.length == 0) {
-            tipInput = $('#user-name');
-            showToolTips(tipInput, "请输入用户名");
+        if (!data.GoodsName || data.GoodsName.length == 0) {
+            tipInput = $('#goods-name');
+            showToolTips(tipInput, "请输入商品名");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }
-        if (!reg.test(data.UserName)) {
-            tipInput = $('#user-name');
-            showToolTips(tipInput, "用户名由数字、字母或下划线组成");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-
         // 验证密码
-        if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
+        if (!reg.test(data.Password) || data.Password.length < 10) {
+            tipInput = $('#goods-describe');
+            showToolTips(tipInput, "商品描述必须大于10个字");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }
-        if (!data.Password || data.Password.length == 0) {
-            tipInput = $('#user-password');
-            showToolTips(tipInput, "请输入密码");
+        if (!reg.test(data.Password)) {
+            tipInput = $('#goods-price');
+            showToolTips(tipInput, "");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }
         if (data.Password != data.RePassword) {
-            tipInput = $('#user-repassword');
+            tipInput = $('#goods-');
             showToolTips(tipInput, "两次输入的密码不一致");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
@@ -308,3 +262,4 @@
         return true;
     }
 </script>
+
