@@ -20,6 +20,21 @@ namespace CrowdFundingShop.UI.Controllers.PC
             return View();
         }
 
+        public ActionResult SeeUserInfo(long id)
+        {
+            // 查询用户信息
+            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(id);
+            if (userInfo == null)
+            {
+                return Content("该用户不存在！！");
+            }
+
+            // 查询该用户的操作日志
+            List<Model.BackgroundUserInfo_log> logList = BLL.BackgroundUserBll_log.GetSingleUserTop10Logs(id);
+            ViewBag.LogList = logList;
+            return View(userInfo);
+        }
+
         // 添加用户页面
         public ActionResult AddUser()
         {
