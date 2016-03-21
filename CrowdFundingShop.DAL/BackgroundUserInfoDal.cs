@@ -300,7 +300,7 @@ namespace CrowdFundingShop.DAL
             int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
             return i > 0 ? true : false;
         }
-        #endregion
+
 
         /// <summary>
         /// 通过ID更新实体
@@ -333,5 +333,28 @@ namespace CrowdFundingShop.DAL
         }
 
 
+        #endregion
+
+
+        #region 删除
+
+        /// <summary>
+        /// 通过ID删除
+        /// </summary>
+        public static bool DeleteByID(long id)
+        {
+            var sql = @"
+                        UPDATE [BackgroundUserInfo] SET [IsDelete] = 1
+                        WHERE 
+                            [ID] = @ID
+                    ";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = id });
+
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
+
+        #endregion
     }
 }

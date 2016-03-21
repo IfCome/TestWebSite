@@ -105,5 +105,14 @@ namespace CrowdFundingShop.BLL
             }
             return diffContent.ToString();
         }
+
+        /// <summary>
+        /// 删除单个用户
+        /// </summary>
+        /// <param name="id"></param>
+        public static bool DeleteSingleUserInfo(long id)
+        {
+            return DAL.BackgroundUserInfoDal.DeleteByID(id);
+        }
     }
 }

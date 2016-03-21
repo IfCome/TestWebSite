@@ -8,19 +8,10 @@ namespace CrowdFundingShop.Utility
 {
     public class Config
     {
-        public static string ImagePath
-        {
-            get { return ConfigurationManager.AppSettings["ImagePath"]; }
-        }
-
-        public static string FtpUser
-        {
-            get { return ConfigurationManager.AppSettings["FtpUser"]; }
-        }
-        public static string FtpPassword
-        {
-            get { return ConfigurationManager.AppSettings["FtpPassword"]; }
-        }
+        //public static string ImagePath
+        //{
+        //    get { return ConfigurationManager.AppSettings["ImagePath"]; }
+        //}
 
 
     }

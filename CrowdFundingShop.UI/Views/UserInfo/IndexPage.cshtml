@@ -100,7 +100,7 @@
                             @if (Identity.LoginUserInfo.RoleType == 10)
                             {
                                 <button type="button" onclick="EditUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
-                                <button type="button" onclick="DeleteUser('{ID}','{RealName}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                <button type="button" onclick="DeleteUser('{ID}', '{UserName}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
                             }
                         </div>
                     </div>
@@ -210,8 +210,22 @@
             window.location.href = 'EditUser.html?id=' + id;
         }
 
-        function DeleteUser(id) {
-
+        function DeleteUser(id, userName) {
+            if (confirm("确定删除" + userName + "?")) {
+                $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "DeleteUser" })', { ID: id }, function (result) {
+                    if (result) {
+                        if (result.Message == 'OK') {
+                            alert("删除成功");
+                            search(false);
+                        } else {
+                            alert(result.Message);
+                        }
+                    }
+                    else {
+                        alert("删除失败，请刷新列表重试");
+                    }
+                }, 'json');
+            }
         }
     </script>
 </body>
