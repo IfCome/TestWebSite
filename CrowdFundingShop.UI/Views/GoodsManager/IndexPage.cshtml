@@ -51,7 +51,7 @@
         <div class="admin-content">
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
-                <li class="am-active">商品管理</li>
+                <li class="am-active"><a href="~/GoodsManager/IndexPage">商品管理</a></li>
             </ol>
             <hr />
             <div class="am-g">
@@ -73,20 +73,10 @@
                     </div>
                 </div>
                 <div class="am-u-sm-12 am-u-md-3">
-                    <div class="am-form-group">
-                        <select data-am-selected="{btnSize: 'sm'}">
-                            <option value="all">所有商品</option>
-                            <option value="com">众筹中</option>
-                            <option value="adm">未开奖</option>
-                            <option value="adm">已开奖</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="am-u-sm-12 am-u-md-3">
                     <div class="am-input-group am-input-group-sm">
-                        <input type="text" class="am-form-field">
+                        <input type="text" id="txtKeyWords" class="am-form-field">
                         <span class="am-input-group-btn">
-                            <button class="am-btn am-btn-default" type="button">搜索</button>
+                            <button class="am-btn am-btn-default" id="btnSearch" type="button">搜索</button>
                         </span>
                     </div>
                 </div>
@@ -103,55 +93,58 @@
             <div class="am-g">
                 <div class="am-u-sm-12">
                     <form class="am-form">
-                        <table class="am-table am-table-striped am-table-hover table-main">
+                        <table id="tableData" class="am-table am-table-striped am-table-hover table-main">
                             <thead>
                                 <tr>
                                     <th class="table-id am-text-center">ID</th>
-                                    <th class="table-title">用户名</th>
-                                    <th class="table-author">真实姓名</th>
-                                    <th class="table-type am-hide-sm-only">角色</th>
+                                    <th class="table-title">商品名称</th>
+                                    <th class="table-author">商品分类</th>
+                                    <th class="table-author" width="50%">商品描述</th>
+                                    <th class="table-type am-hide-sm-only">众筹价格</th>
                                     <th class="table-date am-hide-sm-only">创建时间</th>
-                                    <th class="table-date am-hide-sm-only">最近登录日期</th>
                                     <th class="table-set">操作</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-
-                                    <td class="am-text-center">1</td>
-                                    <td><a href="#">Business management</a></td>
-                                    <td>default</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
+
                         <div class="am-cf">
-                            共 <span id="recordCount">123</span> 个用户
+                            共 <span id="recordCount"></span> 个商品
                             <div class="am-fr">
                                 <ul id="pagination" class="am-pagination"></ul>
                             </div>
                         </div>
                     </form>
                 </div>
+                <table id="dataTableTemplet" style="display:none">
+                    <tr>
+                        <td class="am-text-center">{Index}</td>
+                        <td><a href="javascript:void(0)" onclick="ShowUserDetails('{ID}');">{GoodsName}</a></td>
+                        <td>{Category}</td>
+                        <td>{Describe}</td>
+                        <td class="am-hide-sm-only">{Price}</td>
+                        <td class="am-hide-sm-only">{CreateTime}</td>
+                        <td>
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" onclick="ShowUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
+                                    <button type="button" onclick="EditUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
+                                    <button type="button" onclick="DeleteUser('{ID}','{RealName}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <!-- content end -->
     </div>
     @Html.Partial("~/Views/Common/FootPart.cshtml")
-
     <script type="text/javascript" src="/Resources/js/jqPaginator.js"></script>
     <script>
+        var pageSize = 15;
+        var pageIndex = 1;
+        var isSearching = false;
         // 分页配置
         var pageOptions = {
             totalPages: 1,
@@ -165,25 +158,159 @@
                 //search(num);
             }
         }
+       
 
         $(function () {
             initCss();
             bindFunction();
             loadData();
+            $("#btnSearch").click(function () {
+                search(true);
+            });
         });
 
         function initCss() {
             // 初始化分页
             $.jqPaginator('#pagination', pageOptions);
         }
-
+        /****************上传图片***************/
         function bindFunction() {
+            // 选择图片
+            $('#doc-form-file').on('change', function () {
+                if (this.files.length == 0) {
+                    // 清空文件域
+                    clearFileList();
+                    return false;
+                }
+                var fileName = this.files[0].name;
+                var fileType = this.files[0].type;
+
+                if (!fileName || (fileType != 'image/jpeg' && fileType != 'image/gif' && fileType != 'image/png')) {
+                    // 清空文件域
+                    alert(fileType);
+                    clearFileList();
+                    return false;
+                }
+                if (fileName && fileName.length > 15) {
+                    fileName = fileName.substr(0, 14) + "..."
+                }
+                $('#file-list').html('<span class="am-badge" maxlength=5>' + fileName + '</span> ');
+
+                $('#doc-form-file').hide();
+                $('#uploadFileButton').hide();
+                $('#uploadImg').show();
+                $('#exitUpload').show();
+            });
+
+            // 上传图片
+            $('#uploadImg').click(function () {
+                $('#uploadImg>i').attr('class', "am-icon-spinner am-animation-spin");
+                $('#exitUpload').hide();
+                $('#uploadImg').attr("disabled", true);
+
+                // 这里写访问服务器事件
+
+                $("#fileForm").ajaxSubmit({
+                    dataType: 'text/html',
+                    type: 'post',
+                    url: 'UploadIcon.do',
+                    success: function (result) {
+                        var reg = /<pre.+?>(.+)<\/pre>/g;
+                        var result = result.match(reg);
+                        result = RegExp.$1;
+                        alert(result);
+                        data = eval('(' + result + ')');
+                        if (data && data.Message == "OK") {
+                            // 替换头像
+                            $('#userIcon').attr('src', data.ImgUrl);
+                        } else {
+                            alert(data.Message);
+                        }
+                        $('#uploadImg').removeAttr("disabled");
+                        showUploadFileButton();
+                    }
+                });
+
+            });
+
+            // 取消上传
+            $('#exitUpload').click(function () {
+                showUploadFileButton()
+            });
         }
 
+
+        // 显示上传和取消按钮
+        function showUploadFileButton() {
+            $('#uploadImg>i').attr('class', "am-icon-cloud-upload");
+            $('#uploadImg').hide();
+            $('#exitUpload').hide();
+            $('#doc-form-file').show();
+            $('#uploadFileButton').show();
+            // 清空文件域
+            clearFileList();
+
+            $('#file-list').html('');
+        }
+
+        // 清空文件域
+        function clearFileList() {
+            var file = $("#doc-form-file");
+            file.after(file.clone(true).val(""));
+            file.remove();
+        }
+        /***************************************/
         function loadData() {
-            pageOptions.totalPages = 5;
-            pageOptions.currentPage = 1;
-            $.jqPaginator('#pagination', pageOptions);
+            //pageOptions.totalPages = 5;
+            //pageOptions.currentPage = 1;
+            //$.jqPaginator('#pagination', pageOptions);
+            search(true);
+        }
+
+        function search(isFirst) {
+            // 正在查询
+            if (isSearching) {
+                return;
+            }
+            if (isFirst) {
+                pageIndex = 1;
+            }
+            // 整理参数
+            var data = {
+                PageSize: pageSize,
+                CurrentPage: pageIndex,
+                KeyWords: $('#txtKeyWords').val()
+            };
+            isSearching = true;
+            $.get('@Url.RouteUrl(new { controller = "GoodsManager", action = "GetGoodsList" })', data, function (result) {
+                if (result) {
+                    $('#recordCount').text(parseInt(result.AllCount));
+                    // 清空数据
+                    $("#tableData>tbody").html('');
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            var rowHtml = $("#dataTableTemplet>tbody").html();
+                            rowHtml = rowHtml.replace("{Index}", i + 1);
+                            rowHtml = rowHtml.replace(/{GoodsName}/g, row.GoodsName);
+                            rowHtml = rowHtml.replace("{Describe}", row.Describe);
+                            rowHtml = rowHtml.replace("{Price}", row.Price);
+                            rowHtml = rowHtml.replace("{Category}", row.Category);
+                            rowHtml = rowHtml.replace("{CreateTime}", row.CreateTime);
+                            rowHtml = rowHtml.replace(/{ID}/g, row.ID);
+                            $("#tableData>tbody").append($(rowHtml));
+                        }
+                    }
+
+                    pageOptions.totalPages = Math.ceil(parseInt(result.AllCount) / pageSize);
+                    pageOptions.currentPage = pageIndex;
+                    $.jqPaginator('#pagination', pageOptions);
+                }
+                else {
+                    alert("查询出错");
+                }
+                isSearching = false;
+            }, 'json');
         }
     </script>
 </body>

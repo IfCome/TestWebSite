@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="BackgroundUserInfoDal.cs" />
     <Compile Include="BackgroundUserInfoDal_log.cs" />
+    <Compile Include="CategoryInfoDal.cs" />
+    <Compile Include="GoodsBaseInfoDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

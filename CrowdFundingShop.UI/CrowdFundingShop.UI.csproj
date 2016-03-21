@@ -113,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\WAP\GoodsListController.cs" />
+    <Compile Include="Models\PC\AddGoodsCallBackIn.cs" />
+    <Compile Include="Models\PC\GetGoodsInfoIn.cs" />
     <Compile Include="Models\PC\GetUserInfoListIn.cs" />
     <Compile Include="Controllers\PC\GoodsManagerController.cs" />
     <Compile Include="Controllers\PC\HomeController.cs" />
@@ -245,6 +247,8 @@
     <Content Include="Views\UserInfo\EditUser.cshtml" />
     <Content Include="Views\GoodsManager\Edit.cshtml" />
     <Content Include="Views\UserInfo\SeeUserInfo.cshtml" />
+    <Content Include="Views\GoodsManager\EditPic.cshtml" />
+
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
