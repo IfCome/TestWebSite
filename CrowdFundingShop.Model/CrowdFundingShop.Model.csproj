@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundUserInfo_log.cs" />
+    <Compile Include="CategoryInfo.cs" />
+    <Compile Include="GoodsBaseInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BackgroundUserInfo.cs" />
   </ItemGroup>
