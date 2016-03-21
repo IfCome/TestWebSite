@@ -50,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="SqlHelper.cs" />
+    <Compile Include="UploadImageFolderType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CrowdFundingShop.Model\CrowdFundingShop.Model.csproj">

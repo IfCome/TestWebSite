@@ -216,17 +216,43 @@ namespace CrowdFundingShop.UI.Controllers.PC
             #endregion
 
             // 上传图片到服务器
-            FileUpToImg file = new FileUpToImg();
+            FileUpToImg file = new FileUpToImg(imgFile, UploadImageFolderType.UserIcons.ToString(), "_t", 150, 150);
 
-            String imgUrl = String.Empty;       // 图片在服务器端的保存地址
-            imgUrl = file.uploadUrl;
-            file.UpLoadImage(imgFile, "/images/", "s_", 150, 150);
 
-            if (String.IsNullOrEmpty(imgUrl))
+            if (file.IsSuccess == false)
             {
-                return Json(new { Message = "文件上传失败！" });
+                return Json(new { Message = file.ErrorInfo });
             }
+            String imgUrl = file.ThumbImageUrl;
             return Json(new { Message = "OK", ImgUrl = imgUrl });
+        }
+
+        // 添加用户页面
+        public ActionResult DeleteUser(long id)
+        {
+            if (Identity.LoginUserInfo.RoleType != 10)
+            {
+                return Json(new { Message = "只有管理员才能编辑用户" });
+            }
+            // 查询用户信息
+            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(id);
+            if (userInfo == null)
+            {
+                return Json(new { Message = "该用户不存在或已被删除！！" });
+            }
+            if (BLL.BackgroundUserBll.DeleteSingleUserInfo(id))
+            {
+                // 记录日志
+                string logTitle = "删除后台用户";
+                string logMsg = string.Format("删除用户信息：用户名【{0}】，角色【{1}】", userInfo.UserName, userInfo.RoleType == 10 ? "管理员" : "普通用户");
+                BLL.BackgroundUserBll_log.AddLog(logTitle, logMsg, Request.UserHostAddress);
+                return Json(new { Message = "OK" });
+            }
+            else
+            {
+                return Json(new { Message = "删除失败！" });
+            }
+
         }
     }
 }

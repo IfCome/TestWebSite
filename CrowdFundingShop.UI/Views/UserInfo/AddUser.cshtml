@@ -34,7 +34,7 @@
                                     <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt="" />
                                 </div>
                                 <div class="am-u-md-8">
-                                    <p>你可以使用<a href="#">gravatar.com</a>提供的头像或者使用本地上传头像。 </p>
+                                    <p>请选择你的头像图片，图片大小最好小于2M并且长宽相等</p>
                                     <form id="fileForm" class="am-form" enctype="multipart/form-data" method="post">
                                         <div class="am-form-group am-form-file">
                                             <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm">
@@ -126,7 +126,7 @@
 </body>
 </html>
 
-<script src="~/Resources/js/jquery.form.js"></script>
+<script src="~/Resources/js/ajaxfileupload.js"></script>
 <script>
 
     $(function () {
@@ -149,7 +149,7 @@
         $('#btncommit').click(commitUserInfo);
 
         // 选择图片
-        $('#doc-form-file').on('change', function () {
+        $(document).on('change', '#doc-form-file', function () {
             if (this.files.length == 0) {
                 // 清空文件域
                 clearFileList();
@@ -160,7 +160,6 @@
 
             if (!fileName || (fileType != 'image/jpeg' && fileType != 'image/gif' && fileType != 'image/png')) {
                 // 清空文件域
-                alert(fileType);
                 clearFileList();
                 return false;
             }
@@ -182,16 +181,16 @@
             $('#uploadImg').attr("disabled", true);
 
             // 这里写访问服务器事件
-
-            $("#fileForm").ajaxSubmit({
-                dataType: 'text/html',
-                type: 'post',
+            $.ajaxFileUpload({
                 url: 'UploadIcon.do',
-                success: function (result) {
+                secureuri: false,//一般设置为false
+                fileElementId: 'doc-form-file',
+                dataType: 'text/html',
+                success: function (result, status) {
+                    //服务器成功响应处理函数
                     var reg = /<pre.+?>(.+)<\/pre>/g;
                     var result = result.match(reg);
                     result = RegExp.$1;
-                    alert(result);
                     data = eval('(' + result + ')');
                     if (data && data.Message == "OK") {
                         // 替换头像
@@ -199,11 +198,16 @@
                     } else {
                         alert(data.Message);
                     }
+                },
+                error: function () {
+                    //服务器响应失败处理函数
+                    alert('上传失败！请重新选择图片');
+                },
+                complete: function () {
                     $('#uploadImg').removeAttr("disabled");
                     showUploadFileButton();
                 }
-            });
-
+            })
         });
 
         // 取消上传
@@ -240,10 +244,11 @@
         data.UserName = $.trim($('#user-name').val());
         data.Password = $.trim($('#user-password').val());
         data.RePassword = $.trim($('#user-repassword').val());
-        data.RealName = $.trim($('#user-realname').val());
+        data.RealName = encodeURIComponent($.trim($('#user-realname').val()));
         data.Email = $.trim($('#user-email').val());
         data.QQ = $.trim($('#user-QQ').val());
         data.Phone = $.trim($('#user-phone').val());
+        data.HeadIcon = encodeURIComponent($('#userIcon').attr('src'));
         if (checkData()) {
             // 提交数据
             $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "AddUserCallBack" })', data, function (result) {
