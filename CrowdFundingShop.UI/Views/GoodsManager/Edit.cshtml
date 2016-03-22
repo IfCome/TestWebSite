@@ -31,6 +31,11 @@
                 <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
                     <form class="am-form am-form-horizontal" id="formAddUserInfo">
                         <div class="am-form-group">
+                            <label class="am-u-sm-3 am-form-label"> 1、填写商品基本信息：</label>
+                            <div class="am-u-sm-9">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
                             <label for="goods-name" class="am-u-sm-3 am-form-label"> 类别</label>
                             <div class="am-u-sm-9">
                                 <select data-am-selected="{btnSize: 'sm'}" id="slctParent"></select>
@@ -86,6 +91,8 @@
                 hideToolTips();
             }
         });
+        //label标签字体细化
+        $("label").css("font-weight", "normal");
         //初始化下拉列表
         LoadCategory(0, 1);
         $("#slctParent").on("change", function () {
@@ -124,7 +131,6 @@
     var data = {};
     var tipInput;
     function commitUserInfo() {
-        data.RoleType = $('input[name=userRole]:checked').val();
         data.GoodsName = $.trim($('#goods-name').val());
         data.Describe = $.trim($('#goods-describe').val());
         data.Price = $.trim($('#goods-price').val());
@@ -133,7 +139,6 @@
             // 提交数据
             $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "AddGoodsCallBack" })', data, function (result) {
                 if (result && result.Message == 'OK') {
-                    alert(result.InsertID);
                     location.href = '/GoodsManager/EditPic?id=' + result.InsertID;
                 }
                 else {

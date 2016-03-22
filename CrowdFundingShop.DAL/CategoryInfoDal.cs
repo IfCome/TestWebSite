@@ -10,6 +10,7 @@ namespace CrowdFundingShop.DAL
 {
     public class CategoryInfoDal
     {
+        #region 查询
         public static List<Model.CategoryInfo> GetListByParentID(int parentID)
         {
             var sql = @"
@@ -33,5 +34,6 @@ namespace CrowdFundingShop.DAL
             }
             return null;
         }
+        #endregion
     }
 }

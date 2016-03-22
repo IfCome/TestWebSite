@@ -43,6 +43,7 @@
     <Compile Include="BackgroundUserBll_log.cs" />
     <Compile Include="CategoryInfoBll.cs" />
     <Compile Include="GoodsBaseInfoBll.cs" />
+    <Compile Include="HuoDongInfoBll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

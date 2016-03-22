@@ -18,26 +18,31 @@ namespace CrowdFundingShop.UI.Controllers.PC
             return View();
         }
 
-        public ActionResult GetGoodsList(int currentPage, string keyWords = "")
+        public ActionResult GetGoodsList(int pageSize, int currentPage, string keyWords = "", string huoDongState = "")
         {
             List<Model.GoodsBaseInfo> goodsInfoList = new List<Model.GoodsBaseInfo>();
             int allCount = 0;
-            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(currentPage, keyWords, out allCount);
-            return Json(new
+            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, (huoDongState == "-1" ? "" : huoDongState), out allCount);
+            if (goodsInfoList != null)
             {
-                Rows = goodsInfoList.Select(g => new
+                return Json(new
                 {
-                    g.ID,
-                    g.GoodsName,
-                    g.DetailIcons,
-                    g.Describe,
-                    g.Price,
-                    g.ShowIcons,
-                    g.Category,
-                    g.CreateTime,
-                }),
-                AllCount = allCount
-            }, JsonRequestBehavior.AllowGet);
+                    Rows = goodsInfoList.Select(g => new
+                    {
+                        g.ID,
+                        g.GoodsName,
+                        g.DetailIcons,
+                        Describe = (g.Describe.Length > 50 ? (g.Describe.Remove(50, g.Describe.Length - 50) + "......") : g.Describe),
+                        g.Price,
+                        g.ShowIcons,
+                        g.Category,
+                        g.CreateTime,
+                        g.State
+                    }),
+                    AllCount = allCount
+                }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { Rows = "", AllCount = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit()
@@ -94,7 +99,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
             }
             return Json(new { Message = msg, ErrorType = errorType, InsertID = insertID }, JsonRequestBehavior.AllowGet);
         }
-
+        //添加商品图片信息（更新）
         public ActionResult EditPic(string id)
         {
             ViewBag.ID = id;
@@ -104,7 +109,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
             }
             return View();
         }
-
+        //查商品分类
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
@@ -125,6 +130,77 @@ namespace CrowdFundingShop.UI.Controllers.PC
             {
                 return Json("", JsonRequestBehavior.AllowGet);
             }
+        }
+        //更新商品信息
+        public ActionResult UpdateGoodsCallBack(AddGoodsCallBackIn InModel)
+        {
+            string errorType = "";
+            string msg = "OK";
+            Model.GoodsBaseInfo goodsInfo = new Model.GoodsBaseInfo()
+               {
+                   ID = InModel.ID,
+                   GoodsName = InModel.GoodsName,
+                   Price = InModel.Price,
+                   Describe = InModel.Describe,
+                   Category = InModel.Category,
+                   ShowIcons = string.IsNullOrEmpty(InModel.ShowIcons) ? "" : InModel.ShowIcons.Remove(InModel.ShowIcons.Length - 1),
+                   DetailIcons = string.IsNullOrEmpty(InModel.DetailIcons) ? "" : InModel.DetailIcons.Remove(InModel.DetailIcons.Length - 1),
+                   CreateUserID = Identity.LoginUserInfo.ID.ToString(),
+                   CreateTime = DateTime.Now.ToString()
+               };
+            bool result = BLL.GoodsBaseInfoBll.UpDateGoodsInfo(goodsInfo);
+            if (!result)
+            {
+                errorType = "alert";
+                msg = "添加失败，请重试";
+            }
+            return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
+        }
+        //增加到众筹
+        public ActionResult AddHuoDong(AddHuoDongInfoIn InModel)
+        {
+            string errorType = "";
+            string msg = "OK";
+            Model.HuoDongInfo huodongInfo = new Model.HuoDongInfo()
+            {
+                GoodsID = Converter.TryToInt64(InModel.GoodsID),
+                FinishedTime = Converter.TryToDateTime(InModel.FinishedTime),
+                ShareCount = Converter.TryToInt32(InModel.ShareCount),
+                State = 10,//开始众筹
+                CreateTime = DateTime.Now,
+                CreateUser = Identity.LoginUserInfo.ID.ToString(),
+            };
+            bool result = BLL.HuoDongInfoBll.Add(huodongInfo);
+            if (!result)
+            {
+                errorType = "alert";
+                msg = "添加失败，请重试";
+            }
+            return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
+        }
+        //编辑商品页面
+        public ActionResult EditGoodsInfo(string goodsID)
+        {
+            Model.GoodsBaseInfo outModel = BLL.GoodsBaseInfoBll.GetGoodsInfoByID(goodsID);
+            return View(outModel);
+        }
+        //查看商品页面
+        public ActionResult GetGoodsInfo(string goodsID)
+        {
+            Model.GoodsBaseInfo outModel = BLL.GoodsBaseInfoBll.GetGoodsInfoByID(goodsID);
+            return View(outModel);
+        }
+        public ActionResult DeleteGoodsInfo(string id)
+        {
+            string errorType = "";
+            string msg = "OK";
+            bool result = BLL.GoodsBaseInfoBll.DeleteGoodsInfo(id);
+            if (!result)
+            {
+                errorType = "alert";
+                msg = "删除失败，请重试";
+            }
+            return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
         }
     }
 }

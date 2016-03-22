@@ -7,6 +7,7 @@ namespace CrowdFundingShop.UI.Models.PC
 {
     public class AddGoodsCallBackIn
     {
+        public int ID { get; set; }
         /// <summary>
         /// 商品名称
         /// </summary>

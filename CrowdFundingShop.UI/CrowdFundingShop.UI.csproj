@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="Controllers\WAP\GoodsListController.cs" />
     <Compile Include="Models\PC\AddGoodsCallBackIn.cs" />
+    <Compile Include="Models\PC\AddHuoDongInfoIn.cs" />
     <Compile Include="Models\PC\GetGoodsInfoIn.cs" />
     <Compile Include="Models\PC\GetUserInfoListIn.cs" />
     <Compile Include="Controllers\PC\GoodsManagerController.cs" />
@@ -176,6 +177,9 @@
     <Content Include="Resources\js\jqPaginator.js" />
     <Content Include="Resources\css\LoginStyle.css" />
     <Content Include="Resources\js\jquery-1.9.1.min.js" />
+    <Content Include="Views\GoodsManager\EditGoodsInfo.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -187,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="images\UserIcons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -248,6 +253,8 @@
     <Content Include="Views\GoodsManager\Edit.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\UserInfo\EditUser.cshtml" />
+    <Content Include="Views\GoodsManager\GetGoodsInfo.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

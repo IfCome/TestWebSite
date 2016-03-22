@@ -56,26 +56,107 @@ namespace CrowdFundingShop.DAL
             }
         }
         #endregion
+
+        #region 删除
+        public static bool DeleteGoodsInfo(string id)
+        {
+            var sql = @"UPDATE dbo.GoodsBaseInfo SET IsDelete=1 WHERE ID=@ID";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = id });
+            try
+            {
+                return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 删除
+        public static bool UpDateGoodsInfo(Model.GoodsBaseInfo entity)
+        {
+            var sql = @"UPDATE [GoodsBaseInfo] SET {0} WHERE ID=@ID";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = entity.ID });
+
+            string sqlPart = string.Empty;
+            if (!string.IsNullOrEmpty(entity.GoodsName))
+            {
+                parameters.Add(new SqlParameter() { ParameterName = "@GoodsName", Value = entity.GoodsName });
+                sqlPart += "GoodsName=@GoodsName,";
+            }
+            if (!string.IsNullOrEmpty(entity.Price))
+            {
+                parameters.Add(new SqlParameter() { ParameterName = "@Price", Value = entity.Price });
+                sqlPart += "Price=@Price,";
+            }
+            if (!string.IsNullOrEmpty(entity.Describe))
+            {
+                parameters.Add(new SqlParameter() { ParameterName = "@Describe", Value = entity.Describe });
+                sqlPart += "Describe=@Describe,";
+            }
+            if (!string.IsNullOrEmpty(entity.Category))
+            {
+                parameters.Add(new SqlParameter() { ParameterName = "@Category", Value = entity.Category });
+                sqlPart += "Category=@Category,";
+            }
+            if (!string.IsNullOrEmpty(entity.ShowIcons))
+            {
+                parameters.Add(new SqlParameter() { ParameterName = "@ShowIcons", Value = entity.ShowIcons });
+                sqlPart += "ShowIcons=@ShowIcons,";
+            }
+            if (!string.IsNullOrEmpty(entity.DetailIcons))
+            {
+                parameters.Add(new SqlParameter() { ParameterName = "@DetailIcons", Value = entity.DetailIcons });
+                sqlPart += "DetailIcons=@DetailIcons,";
+            }
+            if (string.IsNullOrEmpty(sqlPart))
+            {
+                //没变化默认为更新成功
+                return true;
+            }
+            else
+            {
+                sqlPart = sqlPart.Remove(sqlPart.Length - 1);
+            }
+            sql = string.Format(sql, sqlPart);
+
+            try
+            {
+                return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0 ? true : false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
         #region 查询
-        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, out int allCount)
+        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, string huodongstate, out int allCount)
         {
             var sql = @"
                         WITH Virtual_T AS
                         (
 	                           SELECT 
                                    G.ID
-                                   ,GoodsName
-                                   ,Describe
-                                   ,Price
-                                   ,Category
-                                   ,CategoryName
-                                   ,ShowIcons
-                                   ,DetailIcons
-                                   ,CreateTime
-                                   ,CreateUserID
-                                   ,ROW_NUMBER() OVER (ORDER BY CreateTime DESC) AS [RowNumber] 
+                                   ,G.GoodsName
+                                   ,G.Describe
+                                   ,G.Price
+                                   ,G.Category
+                                   ,C.CategoryName
+                                   ,G.ShowIcons
+                                   ,G.DetailIcons
+                                   ,G.CreateTime
+                                   ,G.CreateUserID
+                                   ,State=CASE WHEN State IS NULL THEN '0'
+                                    ELSE State END
+                                   ,ROW_NUMBER() OVER (ORDER BY G.CreateTime DESC) AS [RowNumber] 
                              FROM GoodsBaseInfo G WITH (NOLOCK) JOIN CategoryInfo C WITH (NOLOCK)
-                             ON G.Category=C.ID 
+                             ON G.Category=C.ID LEFT JOIN dbo.HuodongInfo H
+                             ON G.ID=H.GoodsID
                             WHERE G.IsDelete=0 AND C.IsDelete=0 {0}
                         )
                         SELECT * FROM Virtual_T 
@@ -90,6 +171,18 @@ namespace CrowdFundingShop.DAL
                 sqlWhere += "AND GoodsName LIKE @GoodsName";
                 parameters.Add(new SqlParameter() { ParameterName = "@GoodsName", Value = "%" + keyWords + "%" });
             }
+            if (!string.IsNullOrEmpty(huodongstate))
+            {
+                if (huodongstate == "0")
+                {
+                    sqlWhere += " AND State IS NULL";
+                }
+                else
+                {
+                    sqlWhere += " AND State=@State";
+                }
+                parameters.Add(new SqlParameter() { ParameterName = "@State", Value = huodongstate });
+            }
             sql = string.Format(sql, sqlWhere);
             parameters.Add(new SqlParameter() { ParameterName = "@PageSize", Value = pageSize });
             parameters.Add(new SqlParameter() { ParameterName = "@CurrentPage", Value = currentPage });
@@ -97,7 +190,7 @@ namespace CrowdFundingShop.DAL
             //记录总数计算
             var countParameters = new List<SqlParameter>();
             parameters.ForEach(h => countParameters.Add(new SqlParameter() { ParameterName = h.ParameterName, Value = h.Value }));
-            var sqlCount = string.Format("SELECT COUNT(*) CNT FROM [GoodsBaseInfo] WHERE IsDelete=0 {0} ", sqlWhere);
+            var sqlCount = string.Format("SELECT COUNT(*) CNT FROM [GoodsBaseInfo] G LEFT JOIN HuodongInfo H ON G.ID=H.GoodsID  WHERE G.IsDelete=0 {0} ", sqlWhere);
             allCount = Converter.TryToInt32(SqlHelper.ExecuteScalar(sqlCount, countParameters.ToArray()));
 
             if (allCount == 0)
@@ -119,7 +212,51 @@ namespace CrowdFundingShop.DAL
                     DetailIcons = Converter.TryToString(row["DetailIcons"], string.Empty),
                     ShowIcons = Converter.TryToString(row["ShowIcons"], string.Empty),
                     CreateTime = Converter.TryToString(row["CreateTime"], DateTime.MinValue.ToString()),
+                    State = Converter.TryToInt32(row["State"], -1),
                 }).ToList();
+            }
+            return null;
+        }
+
+        public static Model.GoodsBaseInfo GetGoodsInfoByID(string id)
+        {
+            var sql = @"SELECT 
+		                            G.ID
+	                               ,G.GoodsName
+	                               ,G.Describe
+	                               ,G.Price
+	                               ,G.Category
+	                               ,G.ShowIcons
+	                               ,G.DetailIcons
+	                               ,G.CreateTime
+	                               ,G.CreateUserID 
+								   ,C.ParentId
+                                   ,C.CategoryName
+	                            FROM dbo.GoodsBaseInfo G JOIN dbo.CategoryInfo C
+	                            ON C.ID=G.Category
+                                WHERE G.IsDelete=0 AND C.IsDelete=0 AND G.ID=@ID
+                              ";
+            var parameters = new List<SqlParameter>();
+            sql = string.Format(sql);
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = id });
+            DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
+            if (dataTable.Rows.Count > 0)
+            {
+                var row = dataTable.Rows[0];
+                return new Model.GoodsBaseInfo()
+                {
+                    ID = Converter.TryToInt32(row["ID"], -1),
+                    GoodsName = Converter.TryToString(row["GoodsName"], string.Empty),
+                    CreateUserID = Converter.TryToString(row["CreateUserID"], string.Empty),
+                    Price = Converter.TryToString(row["Price"], string.Empty),
+                    Describe = Converter.TryToString(row["Describe"], string.Empty),
+                    DetailIcons = Converter.TryToString(row["DetailIcons"], string.Empty),
+                    ShowIcons = Converter.TryToString(row["ShowIcons"], string.Empty),
+                    CreateTime = Converter.TryToString(row["CreateTime"], DateTime.MinValue.ToString()),
+                    Category = Converter.TryToString(row["Category"], string.Empty),
+                    CategoryName = Converter.TryToString(row["CategoryName"], string.Empty),
+                    ParentId = Converter.TryToString(row["ParentId"], string.Empty),
+                };
             }
             return null;
         }

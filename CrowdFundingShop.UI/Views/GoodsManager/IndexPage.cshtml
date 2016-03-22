@@ -64,11 +64,12 @@
                 </div>
                 <div class="am-u-sm-12 am-u-md-2">
                     <div class="am-form-group">
-                        <select data-am-selected="{btnSize: 'sm'}">
-                            <option value="all">所有商品</option>
-                            <option value="com">众筹中</option>
-                            <option value="adm">未开奖</option>
-                            <option value="adm">已开奖</option>
+                        <select id="slctHuoDongState" data-am-selected="{btnSize: 'sm'}">
+                            <option value="-1">所有商品</option>
+                            <option value="0">未众筹</option>
+                            <option value="10">众筹中</option>
+                            <option value="20">未开奖</option>
+                            <option value="30">已开奖</option>
                         </select>
                     </div>
                 </div>
@@ -99,15 +100,15 @@
                                     <th class="table-id am-text-center">ID</th>
                                     <th class="table-title">商品名称</th>
                                     <th class="table-author">商品分类</th>
-                                    <th class="table-author" width="50%">商品描述</th>
+                                    <th class="table-author">商品描述</th>
                                     <th class="table-type am-hide-sm-only">众筹价格</th>
+                                    <th class="table-type am-hide-sm-only">众筹状态</th>
                                     <th class="table-date am-hide-sm-only">创建时间</th>
                                     <th class="table-set">操作</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
-
                         <div class="am-cf">
                             共 <span id="recordCount"></span> 个商品
                             <div class="am-fr">
@@ -123,13 +124,15 @@
                         <td>{Category}</td>
                         <td>{Describe}</td>
                         <td class="am-hide-sm-only">{Price}</td>
+                        <td class="am-hide-sm-only">{State}</td>
                         <td class="am-hide-sm-only">{CreateTime}</td>
                         <td>
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="ShowUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
-                                    <button type="button" onclick="EditUserDetails('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
-                                    <button type="button" onclick="DeleteUser('{ID}','{RealName}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                    <button type="button" onclick="ShowGoods('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
+                                    <button type="button" onclick="EditGoods('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
+                                    <button type="button" flag="{Display}" onclick="DeleteGoods('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                    <button type="button" flag="{Display}" onclick="AddToHuoDong('{ID}','{Price}');" class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-align-justify"></span> 加入众筹</button>
                                 </div>
                             </div>
                         </td>
@@ -139,6 +142,21 @@
         </div>
         <!-- content end -->
     </div>
+    <!--众筹弹出-->
+    <div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">设置众筹时间</div>
+            <div class="am-modal-bd">
+                <p>该日期是众筹最后截止时间，请慎重选取！</p>
+                <p><input type="text" id="txtFinishedTime" class="am-form-field" placeholder="点击选择众筹结束时间" data-am-datepicker="{theme: 'success'}" readonly /></p>
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消众筹</span>
+                <span class="am-modal-btn" data-am-modal-confirm>确认众筹</span>
+            </div>
+        </div>
+    </div>
+    <!--弹出结束-->
     @Html.Partial("~/Views/Common/FootPart.cshtml")
     <script type="text/javascript" src="/Resources/js/jqPaginator.js"></script>
     <script>
@@ -154,17 +172,21 @@
                 if (type == 'init' || num < 1) {
                     return false;
                 }
-                alert(num);
-                //search(num);
+                pageIndex = num;
+                isSearching = false;
+                search(false);
             }
         }
-       
-
         $(function () {
             initCss();
             bindFunction();
             loadData();
             $("#btnSearch").click(function () {
+                isSearching = false;
+                search(true);
+            });
+            $("#slctHuoDongState").change(function () {
+                isSearching = false;
                 search(true);
             });
         });
@@ -237,6 +259,7 @@
             $('#exitUpload').click(function () {
                 showUploadFileButton()
             });
+
         }
 
 
@@ -252,7 +275,6 @@
 
             $('#file-list').html('');
         }
-
         // 清空文件域
         function clearFileList() {
             var file = $("#doc-form-file");
@@ -261,9 +283,9 @@
         }
         /***************************************/
         function loadData() {
-            //pageOptions.totalPages = 5;
-            //pageOptions.currentPage = 1;
-            //$.jqPaginator('#pagination', pageOptions);
+            pageOptions.totalPages = 5;
+            pageOptions.currentPage = 1;
+            $.jqPaginator('#pagination', pageOptions);
             search(true);
         }
 
@@ -275,11 +297,13 @@
             if (isFirst) {
                 pageIndex = 1;
             }
+
             // 整理参数
             var data = {
                 PageSize: pageSize,
                 CurrentPage: pageIndex,
-                KeyWords: $('#txtKeyWords').val()
+                KeyWords: $('#txtKeyWords').val(),
+                HuoDongState: $("#slctHuoDongState").val()
             };
             isSearching = true;
             $.get('@Url.RouteUrl(new { controller = "GoodsManager", action = "GetGoodsList" })', data, function (result) {
@@ -294,14 +318,21 @@
                             rowHtml = rowHtml.replace("{Index}", i + 1);
                             rowHtml = rowHtml.replace(/{GoodsName}/g, row.GoodsName);
                             rowHtml = rowHtml.replace("{Describe}", row.Describe);
-                            rowHtml = rowHtml.replace("{Price}", row.Price);
+                            rowHtml = rowHtml.replace(/{Price}/g, row.Price);
                             rowHtml = rowHtml.replace("{Category}", row.Category);
                             rowHtml = rowHtml.replace("{CreateTime}", row.CreateTime);
                             rowHtml = rowHtml.replace(/{ID}/g, row.ID);
+                            rowHtml = rowHtml.replace("{State}", row.State == "0" ? "<span style='color:red'>未众筹</span>" : (row.State == "10" ? "<span style='color:green'>众筹中</span>" : (row.State == "20" ? "待开奖" : "已开奖")));
+                            if (row.State != "0") {
+                                rowHtml = rowHtml.replace(/{Display}/g, "None");
+                            }
+                            else {
+                                rowHtml = rowHtml.replace(/{Display}/g, "Block");
+                            }
                             $("#tableData>tbody").append($(rowHtml));
                         }
+                        $(".am-btn-group-xs button[flag='None']").remove();
                     }
-
                     pageOptions.totalPages = Math.ceil(parseInt(result.AllCount) / pageSize);
                     pageOptions.currentPage = pageIndex;
                     $.jqPaginator('#pagination', pageOptions);
@@ -311,6 +342,53 @@
                 }
                 isSearching = false;
             }, 'json');
+        }
+
+        function ShowGoods(id) {
+            location.href = '/GoodsManager/GetGoodsInfo?goodsid=' + id;
+        }
+        function EditGoods(id) {
+            location.href = '/GoodsManager/EditGoodsInfo?goodsid=' + id;
+        }
+
+        function AddToHuoDong(id, price) {
+            $('#my-prompt').modal({
+                relatedTarget: this,
+                onConfirm: function (e) {
+                    var data = {
+                        GoodsID: id,
+                        ShareCount: price,
+                        FinishedTime: $("#txtFinishedTime").val()
+                    };
+
+                    $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "AddHuoDong" })', data, function (result) {
+                        if (result && result.Message == 'OK') {
+                            location.href = '/GoodsManager/IndexPage';
+                        }
+                    });
+                },
+                onCancel: function (e) {
+                    return false;
+                }
+            });
+        }
+        function DeleteGoods(id) {
+            var data = {};
+            data.ID = id;
+            if (confirm("删除后不可恢复，确认删除么？")) {
+                $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "DeleteGoodsInfo" })', data, function (result) {
+                    if (result && result.Message == 'OK') {
+                        location.href = '/GoodsManager/IndexPage.html';
+                    }
+                    else {
+                        alert(result.Message);
+                        return;
+                    }
+                }, 'JSON');
+            }
+            else {
+                return false;
+            }
         }
     </script>
 </body>

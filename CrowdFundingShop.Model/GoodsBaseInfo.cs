@@ -28,6 +28,10 @@ namespace CrowdFundingShop.Model
         /// </summary>
         public string Category { get; set; }
         /// <summary>
+        /// 商品分类具体信息
+        /// </summary>
+        public string CategoryName { get; set; }
+        /// <summary>
         /// 展示图片(逗号分割多个图片地址)
         /// </summary>
         public string ShowIcons { get; set; }
@@ -47,5 +51,11 @@ namespace CrowdFundingShop.Model
         /// 创建者ID
         /// </summary>
         public int IsDelete { get; set; }
+        /// <summary>
+        /// 众筹状态0未众筹;10众筹中;20待开奖;30已开奖;
+        /// </summary>
+        public int State { get; set; }
+
+        public string ParentId { get; set; }
     }
 }

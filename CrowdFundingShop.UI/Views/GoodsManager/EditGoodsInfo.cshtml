@@ -1,14 +1,15 @@
 ﻿@{
     Layout = null;
 }
+@model CrowdFundingShop.Model.GoodsBaseInfo
 <!doctype html>
 <html class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新增商品</title>
-    <meta name="description" content="新增商品">
-    <meta name="keywords" content="新增商品">
+    <title>修改商品</title>
+    <meta name="description" content="修改商品">
+    <meta name="keywords" content="修改商品">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
 </head>
 <body>
@@ -21,7 +22,7 @@
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
                 <li><a href="~/GoodsManager/IndexPage">商品管理</a></li>
-                <li class="am-active">新增商品</li>
+                <li class="am-active">修改商品</li>
             </ol>
             <hr />
             <div class="am-g">
@@ -31,18 +32,43 @@
                 <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
                     <form class="am-form am-form-horizontal" id="formAddUserInfo">
                         <div class="am-form-group">
-                            <label class="am-u-sm-3 am-form-label"> 2、选择商品图片信息：</label>
+                            <label class="am-u-sm-3 am-form-label"> 修改商品信息：</label>
                             <div class="am-u-sm-9">
                             </div>
                         </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 类别</label>
+                            <div class="am-u-sm-9">
+                                <select data-am-selected="{btnSize: 'sm'}" id="slctParent"></select>
+                                <select id="goods-category" data-am-selected="{btnSize: 'sm'}"></select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label">商品名</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="required" id="goods-name" placeholder="该商品名称" data-foolish-msg="该商品已存在！" value="@(Model!=null?Model.GoodsName:"")" />
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 商品描述</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="required" id="goods-describe" placeholder="对该商品的详尽描述" value="@(Model!=null?Model.Describe:"")" />
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label">价格</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="goods-price" placeholder="该商品众筹价格" value="@(Model!=null?Model.Price:"")" />
+                            </div>
+                        </div>
+
                         <div class="am-form-group">
                             <label for="goods-name" class="am-u-sm-3 am-form-label"> 展示图片</label>
                             <div class="am-panel-bd">
                                 <div class="am-g">
                                     <div class="am-u-md-8">
                                         <div class="am-form-group am-form-file">
-                                            只上传一张以供微信客户端展示（提示：要上传的图片大小最好小于2M）<br />
-                                            <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm" style="margin-top:15px">
+                                            <button id="uploadFileButton" type="button" class="am-btn am-btn-danger am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件
                                             </button>
                                             <input id="doc-form-file" name="userIcon" type="file" accept="image/gif, image/jpeg, image/png">
@@ -60,8 +86,11 @@
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label"></label>
+                            <input id="hdShowIcons" type="hidden" value="@Model.ShowIcons," />
                             <div class="am-u-sm-9">
-                                <div id="divImages"></div>
+                                <div id="divImages">
+                                    <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(Model.ShowIcons.Replace("localhost", "localhost:39356"))" alt="" /> &nbsp;
+                                </div>
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -70,8 +99,7 @@
                                 <div class="am-g">
                                     <div class="am-u-md-8">
                                         <div class="am-form-group am-form-file">
-                                            可传多张以供详情页展示用（提示：要上传的图片大小最好小于2M）<br />
-                                            <button id="uploadFileButton1" type="button" class="am-btn am-btn-danger am-btn-sm" style="margin-top:15px">
+                                            <button id="uploadFileButton1" type="button" class="am-btn am-btn-danger am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件
                                             </button>
                                             <input id="doc-form-file1" name="userIcon" type="file" accept="image/gif, image/jpeg, image/png">
@@ -89,14 +117,20 @@
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label"></label>
+                            <input id="hdDetailIcons" type="hidden" value="@Model.DetailIcons," />
                             <div class="am-u-sm-9">
-                                <div id="divImages1"></div>
+                                <div id="divImages1">
+                                    @foreach (var item in Model.DetailIcons.Split(','))
+                                    {
+                                        <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(item.Replace("localhost", "localhost:39356"))" alt="" />
+                                    } &nbsp;
+                                </div>
                             </div>
                         </div>
+
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button id="btncommit" type="button" class="am-btn am-btn-primary">确认</button>
-                                <a href="/GoodsManager/IndexPage">不上传，直接返回商品列表</a>
+                                <button id="btncommit" type="button" class="am-btn am-btn-primary">确认修改</button>
                             </div>
                         </div>
                     </form>
@@ -111,9 +145,9 @@
 </html>
 <script src="~/Resources/js/ajaxfileupload.js"></script>
 <script>
+    var ShowIcons = $("#hdShowIcons").val();
+    var DetailIcons = $("#hdDetailIcons").val();
 
-    var ShowIcons = "";
-    var DetailIcons = "";
     $(function () {
         bindFunction();
     });
@@ -128,10 +162,13 @@
                 hideToolTips();
             }
         });
-
         //label标签字体细化
         $("label").css("font-weight", "normal");
-
+        //初始化下拉列表
+        LoadCategory(0, 1);
+        $("#slctParent").on("change", function () {
+            LoadCategory($(this).val(), 2)
+        });
         // 提交用户信息
         $('#btncommit').click(commitUserInfo);
 
@@ -266,8 +303,6 @@
             showUploadFileButton1()
         });
     }
-
-
     // 显示上传和取消按钮
     function showUploadFileButton() {
         $('#uploadImg>i').attr('class', "am-icon-cloud-upload");
@@ -299,16 +334,64 @@
         file.remove();
     }
 
+
+    //1查第一级别 2查第二级别
+    function LoadCategory(parentID, type) {
+        $.get('@Url.RouteUrl(new { controller = "GoodsManager", action = "GetCategoryInfo" })', { ParentID: parentID }, function (result) {
+            //清除第二级列表
+            $('#goods-category option').remove();
+            if (result) {
+                if (type == 1) {
+                    $('#slctParent option').remove();
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        var selected = "";
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            if (row.ID == "@Model.ParentId") {
+                                selected = "selected=selected";
+                            }
+                            else {
+                                selected = "";
+                            }
+                            $('#slctParent').append("<option id='opParent" + i + "' value='" + row.ID + "' " + selected + ">" + row.CategoryName + "</option>")
+                        }
+                    }
+                }
+                else if (type == 2) {
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        var row = result.Rows[i];
+                        var selected = "";
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            if (row.ID == "@Model.Category") {
+                                selected = "selected=selected";
+                            }
+                            else {
+                                selected = "";
+                            }
+                            $('#goods-category').append("<option id='opParent" + i + "' value='" + row.ID + "' " + selected + ">" + row.CategoryName + "</option>")
+                        }
+                    }
+                }
+            }
+        }, 'json');
+    }
+
     var data = {};
+    var tipInput;
     function commitUserInfo() {
-        data.ID = "@ViewBag.ID";
+        data.GoodsName = $.trim($('#goods-name').val());
+        data.Describe = $.trim($('#goods-describe').val());
+        data.Price = $.trim($('#goods-price').val());
+        data.Category = $('#goods-category').val();
+        data.ID = "@Model.ID";
         data.ShowIcons = ShowIcons;
         data.DetailIcons = DetailIcons;
         if (checkData()) {
             // 提交数据
             $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "UpdateGoodsCallBack" })', data, function (result) {
                 if (result && result.Message == 'OK') {
-                    alert("添加成功");
+                    alert("修改成功");
                     location.href = '/GoodsManager/IndexPage.html';
                 }
                 else {
@@ -320,7 +403,25 @@
     }
 
     function checkData() {
-        // 验证用户名
+        var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+        if (!data.GoodsName || data.GoodsName.length == 0) {
+            tipInput = $('#goods-name');
+            showToolTips(tipInput, "请输入商品名");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!data.Describe || data.Describe.length < 10) {
+            tipInput = $('#goods-describe');
+            showToolTips(tipInput, "商品描述必须大于10个字");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!reg.test(data.Price)) {
+            tipInput = $('#goods-price');
+            showToolTips(tipInput, "价格填写不正确");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
         if (data.ShowIcons == "" && data.DetailIcons == "") {
             alert("添加完成，您并未上传任何图片，为保证商品的完整性请在商品列表中继续编辑完善图片");
             location.href = '/GoodsManager/IndexPage.html';
