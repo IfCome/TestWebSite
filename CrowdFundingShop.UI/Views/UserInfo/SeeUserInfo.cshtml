@@ -43,10 +43,16 @@
                                 </div>
                                 <div class="am-u-md-8">
                                     <ul class="am-list am-list-static  am-center">
-                                        <li> @userName - @realName - @roleName </li>
-                                        <li> 手机：@phone </li>
-                                        <li> 邮箱：@email </li>
-                                        <li> Q Q：@qq </li>
+                                        <li>
+                                            @userName - @realName - @roleName
+                                            @if (ViewBag.IsSelf)
+                                            {
+                                                <a style="display:inline;margin-left:10px" href="/UserInfo/EditMyDetails.html"><span class="am-icon-edit"></span></a>
+                                            }
+                                        </li>
+                                        <li>手机：@phone</li>
+                                        <li>邮箱：@email</li>
+                                        <li>Q&nbsp;&nbsp;Q：@qq</li>
                                     </ul>
 
                                 </div>

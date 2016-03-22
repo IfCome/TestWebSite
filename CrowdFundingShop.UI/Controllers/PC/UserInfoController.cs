@@ -20,6 +20,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
             return View();
         }
 
+        // 查看用户信息
         public ActionResult SeeUserInfo(long id)
         {
             // 查询用户信息
@@ -32,6 +33,8 @@ namespace CrowdFundingShop.UI.Controllers.PC
             // 查询该用户的操作日志
             List<Model.BackgroundUserInfo_log> logList = BLL.BackgroundUserBll_log.GetSingleUserTop10Logs(id);
             ViewBag.LogList = logList;
+            ViewBag.IsSelf = (userInfo.ID == Identity.LoginUserInfo.ID);
+
             return View(userInfo);
         }
 
@@ -268,6 +271,41 @@ namespace CrowdFundingShop.UI.Controllers.PC
                 return Json(new { Message = "删除失败！" });
             }
 
+        }
+
+
+
+        // 查看个人资料
+        public ActionResult MyDetails()
+        {
+            // 查询用户信息
+            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(Identity.LoginUserInfo.ID);
+            if (userInfo == null)
+            {
+                return Content("该用户不存在！！");
+            }
+
+            // 查询该用户的操作日志
+            List<Model.BackgroundUserInfo_log> logList = BLL.BackgroundUserBll_log.GetSingleUserTop10Logs(Identity.LoginUserInfo.ID);
+            ViewBag.LogList = logList;
+            ViewBag.IsSelf = true;
+            return View("~/Views/UserInfo/SeeUserInfo.cshtml", userInfo);
+        }
+
+        // 编辑个人资料
+        public ActionResult EditMyDetails()
+        {
+            if (Identity.LoginUserInfo.RoleType != 10)
+            {
+                return Content("只有管理员才能编辑用户");
+            }
+            // 查询用户信息
+            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(id);
+            if (userInfo == null)
+            {
+                return Content("该用户不存在！！");
+            }
+            return View(userInfo);
         }
     }
 }
