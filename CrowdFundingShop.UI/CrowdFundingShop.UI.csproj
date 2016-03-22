@@ -249,12 +249,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\TestPublishWeb.pubxml" />
+    <Content Include="Views\UserInfo\EditUser.cshtml" />
+    <Content Include="Views\GoodsManager\Edit.cshtml" />
+    <Content Include="Views\UserInfo\SeeUserInfo.cshtml" />
     <Content Include="Views\GoodsManager\EditPic.cshtml" />
     <Content Include="Views\GoodsManager\Edit.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Views\UserInfo\EditUser.cshtml" />
-    <Content Include="Views\GoodsManager\GetGoodsInfo.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

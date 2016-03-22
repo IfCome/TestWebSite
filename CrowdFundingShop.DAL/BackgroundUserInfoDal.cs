@@ -332,6 +332,23 @@ namespace CrowdFundingShop.DAL
             return i > 0 ? true : false;
         }
 
+        /// <summary>
+        /// 通过ID更新密码
+        /// </summary>
+        public static bool UpdataPasswordByID(long id, string password)
+        {
+            var sql = @"
+                        UPDATE [BackgroundUserInfo] SET [PassWord] = @PassWord
+                        WHERE 
+                            [ID] = @ID
+                    ";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@PassWord", Value = password });
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = id });
+
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
 
         #endregion
 
@@ -356,5 +373,7 @@ namespace CrowdFundingShop.DAL
         }
 
         #endregion
+
+
     }
 }

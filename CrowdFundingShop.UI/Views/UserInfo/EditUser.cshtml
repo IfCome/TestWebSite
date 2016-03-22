@@ -62,10 +62,10 @@
                             <label for="user-name" class="am-u-sm-3 am-form-label"><span style="color:red">*</span> 角色</label>
                             <div class="am-u-sm-9">
                                 <label class="am-radio-inline">
-                                    <input type="radio" value="20" name="userRole" @(Model.RoleType == 20 ? "checked=\"checked\"" : "")> 普通用户
+                                    <input type="radio" value="20" @(ViewBag.IsSelf ? "disabled=\"disabled\"" : "") name="userRole" @(Model.RoleType == 20 ? "checked=\"checked\"" : "")> 普通用户
                                 </label>
                                 <label class="am-radio-inline">
-                                    <input type="radio" value="10" name="userRole" @(Model.RoleType == 10 ? "checked=\"checked\"" : "")> 管理员
+                                    <input type="radio" value="10" @(ViewBag.IsSelf ? "disabled=\"disabled\"" : "") name="userRole" @(Model.RoleType == 10 ? "checked=\"checked\"" : "")> 管理员
                                 </label>
                             </div>
                         </div>
@@ -111,10 +111,8 @@
         <!-- content end -->
     </div>
     @Html.Partial("~/Views/Common/FootPart.cshtml")
-    @Html.Partial("~/Views/Common/TipsTool.cshtml")
 </body>
 </html>
-
 <script src="~/Resources/js/ajaxfileupload.js"></script>
 <script>
 

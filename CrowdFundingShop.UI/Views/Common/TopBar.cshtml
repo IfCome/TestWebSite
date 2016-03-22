@@ -9,11 +9,123 @@
                 <span class="am-icon-users"></span> @(CrowdFundingShop.Utility.Identity.LoginUserInfo.RoleType == 10 ? "管理员" : "普通用户") <span class="am-icon-caret-down"></span>
             </a>
             <ul class="am-dropdown-content">
-                <li><a href="#"><span class="am-icon-user"></span> 个人资料</a></li>
-                <li><a href="#"><span class="am-icon-key"></span> 修改密码</a></li>
+                <li><a href="/UserInfo/MyDetails.html"><span class="am-icon-user"></span> 个人资料</a></li>
+                <li><a href="javascript:void(0);" data-am-modal="{target: '#editPwd-modal', closeViaDimmer: 0, width: 400, height: 450}"><span class="am-icon-key"></span> 修改密码</a></li>
                 <li><a href="/Login/Logout.html"><span class="am-icon-power-off"></span> 退出系统</a></li>
             </ul>
         </li>
         <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
     </ul>
 </div>
+
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="editPwd-modal">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+            <h2>修改密码</h2>
+            <a href="javascript: void(0)" onclick="hideToolTips();" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <form class="am-form">
+                <fieldset>
+                    <div class="am-form-group">
+                        <label for="oldPassword" class="am-fl">原密码</label>
+                        <input type="password" class="am-fl" id="oldPassword" placeholder="输入原密码">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="am-form-group">
+                        <label for="newPassword" class="am-fl">新密码</label>
+                        <input type="password" class="am-fl" id="newPassword" placeholder="设置新密码">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="am-form-group">
+                        <label for="rePassword" class="am-fl">确认新密码</label>
+                        <input type="password" class="am-fl" id="rePassword" placeholder="确认新密码">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="am-form-group">
+                        <button id="btnSavePassword" type="button" class="am-btn am-btn-primary">确认修改</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Common/TipsTool.cshtml")
+<script>
+
+    var topBarTipInput;
+    // 文本框获取焦点，隐藏tips
+    $('input').focus(function () {
+        if (topBarTipInput && $(this).attr('id') == topBarTipInput.attr('id')) {
+            topBarTipInput.removeClass('am-field-error').parent().parent().removeClass('am-form-error');
+            topBarTipInput = null;
+            hideToolTips();
+        }
+    });
+
+    $('#btnSavePassword').click(function () {
+        var pwdData = {};
+        pwdData.OldPassword = $.trim($('#oldPassword').val());
+        pwdData.NewPassword = $.trim($('#newPassword').val());
+        pwdData.RePassword = $.trim($('#rePassword').val());
+
+        // 验证密码
+
+        var reg = /^[A-Za-z0-9]+$/;
+
+        if (!pwdData.OldPassword || pwdData.OldPassword.length == 0) {
+            topBarTipInput = $('#oldPassword');
+            showToolTips(topBarTipInput, "请输入原密码");
+            topBarTipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!pwdData.NewPassword || pwdData.NewPassword.length == 0) {
+            topBarTipInput = $('#newPassword');
+            showToolTips(topBarTipInput, "请输入新密码");
+            topBarTipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+
+        if (!reg.test(pwdData.NewPassword) || pwdData.NewPassword.length < 5 || pwdData.NewPassword.length > 15) {
+            topBarTipInput = $('#newPassword');
+            showToolTips(topBarTipInput, "密码必须为5-15位的数字或字母的组合");
+            topBarTipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (pwdData.NewPassword != pwdData.RePassword) {
+            topBarTipInput = $('#rePassword');
+            showToolTips(topBarTipInput, "两次输入的密码不一致");
+            topBarTipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+
+        // 提交数据
+        $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "EditPassword" })', pwdData, function (result) {
+            if (result && result.Message == 'OK') {
+                alert("修改成功,请重新登陆");
+                $('#editPwd-modal').modal('close');
+                window.location.href = '/Login/Logout.html';
+            }
+            else {
+                if (result.ErrorType == 'oldPassword') {
+                    topBarTipInput = $('#oldPassword');
+                } else if (result.ErrorType == 'rePassword') {
+                    topBarTipInput = $('#rePassword');
+                }
+                else {
+                    topBarTipInput = null;
+                    alert(result.Message);
+                    return;
+                }
+                showToolTips(topBarTipInput, result.Message);
+                topBarTipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            }
+        }, 'JSON');
+    });
+
+</script>
+
+

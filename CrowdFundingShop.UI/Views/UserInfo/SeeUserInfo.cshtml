@@ -1,0 +1,310 @@
+﻿@model CrowdFundingShop.Model.BackgroundUserInfo
+@{
+    Layout = null;
+}
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>查看用户信息</title>
+    <meta name="description" content="查看用户信息">
+    <meta name="keywords" content="查看用户信息">
+    @Html.Partial("~/Views/Common/SharePart.cshtml")
+</head>
+<body>
+    <header class="am-topbar admin-header">
+        @Html.Partial("~/Views/Common/TopBar.cshtml")
+    </header>
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <ol class="am-breadcrumb">
+                <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
+                <li><a href="~/UserInfo/IndexPage.html">用户管理</a></li>
+                <li class="am-active">用户详情</li>
+            </ol>
+            <hr />
+            @{
+                string userName = Model.UserName.IsEmpty() ? "未知用户名" : Model.UserName;
+                string realName = Model.RealName.IsEmpty() ? "未知姓名" : Model.RealName;
+                string roleName = Model.RoleType == 10 ? "管理员" : "普通用户";
+                string phone = Model.Phone.IsEmpty() ? "无" : Model.Phone;
+                string email = Model.Email.IsEmpty() ? "无" : Model.Email;
+                string qq = Model.QQ.IsEmpty() ? "无" : Model.QQ;
+            }
+            <div class="am-panel">
+                <div class="am-g">
+                    <div class="am-u-sm-12 am-u-md-7">
+                        <div class="am-panel-bd">
+                            <div class="am-g">
+                                <div class="am-u-md-4">
+                                    <img style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(Model.HeadIcon.IsEmpty() ? "http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" : Model.HeadIcon)" alt="" />
+                                </div>
+                                <div class="am-u-md-8">
+                                    <ul class="am-list am-list-static  am-center">
+                                        <li>
+                                            @userName - @realName - @roleName
+                                            @if (ViewBag.IsSelf)
+                                            {
+                                                <a style="display:inline;margin-left:10px" href="/UserInfo/EditMyDetails.html"><span class="am-icon-edit"></span></a>
+                                            }
+                                        </li>
+                                        <li>手机：@phone</li>
+                                        <li>邮箱：@email</li>
+                                        <li>Q&nbsp;&nbsp;Q：@qq</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-3"></div>
+                </div>
+            </div>
+            <div class="am-panel">
+                <div class="am-g">
+                    <div class="am-u-sm-12 am-u-md-12">
+                        <div class="am-panel am-panel-default">
+                            <div class="am-panel-hd am-cf">
+                                操作日志
+                                <span class="am-fr"><a href="javascript:void(0)"> <small> 查看更多>></small>  </a></span>
+                            </div>
+                            <div id="collapse-panel-2" class="am-in">
+                                <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
+                                    <tbody>
+
+                                        @{
+                                            List<CrowdFundingShop.Model.BackgroundUserInfo_log> logList = ViewBag.LogList as List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
+                                            if (logList == null || logList.Count == 0)
+                                            {
+                                                <text>
+                                                    <tr>
+                                                        <td colspan="3" class="am-text-center">暂无操作历史</td>
+                                                    </tr>
+                                                </text>
+                                            }
+                                            else
+                                            {
+                                                <text>
+                                                    <tr>
+                                                        <th class="am-text-center">操作类型</th>
+                                                        <th>操作内容</th>
+                                                        <th>操作时间</th>
+                                                        <th>登录IP</th>
+                                                    </tr>
+                                                </text>
+                                                foreach (var log in logList)
+                                                {
+                                                    <text>
+                                                        <tr>
+                                                            <td class="am-text-center"><a class="@(log.OperateTile.Contains("删除") ? "am-text-danger" : "am-text-success")" href="javascript:void(0)" title="查看操作详情">@log.OperateTile</a></td>
+                                                            <td>@(log.OperateDetail.Length > 60 ? (log.OperateDetail.Substring(0, 60) + "......") : log.OperateDetail)</td>
+                                                            <td>@log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                                            <td>@log.IpAddress</td>
+                                                        </tr>
+                                                    </text>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content end -->
+    </div>
+    @Html.Partial("~/Views/Common/FootPart.cshtml")
+</body>
+</html>
+
+<script src="~/Resources/js/ajaxfileupload.js"></script>
+<script>
+
+    $(function () {
+        bindFunction();
+    });
+
+    // 绑定事件
+    function bindFunction() {
+
+        // 文本框获取焦点，隐藏tips
+        $('input').focus(function () {
+            if (tipInput && $(this).attr('id') == tipInput.attr('id')) {
+                tipInput.removeClass('am-field-error').parent().parent().removeClass('am-form-error');
+                tipInput = null;
+                hideToolTips();
+            }
+        });
+
+        // 提交用户信息
+        $('#btncommit').click(commitUserInfo);
+
+        // 选择图片
+        $(document).on('change', '#doc-form-file', function () {
+            if (this.files.length == 0) {
+                // 清空文件域
+                clearFileList();
+                return false;
+            }
+            var fileName = this.files[0].name;
+            var fileType = this.files[0].type;
+
+            if (!fileName || (fileType != 'image/jpeg' && fileType != 'image/gif' && fileType != 'image/png')) {
+                // 清空文件域
+                clearFileList();
+                return false;
+            }
+            if (fileName && fileName.length > 15) {
+                fileName = fileName.substr(0, 14) + "..."
+            }
+            $('#file-list').html('<span class="am-badge" maxlength=5>' + fileName + '</span> ');
+
+            $('#doc-form-file').hide();
+            $('#uploadFileButton').hide();
+            $('#uploadImg').show();
+            $('#exitUpload').show();
+        });
+
+        // 上传图片
+        $('#uploadImg').click(function () {
+            $('#uploadImg>i').attr('class', "am-icon-spinner am-animation-spin");
+            $('#exitUpload').hide();
+            $('#uploadImg').attr("disabled", true);
+
+            // 这里写访问服务器事件
+            $.ajaxFileUpload({
+                url: 'UploadIcon.do',
+                secureuri: false,//一般设置为false
+                fileElementId: 'doc-form-file',
+                dataType: 'text/html',
+                success: function (result, status) {
+                    //服务器成功响应处理函数
+                    var reg = /<pre.+?>(.+)<\/pre>/g;
+                    var result = result.match(reg);
+                    result = RegExp.$1;
+                    data = eval('(' + result + ')');
+                    if (data && data.Message == "OK") {
+                        // 替换头像
+                        $('#userIcon').attr('src', data.ImgUrl);
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                error: function () {
+                    //服务器响应失败处理函数
+                    alert('上传失败！请重新选择图片');
+                },
+                complete: function () {
+                    $('#uploadImg').removeAttr("disabled");
+                    showUploadFileButton();
+                }
+            })
+        });
+
+        // 取消上传
+        $('#exitUpload').click(function () {
+            showUploadFileButton()
+        });
+    }
+
+
+    // 显示上传和取消按钮
+    function showUploadFileButton() {
+        $('#uploadImg>i').attr('class', "am-icon-cloud-upload");
+        $('#uploadImg').hide();
+        $('#exitUpload').hide();
+        $('#doc-form-file').show();
+        $('#uploadFileButton').show();
+        // 清空文件域
+        clearFileList();
+
+        $('#file-list').html('');
+    }
+
+    // 清空文件域
+    function clearFileList() {
+        var file = $("#doc-form-file");
+        file.after(file.clone(true).val(""));
+        file.remove();
+    }
+
+    var data = {};
+    var tipInput;
+    function commitUserInfo() {
+        data.RoleType = $('input[name=userRole]:checked').val();
+        data.UserName = $.trim($('#user-name').val());
+        data.Password = $.trim($('#user-password').val());
+        data.RePassword = $.trim($('#user-repassword').val());
+        data.RealName = encodeURIComponent($.trim($('#user-realname').val()));
+        data.Email = $.trim($('#user-email').val());
+        data.QQ = $.trim($('#user-QQ').val());
+        data.Phone = $.trim($('#user-phone').val());
+        data.HeadIcon = encodeURIComponent($('#userIcon').attr('src'));
+        if (checkData()) {
+            // 提交数据
+            $.post('@Url.RouteUrl(new { controller = "UserInfo", action = "AddUserCallBack" })', data, function (result) {
+                if (result && result.Message == 'OK') {
+                    alert("添加成功");
+                    location.href = '/UserInfo/IndexPage.html?keyWords=' + data.UserName;
+                }
+                else {
+                    if (result.ErrorType == 'UserName') {
+                        tipInput = $('#user-name');
+                    } else if (result.ErrorType == 'Password') {
+                        tipInput = $('#user-password');
+                    } else if (result.ErrorType == 'RePassword') {
+                        tipInput = $('#user-repassword');
+                    } else {
+                        tipInput = null;
+                        alert(result.Message);
+                        return;
+                    }
+                    showToolTips(tipInput, result.Message);
+                    tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+                }
+            }, 'JSON');
+        }
+    }
+
+    function checkData() {
+        var reg = /^[A-Za-z0-9]+$/;
+        // 验证用户名
+        if (!data.UserName || data.UserName.length == 0) {
+            tipInput = $('#user-name');
+            showToolTips(tipInput, "请输入用户名");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!reg.test(data.UserName)) {
+            tipInput = $('#user-name');
+            showToolTips(tipInput, "用户名由数字、字母或下划线组成");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+
+        // 验证密码
+        if (!reg.test(data.Password) || data.Password.length < 5 || data.Password.length > 15) {
+            tipInput = $('#user-password');
+            showToolTips(tipInput, "密码必须为5-15位的数字或字母的组合");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!data.Password || data.Password.length == 0) {
+            tipInput = $('#user-password');
+            showToolTips(tipInput, "请输入密码");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (data.Password != data.RePassword) {
+            tipInput = $('#user-repassword');
+            showToolTips(tipInput, "两次输入的密码不一致");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        return true;
+    }
+</script>
