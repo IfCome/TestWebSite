@@ -126,6 +126,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
             {
                 return Content("该用户不存在！！");
             }
+            ViewBag.IsSelf = false;
             return View(userInfo);
         }
 
@@ -135,13 +136,13 @@ namespace CrowdFundingShop.UI.Controllers.PC
         {
             string errorType = "";
             string msg = "OK";
-            if (Identity.LoginUserInfo.RoleType != 10)
-            {
-                errorType = "alert";
-                msg = "只有管理员才能修改用户信息";
-            }
+            //if (Identity.LoginUserInfo.RoleType != 10)
+            //{
+            //    errorType = "alert";
+            //    msg = "只有管理员才能修改用户信息";
+            //}
             // 验证参数
-            else if (InModel.ID == 0)
+            if (InModel.ID == 0)
             {
                 errorType = "alert";
                 msg = "用户信息无效";
@@ -274,7 +275,6 @@ namespace CrowdFundingShop.UI.Controllers.PC
         }
 
 
-
         // 查看个人资料
         public ActionResult MyDetails()
         {
@@ -295,17 +295,53 @@ namespace CrowdFundingShop.UI.Controllers.PC
         // 编辑个人资料
         public ActionResult EditMyDetails()
         {
-            if (Identity.LoginUserInfo.RoleType != 10)
-            {
-                return Content("只有管理员才能编辑用户");
-            }
             // 查询用户信息
-            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(id);
+            Model.BackgroundUserInfo userInfo = BLL.BackgroundUserBll.GetSingleUserInfo(Identity.LoginUserInfo.ID);
             if (userInfo == null)
             {
                 return Content("该用户不存在！！");
             }
-            return View(userInfo);
+            ViewBag.IsSelf = true;
+            if (Identity.LoginUserInfo.RoleType == 10)
+            {
+                ViewBag.IsSelf = false; // 管理员不需要做这些限制
+            }
+            return View("~/Views/UserInfo/EditUser.cshtml", userInfo);
+        }
+
+        // 修改密码
+        public ActionResult EditPassword(string oldPassword, string newPassword, string rePassword)
+        {
+            string errorType = "";
+            string msg = "OK";
+
+            // 验证参数
+            if (Identity.LoginUserInfo.PassWord != Security.getMD5ByStr(oldPassword))
+            {
+                errorType = "oldPassword";
+                msg = "原密码错误";
+            }
+            else if (newPassword != rePassword)
+            {
+                errorType = "rePassword";
+                msg = "两次输入的密码不一致";
+            }
+            else
+            {
+                if (BLL.BackgroundUserBll.UpdateUserPassword(Identity.LoginUserInfo.ID, newPassword) == false)
+                {
+                    errorType = "alert";
+                    msg = "修改失败，请稍后重试";
+                }
+                else
+                {
+                    // 记录日志
+                    string logTitle = "修改登陆密码";
+                    string logMsg = "修改登录密码";
+                    BLL.BackgroundUserBll_log.AddLog(logTitle, logMsg, Request.UserHostAddress);
+                }
+            }
+            return Json(new { Message = msg, ErrorType = errorType });
         }
     }
 }

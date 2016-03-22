@@ -114,5 +114,11 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.BackgroundUserInfoDal.DeleteByID(id);
         }
+
+        public static bool UpdateUserPassword(long id, string newPassword)
+        {
+            newPassword = Security.getMD5ByStr(newPassword);
+            return DAL.BackgroundUserInfoDal.UpdataPasswordByID(id, newPassword);
+        }
     }
 }

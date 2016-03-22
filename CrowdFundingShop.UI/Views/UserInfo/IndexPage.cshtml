@@ -36,7 +36,14 @@
                 <div class="am-u-sm-12 am-u-md-6">
                     <div class="am-btn-toolbar">
                         <div class="am-btn-group am-btn-group-xs">
-                            <button type="button" onclick="window.location.href='AddUser'" class="am-btn am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+                            @if (Identity.LoginUserInfo.RoleType == 10)
+                            {
+                                <button type="button" onclick="window.location.href='AddUser'" class="am-btn am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+                            }
+                            else
+                            {
+                                <div style="width:1px;height:1px"></div>@*占位*@
+                            }
                         </div>
                     </div>
                 </div>
