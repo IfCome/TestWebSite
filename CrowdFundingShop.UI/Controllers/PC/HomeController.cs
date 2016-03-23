@@ -13,6 +13,12 @@ namespace CrowdFundingShop.UI.Controllers.PC
 
         public ActionResult IndexPage()
         {
+            // 热门商品
+
+            // 后台日志
+
+
+
             return View();
         }
 
