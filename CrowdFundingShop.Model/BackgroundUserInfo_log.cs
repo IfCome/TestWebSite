@@ -36,5 +36,10 @@ namespace CrowdFundingShop.Model
         /// IP地址
         /// </summary>
         public string IpAddress { get; set; }
+
+        /// <summary>
+        /// 操作人姓名
+        /// </summary>
+        public string UserName { get; set; }
     }
 }

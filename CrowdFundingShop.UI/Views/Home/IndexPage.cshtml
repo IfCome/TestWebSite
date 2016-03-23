@@ -82,7 +82,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -100,7 +99,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -118,7 +116,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -136,7 +133,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -154,7 +150,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -172,7 +167,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -190,7 +184,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -208,7 +201,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -226,7 +218,6 @@
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
                                             <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -243,53 +234,37 @@
                             <span class="am-fr"><a href="#"> <small> 查看更多>></small>  </a></span>
                         </div>
                         <div id="collapse-panel-2" class="am-in">
+                            @{
+                                List<CrowdFundingShop.Model.BackgroundUserInfo_log> logList = ViewBag.LogList as  List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
+                            }
                             <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
                                 <tbody>
-                                    <tr>
-                                        <th class="am-text-center">用户</th>
-                                        <th>操作内容</th>
-                                        <th>操作时间</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">张三</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">登录系统</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">李四</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">添加商品</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">王麻子</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">修改商品基本信息</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">赵六</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">完善个人信息</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">张三</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">完善商品详情</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">李四</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">登录系统</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">王五</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">登录系统</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="am-text-center"><a href="#" title="查看用户信息">张三</a></td>
-                                        <td><a class="am-text-success" href="#" title="查看操作详情">登录系统</a></td>
-                                        <td>@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                    </tr>
+                                    @if (logList==null ||logList.Count==0)
+                                    {
+                                        <text>
+                                            <tr>
+                                                <th> 暂无后台日志 </th>
+                                            </tr>
+                                        </text>
+                                    }else
+                                    {
+                                        <text>
+                                            <tr>
+                                                <th class="am-text-center">用户</th>
+                                                <th>操作内容</th>
+                                                <th>操作时间</th>
+                                            </tr>
+                                            @foreach (var log in logList)
+                                            {
+
+                                                <tr>
+                                                    <td class="am-text-center"><a href="#" title="查看用户信息">@log.UserName</a></td>
+                                                    <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
+                                                    <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                                                </tr>
+                                            }
+                                        </text>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -341,7 +316,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- content end -->
     </div>

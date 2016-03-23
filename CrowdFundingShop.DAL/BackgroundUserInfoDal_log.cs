@@ -80,5 +80,43 @@ namespace CrowdFundingShop.DAL
                 return null;
             }
         }
+
+        /// <summary>
+        /// 获取最近10条log
+        /// </summary>
+        public static List<Model.BackgroundUserInfo_log> GetTop10List()
+        {
+            var sql = @"
+                        SELECT TOP 10 [userid], 
+                                      [operatetile], 
+                                      [operatedetail], 
+                                      [operatetime], 
+                                      [ipaddress], 
+                                      UserName=(SELECT TOP 1 realname 
+                                                FROM   backgrounduserinfo 
+                                                WHERE  id = userid) 
+                        FROM   [backgrounduserinfo_log] WITH (nolock) 
+                        ORDER  BY [operatetime] DESC 
+                    ";
+            var dataTable = SqlHelper.ExecuteDataTable(sql, null);
+
+            if (dataTable.Rows.Count > 0)
+            {
+                return dataTable.AsEnumerable().Select(row => new Model.BackgroundUserInfo_log()
+                {
+                    UserID = Converter.TryToInt64(row["UserID"], -1),
+                    OperateTile = Converter.TryToString(row["OperateTile"], string.Empty),
+                    OperateDetail = Converter.TryToString(row["OperateDetail"], string.Empty),
+                    OperateTime = Converter.TryToDateTime(row["OperateTime"], Convert.ToDateTime("1900-01-01")),
+                    IpAddress = Converter.TryToString(row["IpAddress"], string.Empty),
+                    UserName = Converter.TryToString(row["UserName"], string.Empty),
+
+                }).ToList();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

@@ -26,5 +26,10 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.BackgroundUserInfoDal_log.GetTop10ListByUserID(id);
         }
+
+        public static List<Model.BackgroundUserInfo_log> GetTop10Logs()
+        {
+            return DAL.BackgroundUserInfoDal_log.GetTop10List();
+        }
     }
 }
