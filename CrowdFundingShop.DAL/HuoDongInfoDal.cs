@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Data;
 
 namespace CrowdFundingShop.DAL
 {
@@ -58,5 +59,64 @@ namespace CrowdFundingShop.DAL
             }
         }
         #endregion
+
+        public static DataTable GetTop10SimpleInfo()
+        {
+            var sql = @"
+                        WITH a 
+                                AS ( 
+                                --所有的众筹中的活动  
+                                SELECT id, 
+                                        goodsid, 
+                                        sharecount,
+                                        HuodongNumber 
+                                    FROM   huodonginfo 
+                                    WHERE  state = 10
+                                           AND IsDelete=0
+                                           AND (SELECT COUNT(ID) FROM GoodsBaseInfo WHERE ID=GoodsID AND IsDelete=0) > 0), 
+                                b 
+                                AS ( 
+                                --所有的众筹中的活动的订单数 
+                                SELECT huodongid, 
+                                        Count(id) AS OrderCount 
+                                    FROM   orderinfo 
+                                    WHERE  huodongid IN (SELECT id 
+                                                        FROM   a) 
+                                    GROUP  BY huodongid), 
+                                c 
+                                AS ( 
+                                --前十名活动 
+                                SELECT TOP 10 a.*, 
+                                                OrderCount = Isnull(b.ordercount, 0) 
+                                    FROM   a 
+                                        FULL JOIN b 
+                                                ON a.id = b.huodongid) 
+                                --整理所有信息 
+                                SELECT  GoodsID=c.goodsid, 
+                                        GoodsName = (SELECT TOP 1 goodsname 
+                                                    FROM   goodsbaseinfo 
+                                                    WHERE  id = c.goodsid), 
+                                        Describe=(SELECT TOP 1 Describe
+                                                            FROM   goodsbaseinfo 
+                                                            WHERE  id = c.goodsid), 
+                                        HuodongNumber,
+                                        LastestCustomer = (SELECT TOP 1 NAME = (SELECT nickname 
+                                                                                FROM   consumerinfo 
+                                                                                WHERE  id = consumerid) 
+                                                            FROM   orderinfo 
+                                                            WHERE  huodongid = c.id 
+                                                            ORDER  BY createtime DESC), 
+                                        ShareCount, 
+                                        OrderCount, 
+                                        Progress = ordercount * 100.0 / c.sharecount, 
+                                        DailyIncrease =(SELECT Count(id) 
+                                                        FROM   orderinfo 
+                                                        WHERE  huodongid = c.id) 
+                                FROM   c 
+                        ";
+            var dataTable = SqlHelper.ExecuteDataTable(sql, null);
+
+            return dataTable;
+        }
     }
 }

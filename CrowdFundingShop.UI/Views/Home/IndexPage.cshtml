@@ -1,6 +1,4 @@
-﻿@{
-    Layout = null;
-}
+﻿@using CrowdFundingShop.UI.Models.PC
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -41,6 +39,9 @@
             </ul>
             <div class="am-g">
                 <div class="am-u-sm-12">
+                    @{
+                        List<HomeIndexPageModelOut> huoDongList = ViewBag.HuoDongList as List<CrowdFundingShop.UI.Models.PC.HomeIndexPageModelOut>;
+                    }
                     <table class="am-table am-table-bd am-table-striped admin-content-table">
                         <thead>
                             <tr>
@@ -52,176 +53,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">Business management</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar am-progress-bar-secondary" style="width: 22%"><small style="color:black">22%</small></div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="iPhone 6s 64G版 苹果6s 4G手机 颜色随机&#10;第807期">iPhone6s-64</a></td>
-                                <td><a href="#">随便起一个名字啦</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">生生世世爱</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">Business management</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="iPhone 6s 64G版 苹果6s 4G手机 颜色随机&#10;第807期">iPhone6s-64</a></td>
-                                <td><a href="#">随便起一个名字啦</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">生生世世爱</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">Business management</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="iPhone 6s 64G版 苹果6s 4G手机 颜色随机&#10;第807期">iPhone6s-64</a></td>
-                                <td><a href="#">随便起一个名字啦</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">生生世世爱</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" title="中国移动、电信、联通手机话费充值30元&#10;第572期">SJHF-30</a></td>
-                                <td><a href="#">生生世世爱</a></td>
-                                <td>
-                                    <div class="am-progress am-progress-striped">
-                                        <div class="am-progress-bar" style="width: 15%">15%</div>
-                                    </div>
-                                </td>
-                                <td><span class="am-badge am-badge-success">+20</span></td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-eye"></span> 查看</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            @if (huoDongList == null || huoDongList.Count == 0)
+                            {
+                                <text>
+                                    <tr>
+                                        <th> 暂无众筹商品 </th>
+                                    </tr>
+                                </text>
+                            }
+                            else
+                            {
+                                foreach (HomeIndexPageModelOut item in huoDongList)
+                                {
+                                    <text>
+                                        <tr>
+                                            <td><a href="~/GoodsManager/GetGoodsInfo?goodsid=@(item.GoodsID)" title="@(item.Describe)&#10;第@(item.HuodongNumber)期">@(item.GoodsName)</a></td>
+                                            <td><a href="#">@(string.IsNullOrEmpty(item.LastestCustomer) ? "-- 暂无参与用户 --" : item.LastestCustomer)</a></td>
+                                            <td>
+                                                <div class="am-progress am-progress-striped">
+                                                    <div class="am-progress-bar am-progress-bar-secondary" style="width: @(item.Progress)%"><small style="color:black">@(item.Progress)%</small></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="am-badge am-badge-danger">+@(item.DailyIncrease)</span></td>
+                                            <td>
+                                                <div class="am-btn-toolbar">
+                                                    <div class="am-btn-group am-btn-group-xs">
+                                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location.href = '/GoodsManager/GetGoodsInfo?goodsid=@(item.GoodsID)'"><span class="am-icon-eye"></span> 查看</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </text>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -229,50 +93,54 @@
             <div class="am-g">
                 <div class="am-u-md-6">
                     <div class="am-panel am-panel-default">
-                        <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}">
+                        <div class="am-panel-hd am-cf">
                             后台日志
                             <span class="am-fr"><a href="#"> <small> 查看更多>></small>  </a></span>
                         </div>
                         <div id="collapse-panel-2" class="am-in">
                             @{
-                                List<CrowdFundingShop.Model.BackgroundUserInfo_log> logList = ViewBag.LogList as  List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
-                            }
-                            <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
-                                <tbody>
-                                    @if (logList==null ||logList.Count==0)
-                                    {
-                                        <text>
-                                            <tr>
-                                                <th> 暂无后台日志 </th>
-                                            </tr>
-                                        </text>
-                                    }else
-                                    {
-                                        <text>
-                                            <tr>
-                                                <th class="am-text-center">用户</th>
-                                                <th>操作内容</th>
-                                                <th>操作时间</th>
-                                            </tr>
-                                            @foreach (var log in logList)
-                                            {
+                                List<CrowdFundingShop.Model.BackgroundUserInfo_log> logList = ViewBag.LogList as List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
+                            }<crowdfundingshop.model.backgrounduserinfo_log>
+                                <crowdfundingshop.model.backgrounduserinfo_log>
+                                    <crowdfundingshop.model.backgrounduserinfo_log>
+                                        <crowdfundingshop.model.backgrounduserinfo_log>
+                                            <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
+                                                <tbody>
+                                                    @if (logList == null || logList.Count == 0)
+                                                    {
+                                                        <text>
+                                                            <tr>
+                                                                <th> 暂无后台日志 </th>
+                                                            </tr>
+                                                        </text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>
+                                                            <tr>
+                                                                <th class="am-text-center">用户</th>
+                                                                <th>操作内容</th>
+                                                                <th>操作时间</th>
+                                                            </tr>
+                                                            @foreach (var log in logList)
+                                                            {
 
-                                                <tr>
-                                                    <td class="am-text-center"><a href="#" title="查看用户信息">@log.UserName</a></td>
-                                                    <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
-                                                    <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                                </tr>
-                                            }
-                                        </text>
-                                    }
-                                </tbody>
-                            </table>
+                                                                <tr>
+                                                                    <td class="am-text-center"><a href="#" title="查看用户信息">@log.UserName</a></td>
+                                                                    <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
+                                                                    <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                                                                </tr>
+                                                            }
+                                                        </text>
+                                                    }
+                                                </tbody>
+                                            </table>
                         </div>
                     </div>
                 </div>
                 <div class="am-u-md-6">
                     <div class="am-panel am-panel-default">
-                        <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-4'}">任务 task<span class="am-icon-chevron-down am-fr"></span></div>
+                        <div class="am-panel-hd am-cf">任务 task </div>
                         <div id="collapse-panel-4" class="am-panel-bd am-collapse am-in">
                             <ul class="am-list admin-content-task">
                                 <li>
