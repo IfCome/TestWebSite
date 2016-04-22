@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\WAP\GoodsListController.cs" />
+    <Compile Include="Controllers\WAP\OauthController.cs" />
     <Compile Include="Models\PC\AddGoodsCallBackIn.cs" />
     <Compile Include="Models\PC\AddHuoDongInfoIn.cs" />
     <Compile Include="Models\PC\GetGoodsInfoIn.cs" />
@@ -178,6 +179,22 @@
     <Content Include="Resources\js\jqPaginator.js" />
     <Content Include="Resources\css\LoginStyle.css" />
     <Content Include="Resources\js\jquery-1.9.1.min.js" />
+    <Content Include="Resources\progressbar\css\default.css" />
+    <Content Include="Resources\progressbar\css\ProgressBarWars.css" />
+    <Content Include="Resources\progressbar\fonts\icomoon.svg" />
+    <Content Include="Resources\progressbar\img\darth.jpg" />
+    <Content Include="Resources\progressbar\img\Lasers.png" />
+    <Content Include="Resources\progressbar\img\starwars-logo.png" />
+    <Content Include="Resources\progressbar\js\jquery-2.1.1.min.js" />
+    <Content Include="Resources\progressbar\js\ProgressBarWars.js" />
+    <Content Include="Resources\wap\css\com\com.css" />
+    <Content Include="Resources\wap\css\home\index.css" />
+    <Content Include="Resources\wap\js\com\com.js" />
+    <Content Include="Resources\wap\js\com\jquery.touchslider.min.js" />
+    <Content Include="Resources\wap\js\com\template.js" />
+    <Content Include="Resources\wap\js\home\index.js" />
+    <Content Include="Resources\wap\js\jquery.js" />
+    <Content Include="Resources\wap\js\px-verify.js" />
     <Content Include="Views\GoodsManager\EditGoodsInfo.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -257,6 +274,13 @@
     <Content Include="Views\GoodsManager\Edit.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\GoodsList\Index.cshtml" />
+    <Content Include="Views\GoodsManager\GetGoodsInfo.cshtml" />
+    <Content Include="Views\GoodsList\List.cshtml" />
+    <Content Include="Resources\wap\images\home\index.gif%4011" />
+    <Content Include="Resources\progressbar\fonts\icomoon.eot" />
+    <Content Include="Resources\progressbar\fonts\icomoon.ttf" />
+    <Content Include="Resources\progressbar\fonts\icomoon.woff" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -16,11 +16,20 @@ namespace CrowdFundingShop.DAL
             var sql = @"
                                 SELECT ID,ParentId,CategoryName 
                                 FROM dbo.CategoryInfo 
-                                WHERE IsDelete=0 AND ParentId=@ParentId 
+                                WHERE IsDelete=0 {0}
                             ";
-
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter() { ParameterName = "@ParentId", Value = parentID });
+            string sqlWhere = string.Empty;
+            if (parentID != 0)
+            {
+                sqlWhere = " AND ParentID = @ParentId";
+                parameters.Add(new SqlParameter() { ParameterName = "@ParentId", Value = parentID });
+            }
+            else
+            {
+                sqlWhere = " AND ParentId !=0 AND ParentId IS NOT NULL";
+            }
+            sql = string.Format(sql, sqlWhere);
             DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
 
             if (dataTable.Rows.Count > 0)

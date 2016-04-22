@@ -18,11 +18,11 @@ namespace CrowdFundingShop.UI.Controllers.PC
             return View();
         }
 
-        public ActionResult GetGoodsList(int pageSize, int currentPage, string keyWords = "", string huoDongState = "")
+        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, string keyWords = "", string huoDongState = "")
         {
             List<Model.GoodsBaseInfo> goodsInfoList = new List<Model.GoodsBaseInfo>();
             int allCount = 0;
-            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, (huoDongState == "-1" ? "" : huoDongState), out allCount);
+            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, category, (huoDongState == "-1" ? "" : huoDongState), out allCount);
             if (goodsInfoList != null)
             {
                 return Json(new

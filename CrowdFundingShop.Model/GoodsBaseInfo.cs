@@ -32,7 +32,7 @@ namespace CrowdFundingShop.Model
         /// </summary>
         public string CategoryName { get; set; }
         /// <summary>
-        /// 展示图片(逗号分割多个图片地址)
+        /// 展示图片
         /// </summary>
         public string ShowIcons { get; set; }
         /// <summary>

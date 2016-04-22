@@ -135,7 +135,7 @@ namespace CrowdFundingShop.DAL
         #endregion
 
         #region 查询
-        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, string huodongstate, out int allCount)
+        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, int category, string huodongstate, out int allCount)
         {
             var sql = @"
                         WITH Virtual_T AS
@@ -170,6 +170,11 @@ namespace CrowdFundingShop.DAL
             {
                 sqlWhere += "AND GoodsName LIKE @GoodsName";
                 parameters.Add(new SqlParameter() { ParameterName = "@GoodsName", Value = "%" + keyWords + "%" });
+            }
+            if (category != 0)
+            {
+                sqlWhere += "AND Category =@Category";
+                parameters.Add(new SqlParameter() { ParameterName = "@Category", Value = category });
             }
             if (!string.IsNullOrEmpty(huodongstate))
             {

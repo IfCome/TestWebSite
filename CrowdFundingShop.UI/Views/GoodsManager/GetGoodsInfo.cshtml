@@ -7,9 +7,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>修改商品</title>
-    <meta name="description" content="修改商品">
-    <meta name="keywords" content="修改商品">
+    <title>商品详情</title>
+    <meta name="description" content="商品详情">
+    <meta name="keywords" content="商品详情">
     @Html.Partial("~/Views/Common/SharePart.cshtml")
 </head>
 <body>
@@ -22,69 +22,37 @@
             <ol class="am-breadcrumb">
                 <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
                 <li><a href="~/GoodsManager/IndexPage">商品管理</a></li>
-                <li class="am-active">修改商品</li>
+                <li class="am-active">商品详情</li>
             </ol>
             <hr />
             <div class="am-g">
-                <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
-                    <div class="am-container am-hide-sm-only" style=" height: 50px; "></div>
-                </div>
-                <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
-                    <form class="am-form am-form-horizontal" id="formAddUserInfo">
-                        <div class="am-form-group">
-                            <label class="am-u-sm-3 am-form-label"> 修改商品信息</label>
-                            <div class="am-u-sm-9">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 类别：</label>
-                           <span>@(Model != null ? Model.CategoryName : "")</span>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label">商品名：</label>
-                            <div class="am-u-sm-9">
-                                <span>@(Model != null ? Model.GoodsName : "")</span>
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 商品描述：</label>
-                            <div class="am-u-sm-9">
-                                <span>@(Model != null ? Model.Describe : "")</span>
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label">价格：</label>
-                            <div class="am-u-sm-9">
-                                <span style="">@(Model != null ? Model.Price : "")</span>
-                            </div>
-                        </div>
+                @*<div class="am-u-sm-12 am-u-md-4 am-u-md-12">
+                        <div class="am-container am-hide-sm-only" style=" height: 50px; "></div>
+                    </div>*@
 
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 展示图片：</label>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-3 am-form-label"></label>
-                            <div class="am-u-sm-9">
-                                <div id="divImages">
-                                    <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(Model.ShowIcons.Replace("localhost", "localhost:39356"))" alt="" /> &nbsp;
-                                </div>
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 详情页图片：</label>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-3 am-form-label"></label>
-                            <div class="am-u-sm-9">
-                                <div id="divImages1">
-                                    @foreach (var item in Model.DetailIcons.Split(','))
-                                    {
-                                        <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(item.Replace("localhost", "localhost:39356"))" alt="" />
-                                    } &nbsp;
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                <div class="am-u-md-8">
+                    商品详细信息<br /><br />
+                    <ul class="am-list am-list-static  am-center">
+                        <li>商品名称：@Model.GoodsName</li>
+                        <li>
+                            商品类别：@Model.CategoryName
+                        </li>
+                        <li>商品详情：@Model.Describe</li>
+                        <li>
+                            展示图片：
+                            <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(Model.ShowIcons.Replace("localhost", "localhost:39356"))" alt="" /> &nbsp;
+                        </li>
+                        <li>
+                            详情图片：
+                            @foreach (var item in Model.DetailIcons.Split(','))
+                            {
+                                if (item != "")
+                                {
+                                    <img id="userIcon" style="max-height: 150px;" class="am-img-circle am-img-thumbnail" src="@(item.Replace("localhost", "localhost:39356"))" alt="" />
+                                }
+                            } &nbsp;
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

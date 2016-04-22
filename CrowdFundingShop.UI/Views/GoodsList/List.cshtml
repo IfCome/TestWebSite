@@ -1,0 +1,170 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <title>仿拍鞋网商城首页触屏版html5手机wap购物网站模板下载-懒人模板【http://www.lanrenmb.com/shenghuofuwu/gouwu/】</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="拍鞋网,拍鞋网官方网站,拍鞋网商城" />
+    <meta name="description" content="买鞋子哪个网站好，当然首选拍鞋网!中国最早成立的正品鞋子购物网站,国内最大的品牌鞋子销售广场。所售鞋子100%厂家授权,全国包邮,货到付款,提供最完美的购物体验！" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="bookmark" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
+    <!--离线应用的另一个技巧-->
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/com/com.css" />
+    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/home/index.css" />
+
+    @*进度条引用*@
+    <link href="~/Resources/progressbar/css/ProgressBarWars.css" rel="stylesheet" />
+    <script src="~/Resources/progressbar/js/jquery-2.1.1.min.js"></script>
+
+</head>
+<body>
+    <div class="com-content" style="margin-bottom: 60px;">
+        <div class="com-content-area" id="js-com-content-area">
+            <!--content-->
+            <div class="page-role home-page">
+                <div class="pxui-tab pxui-tab-nav pxui-tab-no-top" id="div-nav">
+                    <div style="width:1000px">
+                        <ul class="my-header-list" style="position:relative; ">
+                            @*ajax填充数据*@
+                        </ul>
+                    </div>
+                </div>
+                <div class="pxui-area">
+                    <div class="pxui-shoes">
+                        @*ajax填充数据*@
+                    </div>
+                </div>
+            </div>
+            <!--content-end-->
+        </div>
+        <div class="com-footer-area home-page" id="js-com-footer-area">
+            <div class="pxui-tab pxui-tab-nav pxui-tab-no-top">
+                <a class="selected" style="width: 19.5%;"><i></i>首页<span></span></a>
+                <a href="category/default.htm" style="width: 19.5%;"><i></i>热门商品<span></span></a>
+                <a href="brand/default.htm" style="width: 19.5%;"><i></i>即将揭晓<span></span></a>
+                <a href="tuan/default.htm" style="width: 19.5%;"><i></i>最新揭晓<span></span></a>
+                <a href="" style="width: 19.5%;"><i></i>个人中心<span></span></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="~/Resources/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        LoadCategory()
+        $("a[type=nav]").on("click", function () {
+            alert("aaa")
+            $(this).addClass(("selected")).not($(this)).removeClass("selected");
+        });
+    });
+
+    function LoadCategory() {
+        $.get('@Url.RouteUrl(new { controller = "GoodsManager", action = "GetCategoryInfo" })', { ParentID: 0 }, function (result) {
+            if (result) {
+                $('#slctParent option').remove();
+                if (result.Rows != null && result.Rows.length > 0) {
+                    for (var i = 0; i < result.Rows.length; i++) {
+                        var row = result.Rows[i];
+                        $('.my-header-list').append("<li>" +
+                                                                        "<a type='nav' val='" + row.ID + "'>" + row.CategoryName + "<span></span></a>" +
+                                                                  "</li>");
+                    }
+                    //选中第一项并且查出第一项的商品
+                    $('.my-header-list li:eq(0) a').addClass("selected");
+                    search($('.my-header-list li:eq(0) a').attr("val"));
+                }
+            }
+        }, 'json');
+    }
+    var isSearching = false;
+    function search(category) {
+        // 正在查询
+        if (isSearching) {
+            return;
+        }
+        // 整理参数
+        var data = {
+            PageSize: 100,
+            CurrentPage: 1,
+            category: category
+        };
+        isSearching = true;
+        var flagCount = 0;
+        $.get('@Url.RouteUrl(new { controller = "GoodsManager", action = "GetGoodsList" })', data, function (result) {
+            if (result) {
+                // 清空数据
+                $(".pxui-shoes").html('');
+                if (result.Rows != null && result.Rows.length > 0) {
+                    var rowHtml = "";
+                    for (var i = 0; i < result.Rows.length; i++) {
+                        var row = result.Rows[i];
+                        if (flagCount == 0) {
+                            rowHtml += "<div>";
+                        }
+                        if (flagCount != 0 && flagCount % 2 == 0) {
+                            rowHtml += "</div><div>";
+                        }
+                        rowHtml += ('<a href="shoe-361sport-7212220-500798.html">' +
+                                                        '<div class="img80">' +
+                                                            '<dfn></dfn>' +
+                                                            '<img style="padding-top:3px" src="' + row.ShowIcons.replace('localhost', 'localhost:39356') + '"/>' +
+                                                        '</div>' +
+                                                        '<span class="name">' + row.GoodsName + '</span>' +
+                                                        '<span class="price">' + row.Price + '</span>' +
+                                                        '<div class="zzsc-content">' +
+                                                            '<div class="progress" id="vader' + row.ID + '"></div>' +
+                                                        '</div>' +
+                                                    '</a>');
+                        flagCount++;
+                    }
+                    $(".pxui-shoes").append(rowHtml);
+                    //加进度条
+                    for (var i = 0; i < result.Rows.length; i++) {
+                        var row = result.Rows[i];
+                        $("#vader" + row.ID).ProgressBarWars({ porcentaje: 60, estilo: "vader" });
+                    }
+                }
+            }
+            else {
+                alert("查询出错");
+            }
+            isSearching = false;
+        }, 'json');
+    }
+    //进度条js
+    $.fn.extend({
+        ProgressBarWars: function (opciones) {
+            var ProgressBarWars = this;
+            var theidProgressBarWars = $(ProgressBarWars).attr("id");
+            var styleUnique = Date.now();
+            var StringStyle = "";
+
+            defaults = {
+                porcentaje: "100",
+                tiempo: 1000,
+                color: "",
+                estilo: "yoda",
+                tamanio: "20%",
+                alto: "2px"
+            }
+
+            var opciones = $.extend({}, defaults, opciones);
+            if (opciones.color != '') { StringStyle = "<style>.color" + styleUnique + "{ border-radius: 1px;display: block; width: 0%; box-shadow:0px 0px 5px 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ";background-color: #fff;}</style>"; opciones.estilo = "color" + styleUnique; }
+            $(ProgressBarWars).before(StringStyle);
+            $(ProgressBarWars).append('<span class="barControl" style="width:' + opciones.tamanio + ';"><div class="barContro_space"><span class="' + opciones.estilo + '" style="height: ' + opciones.alto + ';"  id="bar' + theidProgressBarWars + '"></span></div></span>');
+            $("#bar" + theidProgressBarWars).animate({ width: opciones.porcentaje + "%" }, opciones.tiempo);
+            this.mover = function (ntamanio) {
+                $("#bar" + $(this).attr("id")).animate({ width: ntamanio + "%" }, opciones.tiempo);
+            };
+            return this;
+        }
+    });
+</script>
