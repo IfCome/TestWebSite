@@ -57,5 +57,11 @@ namespace CrowdFundingShop.Model
         public int State { get; set; }
 
         public string ParentId { get; set; }
+
+        public int ZhongChouCount { get; set; }
+
+        public double ZhongChouPercent { get; set; }
+        
+        public long HuoDongID { get; set; }
     }
 }

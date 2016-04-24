@@ -182,9 +182,9 @@ input.pxui-blue-button:disabled:active{background:#56678e;border-color:#56678e;}
 .pxui-shoes > div{overflow:hidden;margin-bottom:-1px;}
 .pxui-shoes .img160,
 .pxui-shoes .img220{margin:auto;}
-.pxui-shoes a{width:50%;float:left;border-bottom:1px solid #d3d3d3;overflow:hidden;min-width:120px;position:relative;height:150px;color:#575757;}
+.pxui-shoes a{width:50%;float:left;border-bottom:1px solid #d3d3d3;overflow:hidden;min-width:120px;position:relative;height:170px;color:#575757;}
 .pxui-shoes a:nth-child(2n+1){margin-left:-1px;border-right:1px solid #d3d3d3;}
-.pxui-shoes .name{display:block;font-size:12px;max-height:48px;overflow:hidden;padding:0 12px;text-align:left;}
+.pxui-shoes .name{display:block;font-size:12px;max-height:48px;overflow:hidden;padding:5px 12px;text-align:left;}
 .pxui-shoes .price{margin-left:12px;display:inline-block;vertical-align:bottom;color:#fb4e3a;font-size:14px;}
 .pxui-shoes del.price{margin-left:0;color:#A9A9A9;font-size:12px;}
 .pxui-shoes .tag{position:absolute;top:0px;left:0px;}

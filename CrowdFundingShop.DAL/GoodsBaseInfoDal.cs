@@ -154,6 +154,7 @@ namespace CrowdFundingShop.DAL
                                    ,State=CASE WHEN State IS NULL THEN '0'
                                     ELSE State END
                                    ,ROW_NUMBER() OVER (ORDER BY G.CreateTime DESC) AS [RowNumber] 
+                                   ,ZhongChouCount=(SELECT COUNT(1) FROM OrderInfo WHERE HuoDongID=H.ID)
                              FROM GoodsBaseInfo G WITH (NOLOCK) JOIN CategoryInfo C WITH (NOLOCK)
                              ON G.Category=C.ID LEFT JOIN dbo.HuodongInfo H
                              ON G.ID=H.GoodsID
@@ -218,6 +219,7 @@ namespace CrowdFundingShop.DAL
                     ShowIcons = Converter.TryToString(row["ShowIcons"], string.Empty),
                     CreateTime = Converter.TryToString(row["CreateTime"], DateTime.MinValue.ToString()),
                     State = Converter.TryToInt32(row["State"], -1),
+                    ZhongChouCount = Converter.TryToInt32(row["ZhongChouCount"], 0)
                 }).ToList();
             }
             return null;
@@ -237,8 +239,11 @@ namespace CrowdFundingShop.DAL
 	                               ,G.CreateUserID 
 								   ,C.ParentId
                                    ,C.CategoryName
-	                            FROM dbo.GoodsBaseInfo G JOIN dbo.CategoryInfo C
-	                            ON C.ID=G.Category
+                                   ,H.ID AS HuoDongID
+                                   ,ZhongChouCount=(SELECT Count(1) FROM OrderInfo where huodongid=H.ID)
+                                FROM dbo.GoodsBaseInfo G JOIN dbo.CategoryInfo C
+                                ON C.ID=G.Category JOIN HuoDongInfo H
+                                ON G.ID=H.GoodsID
                                 WHERE G.IsDelete=0 AND C.IsDelete=0 AND G.ID=@ID
                               ";
             var parameters = new List<SqlParameter>();
@@ -261,6 +266,8 @@ namespace CrowdFundingShop.DAL
                     Category = Converter.TryToString(row["Category"], string.Empty),
                     CategoryName = Converter.TryToString(row["CategoryName"], string.Empty),
                     ParentId = Converter.TryToString(row["ParentId"], string.Empty),
+                    ZhongChouCount = Converter.TryToInt32(row["ZhongChouCount"], 0),
+                    HuoDongID = Converter.TryToInt64(row["HuoDongID"], 0)
                 };
             }
             return null;

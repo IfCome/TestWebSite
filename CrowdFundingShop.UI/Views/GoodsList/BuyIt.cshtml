@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+@model IEnumerable<CrowdFundingShop.Model.ShoppingCart>
+
+<!doctype html>
+<html>
+<head>
+    <title>提交订单</title>
+    <meta charset="utf-8">
+    <meta content=" width = device-width , initial-scale = 1.0 , maximum-scale = 1.0 , user-scalable = no " id="viewport" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/cart/index.css" rel="stylesheet" />
+    <!--改版后 com1-3.css可以去掉-->
+    <link href="~/Resources/wap/css/cart/com1-3.css" rel="stylesheet" />
+    <!--新改的-->
+    <link href="~/Resources/wap/css/cart/com1-4.css" rel="stylesheet" />
+    <script src="~/Resources/js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    <div class="com-content">
+        <div class="clearboth"></div>
+        <div class="com-content-area" id="js-com-content-area">
+            <div class="mask hidden"></div>
+            <div class="page-role payed-page">
+                <div class="com-title">
+                    <a title="返回" href="javascript:history.back();void(0)" class="return">
+                    </a>
+                    <a title="菜单" href="javascript:void(0);" class="home_menu">
+                        <span></span>
+                    </a>
+                    提交订单
+                </div>
+                <div class="spaceholder"></div>
+                <div class="pxui-area">
+                    <h2><i></i>恭喜您！<br />订单已提交成功！</h2>
+                    @{
+                        int price = 0;
+                        if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                price += item.StoreCount;
+                            }
+                        }
+                    }
+                    <input type="button" class="pxui-light-button" onclick="pay(@price)" value="立即支付(@(price+"元)")" />
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <b>商品详情：</b><span>@(item.GoodsName + "(" + item.StoreCount + "件)")</span>
+                            <br />
+                            <b>支付方式：</b><span>微信支付</span><br />
+                            <b>支付金额：</b><strong class="pxui-color-red">@("￥" + item.StoreCount)</strong><br />
+                            <hr style="width:97%;" />
+                        }
+                    }
+                    <div class="app_result_tip">
+                        <span>安全提醒：下单后，为了您的财产安全，任何有涉及汇款、退款等内容的信息或电话，请不要相信，谨防假冒客服电话诈骗！</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    top.ztetbdata = null;
+</script>
+@*<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>*@
+<script>
+    function pay(price) {
+        window.location.href = "/order/pay?price=" + price;
+    }
+</script>

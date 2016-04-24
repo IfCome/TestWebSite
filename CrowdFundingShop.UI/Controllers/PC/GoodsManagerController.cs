@@ -37,7 +37,9 @@ namespace CrowdFundingShop.UI.Controllers.PC
                         g.ShowIcons,
                         g.Category,
                         g.CreateTime,
-                        g.State
+                        g.State,
+                        g.ZhongChouCount,
+                        ZhongChouPercent = (g.Price != "0" && g.Price != "" && g.ZhongChouCount != 0) ? ((g.ZhongChouCount * 100.0 / Converter.TryToInt32(g.Price)) < 1 ? 2 : (g.ZhongChouCount * 100.0 / Converter.TryToInt32(g.Price))) : 0
                     }),
                     AllCount = allCount
                 }, JsonRequestBehavior.AllowGet);

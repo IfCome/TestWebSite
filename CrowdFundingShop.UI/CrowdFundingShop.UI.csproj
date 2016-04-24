@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="Controllers\WAP\GoodsListController.cs" />
     <Compile Include="Controllers\WAP\OauthController.cs" />
+    <Compile Include="Controllers\WAP\OrderController.cs" />
     <Compile Include="Models\PC\AddGoodsCallBackIn.cs" />
     <Compile Include="Models\PC\AddHuoDongInfoIn.cs" />
     <Compile Include="Models\PC\GetGoodsInfoIn.cs" />
@@ -135,6 +136,88 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="images\UserIcons\2016032111151815.png" />
+    <Content Include="images\UserIcons\2016032111151815_t.png" />
+    <Content Include="images\UserIcons\2016032111152015.png" />
+    <Content Include="images\UserIcons\2016032111152015_t.png" />
+    <Content Include="images\UserIcons\2016032111152415.png" />
+    <Content Include="images\UserIcons\2016032111152415_t.png" />
+    <Content Include="images\UserIcons\2016032111153015.png" />
+    <Content Include="images\UserIcons\2016032111153015_t.png" />
+    <Content Include="images\UserIcons\2016032111174817.png" />
+    <Content Include="images\UserIcons\2016032111174817_t.png" />
+    <Content Include="images\UserIcons\2016032111175017.png" />
+    <Content Include="images\UserIcons\2016032111175017_t.png" />
+    <Content Include="images\UserIcons\2016032111175417.png" />
+    <Content Include="images\UserIcons\2016032111175417_t.png" />
+    <Content Include="images\UserIcons\2016032111193019.png" />
+    <Content Include="images\UserIcons\2016032111193019_t.png" />
+    <Content Include="images\UserIcons\2016032111193319.png" />
+    <Content Include="images\UserIcons\2016032111193319_t.png" />
+    <Content Include="images\UserIcons\2016032111193719.png" />
+    <Content Include="images\UserIcons\2016032111193719_t.png" />
+    <Content Include="images\UserIcons\2016032111201720.png" />
+    <Content Include="images\UserIcons\2016032111201720_t.png" />
+    <Content Include="images\UserIcons\2016032111202020.png" />
+    <Content Include="images\UserIcons\2016032111202020_t.png" />
+    <Content Include="images\UserIcons\2016032111202320.png" />
+    <Content Include="images\UserIcons\2016032111202320_t.png" />
+    <Content Include="images\UserIcons\2016032111555955.png" />
+    <Content Include="images\UserIcons\2016032111555955_t.png" />
+    <Content Include="images\UserIcons\2016032111560656.png" />
+    <Content Include="images\UserIcons\2016032111560656_t.png" />
+    <Content Include="images\UserIcons\2016032111561056.png" />
+    <Content Include="images\UserIcons\2016032111561056_t.png" />
+    <Content Include="images\UserIcons\2016032201053505.png" />
+    <Content Include="images\UserIcons\2016032201053505_t.png" />
+    <Content Include="images\UserIcons\2016032201084508.png" />
+    <Content Include="images\UserIcons\2016032201084508_t.png" />
+    <Content Include="images\UserIcons\2016032201174317.png" />
+    <Content Include="images\UserIcons\2016032201174317_t.png" />
+    <Content Include="images\UserIcons\2016032201174817.jpg" />
+    <Content Include="images\UserIcons\2016032201174817_t.jpg" />
+    <Content Include="images\UserIcons\2016032201175217.jpg" />
+    <Content Include="images\UserIcons\2016032201175217_t.jpg" />
+    <Content Include="images\UserIcons\2016032201175717.jpg" />
+    <Content Include="images\UserIcons\2016032201175717_t.jpg" />
+    <Content Include="images\UserIcons\2016032210105610.png" />
+    <Content Include="images\UserIcons\2016032210105610_t.png" />
+    <Content Include="images\UserIcons\2016032210110111.jpg" />
+    <Content Include="images\UserIcons\2016032210110111_t.jpg" />
+    <Content Include="images\UserIcons\2016032301021602.png" />
+    <Content Include="images\UserIcons\2016032301021602_t.png" />
+    <Content Include="images\UserIcons\2016032301045704.jpg" />
+    <Content Include="images\UserIcons\2016032301045704_t.jpg" />
+    <Content Include="images\UserIcons\2016032301050205.png" />
+    <Content Include="images\UserIcons\2016032301050205_t.png" />
+    <Content Include="images\UserIcons\2016032301050705.png" />
+    <Content Include="images\UserIcons\2016032301050705_t.png" />
+    <Content Include="images\UserIcons\2016032301263426.png" />
+    <Content Include="images\UserIcons\2016032301263426_t.png" />
+    <Content Include="images\UserIcons\2016032301263926.jpg" />
+    <Content Include="images\UserIcons\2016032301263926_t.jpg" />
+    <Content Include="images\UserIcons\2016032301264526.jpg" />
+    <Content Include="images\UserIcons\2016032301264526_t.jpg" />
+    <Content Include="images\UserIcons\2016032301264926.jpg" />
+    <Content Include="images\UserIcons\2016032301264926_t.jpg" />
+    <Content Include="images\UserIcons\2016032312522252.jpg" />
+    <Content Include="images\UserIcons\2016032312522252_t.jpg" />
+    <Content Include="images\UserIcons\2016032312522952.png" />
+    <Content Include="images\UserIcons\2016032312522952_t.png" />
+    <Content Include="images\UserIcons\2016032312523752.png" />
+    <Content Include="images\UserIcons\2016032312523752_t.png" />
+    <Content Include="images\UserIcons\2016032312533053.jpg" />
+    <Content Include="images\UserIcons\2016032312533053_t.jpg" />
+    <Content Include="images\UserIcons\2016032312534053.jpg" />
+    <Content Include="images\UserIcons\2016032312534053_t.jpg" />
+    <Content Include="images\UserIcons\2016032312534853.png" />
+    <Content Include="images\UserIcons\2016032312534853_t.png" />
+    <Content Include="images\UserIcons\2016032312544954.png" />
+    <Content Include="images\UserIcons\2016032312544954_t.png" />
+    <Content Include="images\UserIcons\2016032312551255.png" />
+    <Content Include="images\UserIcons\2016032312551255_t.png" />
+    <Content Include="images\UserIcons\2016032312563656.png" />
+    <Content Include="images\UserIcons\2016032312563656_t.png" />
     <Content Include="Resources\amazeuiassets\css\admin.css" />
     <Content Include="Resources\amazeuiassets\css\amazeui.css" />
     <Content Include="Resources\amazeuiassets\css\amazeui.flat.css" />
@@ -187,14 +270,26 @@
     <Content Include="Resources\progressbar\img\starwars-logo.png" />
     <Content Include="Resources\progressbar\js\jquery-2.1.1.min.js" />
     <Content Include="Resources\progressbar\js\ProgressBarWars.js" />
+    <Content Include="Resources\wap\css\cart\com1-3.css" />
+    <Content Include="Resources\wap\css\cart\com1-4.css" />
+    <Content Include="Resources\wap\css\cart\index.css" />
     <Content Include="Resources\wap\css\com\com.css" />
+    <Content Include="Resources\wap\css\com\index.css" />
     <Content Include="Resources\wap\css\home\index.css" />
+    <Content Include="Resources\wap\images\cart\index.gif" />
+    <Content Include="Resources\wap\images\goods\index.gif" />
+    <Content Include="Resources\wap\images\home\bg.png" />
+    <Content Include="Resources\wap\images\home\left.png" />
     <Content Include="Resources\wap\js\com\com.js" />
+    <Content Include="Resources\wap\js\com\index.js" />
     <Content Include="Resources\wap\js\com\jquery.touchslider.min.js" />
+    <Content Include="Resources\wap\js\com\px-verify.js" />
     <Content Include="Resources\wap\js\com\template.js" />
     <Content Include="Resources\wap\js\home\index.js" />
     <Content Include="Resources\wap\js\jquery.js" />
     <Content Include="Resources\wap\js\px-verify.js" />
+    <Content Include="Resources\wap\js\shoppingcart.js" />
+    <Content Include="Resources\wap\js\zepto.min.js" />
     <Content Include="Views\GoodsManager\EditGoodsInfo.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -209,7 +304,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\UserIcons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -281,6 +375,11 @@
     <Content Include="Resources\progressbar\fonts\icomoon.eot" />
     <Content Include="Resources\progressbar\fonts\icomoon.ttf" />
     <Content Include="Resources\progressbar\fonts\icomoon.woff" />
+    <Content Include="Views\GoodsList\Detail.cshtml" />
+    <Content Include="Views\GoodsList\MyShoppingCart.cshtml" />
+    <Content Include="Views\GoodsList\BuyIt.cshtml" />
+    <Content Include="Resources\wap\css\cart\zip.touch.cart.css" />
+    <Content Include="Views\Order\Pay.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

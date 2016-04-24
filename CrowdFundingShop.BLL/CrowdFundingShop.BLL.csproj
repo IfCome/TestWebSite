@@ -45,6 +45,7 @@
     <Compile Include="GoodsBaseInfoBll.cs" />
     <Compile Include="HuoDongInfoBll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShoppingCartBll.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CrowdFundingShop.DAL\CrowdFundingShop.DAL.csproj">

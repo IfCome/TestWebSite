@@ -1,0 +1,164 @@
+﻿@{
+    Layout = null;
+}
+@model CrowdFundingShop.Model.GoodsBaseInfo
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
+    <!--离线应用的另一个技巧-->
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    @*弹出框引用*@
+    <link rel="stylesheet" href="http://ued.paixie.net/zip.touch.cart2_0._all_.v79214.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/com/com.css" />
+    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/home/index.css" />
+    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/com/index.css" />
+    @*<script src="~/Resources/progressbar/js/jquery-2.1.1.min.js"></script>*@
+    <script src="~/Resources/js/jquery-1.9.1.min.js"></script>
+    <script src="~/Resources/wap/js/com/px-verify.js"></script>
+    <script src="~/Resources/wap/js/com/template.js"></script>
+    <script src="http://ued.paixie.net/scripts/public/jquery.js"></script>
+    <script src="~/Resources/wap/js/com/jquery.touchslider.min.js"></script>
+    <script src="~/Resources/wap/js/com/index.js"></script>
+    <script src="~/Resources/wap/js/com/com.js"></script>
+    @*进度条引用*@
+    <link href="~/Resources/progressbar/css/ProgressBarWars.css" rel="stylesheet" />
+    <script src="~/Resources/wap/js/shoppingcart.js"></script>
+    <script>
+        var isDown = false;
+        $(function () {
+            jQuery(function ($) {
+                $(".touchslider").touchSlider({ mouseTouch: true, autoplay: true });
+            });
+            $("#vader").ProgressBarWars({ porcentaje: "@Model.ZhongChouPercent", estilo: "vader" });
+        });
+    </script>
+</head>
+<body>
+    <div class="com-content">
+        <div class="com-content-area" id="js-com-content-area">
+            <!--content-->
+            <div class="page-role good-page">
+                <div class="page-title" style="margin-top:10px">
+                    <a class="return" href="javascript:history.back();void(0)">返 回</a>商品详情
+                </div>
+                <div class="pxui-area">
+                    <h1>
+                        @Model.GoodsName
+                    </h1>
+                    <div class="touchslider">
+                        <div class="touchslider-viewport" style="height:280px;overflow:hidden">
+                            <div>
+                                @foreach (var item in Model.DetailIcons.Split(','))
+                                {
+                                    if (!string.IsNullOrEmpty(item))
+                                    {
+                                        <div class="touchslider-item"><a><span class="img320"><dfn></dfn><img src="@(item.Replace("localhost", "localhost:39356").Replace("_t",""))" /></span></a></div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="touchslider-navtag">
+                            <a class="touchslider-prev"></a>
+                            @{
+                                int count = 0;
+                            }
+                            @foreach (var item in Model.DetailIcons.Split(','))
+                            {
+                                if (!string.IsNullOrEmpty(item))
+                                {
+                                    if (count == 0)
+                                    {
+                                        <span class="touchslider-nav-item touchslider-nav-item-current"></span>
+                                        count++;
+                                    }
+                                    else
+                                    {
+                                        <span class="touchslider-nav-item"></span>
+                                    }
+                                }
+                            }
+                            <a class="touchslider-next"></a>
+                        </div>
+                    </div>
+                    <div style="background-color:rgb(234,234,243);margin-top:10px;padding:8px;border-radius:5px">
+                        <span style="margin-top:5px" class="price">@("总需" + Model.Price + "人次")</span>
+                        <div class="zzsc-content">
+                            <div class="progress" id="vader"></div>
+                        </div>
+                        <span style="font-size:10px;margin-left:10px">@(Model.ZhongChouCount + "人次已参加")</span>
+                        <span style="font-size:10px;margin-right:10px;float:right">@("剩余" + (Convert.ToInt32(Model.Price) - Model.ZhongChouCount) + "人次")</span>
+                    </div>
+                    <div class="pxui-list" data-model="radio">
+                        <a>@("点击查看" + Model.GoodsName + "的具体信息")<i class="arrow-right"></i></a>
+
+                        <div class="pxui-list-con" style="display:none;">
+                            @Model.Describe
+                        </div>
+                        <div style="clear:both;height:4px;margin: 0;padding: 0px; width:100%;"></div>
+                    </div>
+                    <input id="btnAddToCart" type="button" class="pxui-blue-button" value="加入购物车" style="display:inline;margin-left:1%" />
+                    <input id="btnBuy" type="button" class="pxui-light-button" value="立即购买" style="display:inline" />
+                    <h3 id="js-attrs-title" style="display:none"></h3>
+                </div>
+            </div>
+            <!--content-end-->
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    //进度条js
+    $.fn.extend({
+        ProgressBarWars: function (opciones) {
+            var ProgressBarWars = this;
+            var theidProgressBarWars = $(ProgressBarWars).attr("id");
+            var styleUnique = Date.now();
+            var StringStyle = "";
+
+            defaults = {
+                porcentaje: "100",
+                tiempo: 1000,
+                color: "",
+                estilo: "yoda",
+                tamanio: "20%",
+                alto: "2px"
+            }
+            var opciones = $.extend({}, defaults, opciones);
+            if (opciones.color != '') { StringStyle = "<style>.color" + styleUnique + "{ border-radius: 1px;display: block; width: 0%; box-shadow:0px 0px 5px 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ", 0 0 1px " + opciones.color + ";background-color: #fff;}</style>"; opciones.estilo = "color" + styleUnique; }
+            $(ProgressBarWars).before(StringStyle);
+            $(ProgressBarWars).append('<span class="barControl" style="width:' + opciones.tamanio + ';"><div class="barContro_space"><span class="' + opciones.estilo + '" style="height: ' + opciones.alto + ';"  id="bar' + theidProgressBarWars + '"></span></div></span>');
+            $("#bar" + theidProgressBarWars).animate({ width: opciones.porcentaje + "%" }, opciones.tiempo);
+            this.mover = function (ntamanio) {
+                $("#bar" + $(this).attr("id")).animate({ width: ntamanio + "%" }, opciones.tiempo);
+            };
+            return this;
+        }
+    });
+    $(function () {
+        $("#btnAddToCart").click(function () {
+            fnAddToCart();
+        });
+        $("#btnBuy").click(function () {
+            fnAddToCart();
+        });
+    });
+    function fnAddToCart() {
+        var data = {};
+        data.HuoDongID = "@Model.HuoDongID";
+        data.StoreCount = 1;
+        // 提交数据
+        $.post('@Url.RouteUrl(new { controller = "GoodsList", action = "AddToCart" })', data, function (result) {
+            if (result && result.Message == 'OK') {
+                location.href = '/GoodsList/MyShoppingCart';
+            }
+            else {
+                Model.alert(result.Message);
+            }
+        }, 'JSON');
+    }
+</script>
