@@ -379,7 +379,7 @@
     <Content Include="Views\GoodsList\MyShoppingCart.cshtml" />
     <Content Include="Views\GoodsList\BuyIt.cshtml" />
     <Content Include="Resources\wap\css\cart\zip.touch.cart.css" />
-    <Content Include="Views\Order\Pay.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -13,7 +13,7 @@ namespace CrowdFundingShop.DAL
         public static bool Add(Model.OrderInfo entity)
         {
             var sql = @"
-                        INSERT INTO [HuoDongInfo]
+                        INSERT INTO [OrderInfo]
                                (
                                     ConsumerID
                                     ,HuodongID
@@ -28,9 +28,9 @@ namespace CrowdFundingShop.DAL
                                     ,GETDATE()
                                )";
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter() { ParameterName = "@GoodsID", Value = entity.ConsumerID });
-            parameters.Add(new SqlParameter() { ParameterName = "@ShareCount", Value = entity.HuodongID });
-            parameters.Add(new SqlParameter() { ParameterName = "@State", Value = entity.Number });
+            parameters.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = entity.ConsumerID });
+            parameters.Add(new SqlParameter() { ParameterName = "@HuodongID", Value = entity.HuodongID });
+            parameters.Add(new SqlParameter() { ParameterName = "@Number", Value = entity.Number });
             try
             {
                 return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0;

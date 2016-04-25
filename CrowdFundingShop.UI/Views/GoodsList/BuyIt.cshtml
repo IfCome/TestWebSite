@@ -72,7 +72,34 @@
 </script>
 @*<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>*@
 <script>
-    function pay(price) {
-        window.location.href = "/order/pay?price=" + price;
+    function pay() {
+        var data = {};
+        @{
+                string huodongids = string.Empty;
+                string storecount = string.Empty;
+                string  allprice=string.Empty;
+                string zhongchoucount = string.Empty;
+                foreach (var item in Model)
+                {
+                    storecount += item.StoreCount + ",";
+                    huodongids+= item.HuoDongID + ",";
+                    allprice += item.Price+",";
+                    zhongchoucount += item.ZhongChouCount.ToString()+",";
+                }
+        }
+        data.HuoDongIDs = "@huodongids";
+        data.StoreCount = "@storecount";
+        data.allprice = "@allprice";
+        data.zhongchoucount = "@zhongchoucount";
+        alert(data);
+        // 提交数据
+        $.post('@Url.RouteUrl(new { controller = "Order", action = "Pay" })', data, function (result) {
+            if (result && result.Message == 'OK') {
+                location.href = '/Order/Index';
+            }
+            else {
+                Model.alert(result.Message);
+            }
+        }, 'JSON');
     }
 </script>

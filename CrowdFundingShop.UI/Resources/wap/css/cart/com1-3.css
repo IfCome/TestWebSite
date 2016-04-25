@@ -22,7 +22,7 @@ input[type=button]:active,
 input[type=submit]:active,
 input[type=reset]:active { -moz-transform: rotate(0deg) scale(1.00, 1.00) translate(0px, 1px) skew(0deg, 0deg); -moz-transform-origin: 0% 0%; -webkit-transform: rotate(0deg) scale(1.00, 1.00) translate(0px, 1px) skew(0deg, 0deg); -webkit-transform-origin: 0% 0%; -o-transform: rotate(0deg) scale(1.00, 1.00) translate(0px, 1px) skew(0deg, 0deg); -o-transform-origin: 0% 0%; transform: rotate(0deg) scale(1.00, 1.00) translate(0px, 1px) skew(0deg, 0deg); transform-origin: 0% 0%; }
 textarea { resize: none; overflow: auto; }
-.com-content { background: #e1e5ee; margin: auto; overflow: hidden; position: relative; box-shadow: 0 0 10px #000; min-width: 320px; max-width: 640px; height:730px}
+.com-content { background: #e1e5ee; margin: auto; overflow: hidden; position: relative; box-shadow: 0 0 10px #000; min-width: 320px; max-width: 640px; min-height:730px}
 .com-content-area { margin: 12px;  font-size:12px;}
 input[type=text],
 input[type=number],

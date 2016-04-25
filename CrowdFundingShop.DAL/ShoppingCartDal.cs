@@ -83,7 +83,7 @@ namespace CrowdFundingShop.DAL
                                 FROM ShoppingCart S JOIN HuoDongInfo H
                                     ON S.HuoDongID=H.ID JOIN GoodsBaseInfo G
                                     ON H.GoodsID=G.ID
-                                WHERE ConsumerID=@ID";
+                                WHERE ConsumerID=@ID AND H.State=10";
             var parameters = new List<SqlParameter>();
             sql = string.Format(sql);
             parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = id });

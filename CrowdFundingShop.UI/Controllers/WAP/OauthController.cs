@@ -50,38 +50,45 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             var AppID = ConfigurationManager.AppSettings["AppID"];
             var domainurl = ConfigurationManager.AppSettings["domainurl"];
-            var red_url = Url.Encode(domainurl + "/oauth/getuserwechatinfo");
+            var red_url = Url.Encode(domainurl + "/Oauth/getuserwechatinfo");
             const string scope = "snsapi_userinfo";
             Session["backurl"] = backurl;
             var state = GetRandCode(8);
             Session[state] = state;
-
             return Redirect(GetCodeUrl(AppID, red_url, scope, state));
         }
         public ActionResult getuserwechatinfo(string state, string code)
         {
-            BLL.BackgroundUserBll_log.AddLog("微信获取用户", "state：" + state + "；" + "code：" + code, "0.0.0.0");
-            var AppID = ConfigurationManager.AppSettings["AppID"];
-            var AppSecret = ConfigurationManager.AppSettings["AppSecret"];
-            string userString = "";
-            if (Session["user"] == null)
+            try
             {
-                userString = GetUserInfo(AppID, AppSecret, code);
-                Session["user"] = userString;
-                return RedirectToAction("SaveUser");
-            }
-            else
-            {
-                string url = Session["backurl"].ToString();
-                userString = Session["user"].ToString();
-                var Jss = new JavaScriptSerializer();
-                var data = (Dictionary<string, object>)Jss.DeserializeObject(userString);
-                if (data == null || data["openid"] == null)
-                    return Redirect("~/htmls/error.htm");
-                if (url.Contains("?"))
-                    return Redirect(url + "&unionid=" + data["unionid"].ToString());
+                BLL.BackgroundUserBll_log.AddLog("微信获取用户1", "state：" + state + "；" + "code：" + code, "0.0.0.0");
+                var AppID = ConfigurationManager.AppSettings["AppID"];
+                var AppSecret = ConfigurationManager.AppSettings["AppSecret"];
+                string userString = "";
+                if (Session["user"] == null)
+                {
+                    userString = GetUserInfo(AppID, AppSecret, code);
+                    Session["user"] = userString;
+                    return RedirectToAction("SaveUser");
+                }
                 else
-                    return Redirect(url + "?unionid=" + data["unionid"].ToString());
+                {
+                    string url = Session["backurl"].ToString();
+                    userString = Session["user"].ToString();
+                    var Jss = new JavaScriptSerializer();
+                    var data = (Dictionary<string, object>)Jss.DeserializeObject(userString);
+                    if (data == null || data["openid"] == null)
+                        return View("~/Views/GoodsList/List.cshtml?userinfo=错误0");
+                    if (url.Contains("?"))
+                        return Redirect(url + "&unionid=" + data["unionid"].ToString());
+                    else
+                        return Redirect(url + "?unionid=" + data["unionid"].ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                BLL.BackgroundUserBll_log.AddLog("错误了", e.Message, "0.0.0.0");
+                return View("~/Views/GoodsList/List.cshtml?userinfo=错误2");
             }
         }
 
@@ -95,8 +102,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         /// <returns>授权地址</returns>
         public string GetCodeUrl(string Appid, string redirect_uri, string scope, string state)
         {
-            return
-                string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}#wechat_redirect", Appid, redirect_uri, scope, state);
+            return string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}&connect_redirect=1#wechat_redirect", Appid, redirect_uri, scope, state);
         }
         /// <summary>
         ///用code换取获取用户信息（包括非关注用户的）
@@ -107,6 +113,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         /// <returns>获取用户信息（json格式）</returns>
         public string GetUserInfo(string Appid, string Appsecret, string Code)
         {
+            BLL.BackgroundUserBll_log.AddLog("标记", "进GetUserInfo了 appid：" + Appid + "；appsecret：" + Appsecret + "；code：" + Code, "0.0.0.0");
             try
             {
                 var url = string.Format("https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code", Appid, Appsecret, Code);
@@ -115,6 +122,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 if (!DicText.ContainsKey("openid"))
                 {
                     //WriteTxt_Log("获取openid失败，错误码：" + DicText["errcode"].ToString());
+                    BLL.BackgroundUserBll_log.AddLog("标记111", "获取openid失败，错误码：" + DicText["errcode"].ToString(), "0.0.0.0");
                     return "";
                 }
                 else
@@ -124,6 +132,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             }
             catch (Exception ex)
             {
+                BLL.BackgroundUserBll_log.AddLog("标记112", "ex：" + ex.Message, "0.0.0.0");
                 //WriteTxt_Log("ex:" + ex.Message);
                 return "";
                 //throw;																												
