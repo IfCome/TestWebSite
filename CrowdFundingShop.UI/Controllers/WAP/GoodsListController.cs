@@ -20,16 +20,17 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             return View();
         }
         //商品列表页
-        public ActionResult List()
+        public ActionResult List(string userinfo)
         {
+            ViewBag.UserInfo = userinfo;
             return View();
         }
         //获取商品列表
-        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, string keyWords = "", string huoDongState = "")
+        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, int ishot = 0, int jiexiaotype = 0, string keyWords = "", string huoDongState = "")
         {
             List<Model.GoodsBaseInfo> goodsInfoList = new List<Model.GoodsBaseInfo>();
             int allCount = 0;
-            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, category, (huoDongState == "-1" ? "" : huoDongState), out allCount);
+            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, category, (huoDongState == "-1" ? "" : huoDongState), ishot, jiexiaotype, out allCount);
             if (goodsInfoList != null)
             {
                 return Json(new
@@ -53,6 +54,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             }
             return Json(new { Rows = "", AllCount = 0 }, JsonRequestBehavior.AllowGet);
         }
+        //商品种类
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();

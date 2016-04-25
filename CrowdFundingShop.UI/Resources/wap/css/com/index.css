@@ -3,7 +3,7 @@
 .touchslider-prev,
 .touchslider-next,
 .good-page .comment-list strong i,
-.goshop i{background-image:url(../../images/goods/index.gif);background-size:105px 82px;}
+.goshop i{background-image:url(../../images/good/index.gif);background-size:105px 82px;}
 .good-page .img320{display:block;margin:auto;}
 .good-page .pxui-area{padding:10px;}
 .good-page .pxui-imgshow img,
@@ -26,7 +26,7 @@
 .good-page .pxui-gray-button .arrow-right::before{background:#575757;}
 .good-page .pxui-light-button,
 .good-page input.pxui-blue-button,
-.good-page input.pxui-gray-button{font-size:16px;line-height:24px;border-radius:3px;margin:0;margin-top:30px;width:48%;}
+.good-page input.pxui-gray-button{font-size:16px;line-height:24px;border-radius:3px;margin:0;margin-top:30px;width:48%;margin-left:1%}
 .good-page a.pxui-blue-button{width:auto;}
 .good-page .attrs{margin:0 10px;overflow:hidden;}
 .good-page .attrs li{width:50%;float:left;display:none;height:28px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;font-size:12px;}

@@ -11,9 +11,9 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.GoodsBaseInfoDal.AddGoodsInfo(InModel);
         }
-        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, int category, string huodongstate, out int allCount)
+        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, int category, string huodongstate,int ishot, int jiexiaotype, out int allCount)
         {
-            return DAL.GoodsBaseInfoDal.GetList(pageSize, currentPage, keyWords,category, huodongstate,out allCount);
+            return DAL.GoodsBaseInfoDal.GetList(pageSize, currentPage, keyWords, category, huodongstate, ishot, jiexiaotype, out allCount);
         }
         public static bool UpDateGoodsInfo(Model.GoodsBaseInfo InModel)
         {

@@ -135,7 +135,7 @@ namespace CrowdFundingShop.DAL
         #endregion
 
         #region 查询
-        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, int category, string huodongstate, out int allCount)
+        public static List<Model.GoodsBaseInfo> GetList(int pageSize, int currentPage, string keyWords, int category, string huodongstate, int ishot, int jiexiaotype, out int allCount)
         {
             var sql = @"
                         WITH Virtual_T AS
@@ -155,6 +155,7 @@ namespace CrowdFundingShop.DAL
                                     ELSE State END
                                    ,ROW_NUMBER() OVER (ORDER BY G.CreateTime DESC) AS [RowNumber] 
                                    ,ZhongChouCount=(SELECT COUNT(1) FROM OrderInfo WHERE HuoDongID=H.ID)
+                                   ,FinishedTime
                              FROM GoodsBaseInfo G WITH (NOLOCK) JOIN CategoryInfo C WITH (NOLOCK)
                              ON G.Category=C.ID LEFT JOIN dbo.HuodongInfo H
                              ON G.ID=H.GoodsID
@@ -189,6 +190,14 @@ namespace CrowdFundingShop.DAL
                 }
                 parameters.Add(new SqlParameter() { ParameterName = "@State", Value = huodongstate });
             }
+            if (ishot == 1)
+            {
+                sqlWhere += " AND IsHot=1";
+            }
+            if (jiexiaotype == 1)
+            {
+                sqlWhere += " AND FinishedTime BETWEEN GETDATE() AND GETDATE()+1";
+            }
             sql = string.Format(sql, sqlWhere);
             parameters.Add(new SqlParameter() { ParameterName = "@PageSize", Value = pageSize });
             parameters.Add(new SqlParameter() { ParameterName = "@CurrentPage", Value = currentPage });
@@ -219,7 +228,8 @@ namespace CrowdFundingShop.DAL
                     ShowIcons = Converter.TryToString(row["ShowIcons"], string.Empty),
                     CreateTime = Converter.TryToString(row["CreateTime"], DateTime.MinValue.ToString()),
                     State = Converter.TryToInt32(row["State"], -1),
-                    ZhongChouCount = Converter.TryToInt32(row["ZhongChouCount"], 0)
+                    ZhongChouCount = Converter.TryToInt32(row["ZhongChouCount"], 0),
+                    FinishedTime = Converter.TryToDateTime(row["FinishedTime"], DateTime.MinValue)
                 }).ToList();
             }
             return null;

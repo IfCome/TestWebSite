@@ -61,7 +61,9 @@ namespace CrowdFundingShop.Model
         public int ZhongChouCount { get; set; }
 
         public double ZhongChouPercent { get; set; }
-        
+
         public long HuoDongID { get; set; }
+
+        public DateTime FinishedTime { get; set; }
     }
 }
