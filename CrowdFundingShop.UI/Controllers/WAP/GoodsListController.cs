@@ -53,6 +53,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             }
             return Json(new { Rows = "", AllCount = 0 }, JsonRequestBehavior.AllowGet);
         }
+        //商品种类
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
