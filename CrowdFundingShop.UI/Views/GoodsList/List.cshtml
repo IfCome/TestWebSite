@@ -41,19 +41,23 @@
         </div>
         <div class="com-footer-area home-page" id="js-com-footer-area">
             <div class="pxui-tab pxui-tab-nav pxui-tab-no-top">
-                <a class="selected" style="width: 19.5%;">首页<span></span></a>
-                <a href="category/default.htm" style="width: 19.5%;">热门商品<span></span></a>
-                <a href="brand/default.htm" style="width: 19.5%;">即将揭晓<span></span></a>
-                <a href="tuan/default.htm" style="width: 19.5%;">最新揭晓<span></span></a>
+                <a id="homepage" class="selected" style="width: 19.5%;">首页<span></span></a>
+                <a id="remenshangpin" style="width: 19.5%;">热门商品<span></span></a>
+                <a id="jijiangjiexiao" style="width: 19.5%;">即将揭晓<span></span></a>
+                <a id="zuixinjiexiao" style="width: 19.5%;">最新揭晓<span></span></a>
                 <a href="" style="width: 19.5%;">个人中心<span></span></a>
             </div>
         </div>
     </div>
+    @ViewBag.UserInfo
 </body>
 </html>
 <script type="text/javascript">
     $(function () {
-        LoadCategory()
+        //加载商品类别
+        LoadCategory();
+        //加载底部切换
+        BottomTab();
     });
 
     function LoadCategory() {
@@ -75,6 +79,8 @@
         }, 'json');
     }
     var isSearching = false;
+    var ishot = 0;// 0，全部 1热门商品
+    var jiexiaotype = 0;//0 全部 1、即将揭晓 1天内 2、已经揭晓的查前一百条
     function search(category) {
         // 正在查询
         if (isSearching) {
@@ -85,7 +91,9 @@
             PageSize: 100,
             CurrentPage: 1,
             category: category,
-            huoDongState: "10"
+            huoDongState: jiexiaotype == 2 ? "30" : "10",
+            ishot: ishot,
+            jiexiaotype: jiexiaotype
         };
         isSearching = true;
         var flagCount = 0;
@@ -140,6 +148,38 @@
             $(this).addClass(("selected"));
             search($(this).attr("val"));
         });
+    }
+    //底部页面标签的切换
+    function BottomTab() {
+        $("#homepage").click(function () {
+            $(this).addClass("selected").siblings().removeClass("selected");
+            ishot = 0;
+            jiexiaotype = 0;
+            fuJIHE();
+        });
+        $("#remenshangpin").click(function () {
+            $(this).addClass("selected").siblings().removeClass("selected");
+            ishot = 1;
+            jiexiaotype = 0;
+            fuJIHE();
+        });
+        $("#jijiangjiexiao").click(function () {
+            $(this).addClass("selected").siblings().removeClass("selected");
+            ishot = 0;
+            jiexiaotype = 1;
+            fuJIHE();
+        });
+        $("#zuixinjiexiao").click(function () {
+            $(this).addClass("selected").siblings().removeClass("selected");
+            ishot = 0;
+            jiexiaotype = 2;
+            fuJIHE();
+        });
+    }
+    function fuJIHE() {
+        $(".my-header-list>li>a").removeClass("selected");
+        $('.my-header-list li:eq(0) a').addClass("selected");
+        search($('.my-header-list li:eq(0) a').attr("val"));
     }
     //进入详情页
     function ToGoodsDetail(id) {

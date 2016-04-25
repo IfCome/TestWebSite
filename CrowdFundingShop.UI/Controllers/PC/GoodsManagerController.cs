@@ -22,7 +22,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
         {
             List<Model.GoodsBaseInfo> goodsInfoList = new List<Model.GoodsBaseInfo>();
             int allCount = 0;
-            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, category, (huoDongState == "-1" ? "" : huoDongState), out allCount);
+            goodsInfoList = BLL.GoodsBaseInfoBll.GetList(pageSize, currentPage, keyWords, category, (huoDongState == "-1" ? "" : huoDongState), 0, 0, out allCount);
             if (goodsInfoList != null)
             {
                 return Json(new

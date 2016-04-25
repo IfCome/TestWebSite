@@ -60,6 +60,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         }
         public ActionResult getuserwechatinfo(string state, string code)
         {
+            BLL.BackgroundUserBll_log.AddLog("微信获取用户", "state：" + state + "；" + "code：" + code, "0.0.0.0");
             var AppID = ConfigurationManager.AppSettings["AppID"];
             var AppSecret = ConfigurationManager.AppSettings["AppSecret"];
             string userString = "";
@@ -210,7 +211,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult SaveUser()
         {
             string outModel = Session["user"].ToString();
-            return View("~/Views/GoodsList/List.cshtml?userinfo?" + outModel);
+            return View("~/Views/GoodsList/List.cshtml?userinfo=" + outModel);
         }
         #endregion
     }
