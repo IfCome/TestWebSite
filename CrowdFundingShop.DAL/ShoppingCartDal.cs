@@ -46,6 +46,7 @@ namespace CrowdFundingShop.DAL
             return i > 0 ? true : false;
         }
         #endregion
+        #region 改
         public static bool UpdateStoreCount(Model.ShoppingCart entity)
         {
             var sql = string.Empty;
@@ -65,7 +66,6 @@ namespace CrowdFundingShop.DAL
             int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
             return i > 0 ? true : false;
         }
-        #region 改
         #endregion
         #region 查
         //查自己购物车商品
