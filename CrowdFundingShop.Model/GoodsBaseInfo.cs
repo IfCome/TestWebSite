@@ -65,5 +65,9 @@ namespace CrowdFundingShop.Model
         public long HuoDongID { get; set; }
 
         public DateTime FinishedTime { get; set; }
+        //取奖号码
+        public string Number { get; set; }
+        //购买数量
+        public int StoreCount { get; set; }
     }
 }

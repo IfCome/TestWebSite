@@ -16,58 +16,79 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             return View();
         }
-
         public ActionResult Pay(string huodongids = "", string storecount = "", string allprice = "", string zhongchoucount = "")
         {
+            long consumerid = 1;//微信接口获取;
             string msg = "OK";
-            if (huodongids != "")
+            try
             {
-                int total = 0;
-                foreach (var item in storecount.Split(','))
+                if (huodongids != "")
                 {
-                    total += Converter.TryToInt32(item);
-                }
-                //请求微信支付接口
-                bool weixinresult = true;
-                if (weixinresult)
-                {
-                    huodongids = huodongids.Remove(huodongids.Length - 1);
-                    storecount = storecount.Remove(storecount.Length - 1);
-                    allprice = allprice.Remove(allprice.Length - 1);
-                    zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
-                    var flagCount = 0;
-                    foreach (var item in huodongids.Split(','))
+                    int total = 0;
+                    foreach (var item in storecount.Split(','))
                     {
-                        int ThisOneStoreCount = Converter.TryToInt32(storecount.Split(',')[flagCount]);
-                        for (int i = 0; i < ThisOneStoreCount; i++)
+                        total += Converter.TryToInt32(item);
+                    }
+                    //请求微信支付接口
+                    bool weixinresult = true;
+                    if (weixinresult)
+                    {
+                        huodongids = huodongids.Remove(huodongids.Length - 1);
+                        storecount = storecount.Remove(storecount.Length - 1);
+                        allprice = allprice.Remove(allprice.Length - 1);
+                        zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
+                        var flagCount = 0;
+                        foreach (var item in huodongids.Split(','))
                         {
-                            Model.OrderInfo entity = new Model.OrderInfo()
+                            int ThisOneStoreCount = Converter.TryToInt32(storecount.Split(',')[flagCount]);
+                            for (int i = 0; i < ThisOneStoreCount; i++)
                             {
-                                ConsumerID = 1,//微信接口获取;
-                                HuodongID = Converter.TryToInt64(item),
-                                Number = ShoppingNumber(Converter.TryToInt32(allprice.Split(',')[flagCount]), (Converter.TryToInt32(zhongchoucount.Split(',')[flagCount]) + flagCount + 1))
-                            };
-                            if (msg == "OK")
-                            {
-                                if (!BLL.OrderInfoBll.Add(entity))
+                                Model.OrderInfo entity = new Model.OrderInfo()
                                 {
-                                    msg = "网络连接超时";
-                                    return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+                                    ConsumerID = consumerid,
+                                    HuodongID = Converter.TryToInt64(item),
+                                    Number = ShoppingNumber(Converter.TryToInt64(item), consumerid)
+                                };
+                                if (msg == "OK")
+                                {
+                                    if (!BLL.OrderInfoBll.Add(entity))
+                                    {
+                                        msg = "网络连接超时";
+                                        return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+                                    }
                                 }
                             }
+                            //买完之后删除购物车该商品
+                            Model.ShoppingCart scart = new Model.ShoppingCart()
+                            {
+                                ConsumerID = 1,
+                                HuoDongID = Converter.TryToInt32(item)
+                            };
+                            BLL.ShoppingCartBll.DeleteByHuoDongID(scart);
+                            flagCount++;
                         }
-                        flagCount++;
                     }
                 }
+            }
+            catch
+            {
+                return Json(new { Message = "网络连接超时" }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MyLuckInfo()
+        {
+            return View();
+        }
+
         #region 方法
-        public static int ShoppingNumber(int allprice, int currentstore)
+        public static int ShoppingNumber(long huodongid, long consumerid)
         {
             int number = 0;
-            number = 1000000 + currentstore;
+            //查在这个人的这个活动ID下现在最大的号码是多少
+            int maxnumber = BLL.OrderInfoBll.GetMaxNumber(huodongid, consumerid);
+            number = maxnumber + 1;
             return number;
         }
         #endregion

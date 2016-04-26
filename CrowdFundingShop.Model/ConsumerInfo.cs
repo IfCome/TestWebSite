@@ -5,13 +5,13 @@ using System.Text;
 
 namespace CrowdFundingShop.Model
 {
-    public class OrderInfo
+    public class ConsumerInfo
     {
         public long ID { get; set; }
-        public long ConsumerID { get; set; }
-        public long HuodongID { get; set; }
-        public int Number { get; set; }
-        public DateTime CreateTime { get; set; }
+        public string WeiXinAccount { get; set; }
+        public string Nickname { get; set; }
+        public string Phone { get; set; }
+        public string HeadIcon { get; set; }
         public int JiJiangJieXiao { get; set; }
         public int YiJieXiao { get; set; }
         public int CartCount { get; set; }

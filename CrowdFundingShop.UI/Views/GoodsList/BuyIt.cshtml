@@ -12,12 +12,16 @@
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/cart/zip.touch.cart.css" rel="stylesheet" />
     <link href="~/Resources/wap/css/cart/index.css" rel="stylesheet" />
     <!--改版后 com1-3.css可以去掉-->
     <link href="~/Resources/wap/css/cart/com1-3.css" rel="stylesheet" />
     <!--新改的-->
     <link href="~/Resources/wap/css/cart/com1-4.css" rel="stylesheet" />
     <script src="~/Resources/js/jquery-1.9.1.min.js"></script>
+    <!--弹出款-->
+    <script src="~/Resources/wap/js/zepto.min.js"></script>
+    <script src="~/Resources/wap/js/shoppingcart.js"></script>
 </head>
 <body>
     <div class="com-content">
@@ -91,14 +95,13 @@
         data.StoreCount = "@storecount";
         data.allprice = "@allprice";
         data.zhongchoucount = "@zhongchoucount";
-        alert(data);
         // 提交数据
         $.post('@Url.RouteUrl(new { controller = "Order", action = "Pay" })', data, function (result) {
             if (result && result.Message == 'OK') {
                 location.href = '/Order/Index';
             }
             else {
-                Model.alert(result.Message);
+                Model.message(result.Message);
             }
         }, 'JSON');
     }

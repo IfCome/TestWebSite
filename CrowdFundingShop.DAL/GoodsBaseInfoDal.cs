@@ -162,50 +162,52 @@ namespace CrowdFundingShop.DAL
                             WHERE G.IsDelete=0 AND C.IsDelete=0 {0}
                         )
                         SELECT * FROM Virtual_T 
-                        WHERE @PageSize * (@CurrentPage - 1) < RowNumber AND RowNumber <= @PageSize * @CurrentPage
+                        WHERE @PageSize * (@CurrentPage - 1) < RowNumber AND RowNumber <= @PageSize * @CurrentPage {1}
                     ";
 
             //条件查询部分
-            var sqlWhere = "";
+            string sqlWhere1 = "";
+            string sqlWhere2 = "";
             var parameters = new List<SqlParameter>();
             if (!string.IsNullOrEmpty(keyWords))
             {
-                sqlWhere += "AND GoodsName LIKE @GoodsName";
+                sqlWhere1 += "AND GoodsName LIKE @GoodsName";
                 parameters.Add(new SqlParameter() { ParameterName = "@GoodsName", Value = "%" + keyWords + "%" });
             }
             if (category != 0)
             {
-                sqlWhere += "AND Category =@Category";
+                sqlWhere1 += "AND Category =@Category";
                 parameters.Add(new SqlParameter() { ParameterName = "@Category", Value = category });
             }
             if (!string.IsNullOrEmpty(huodongstate))
             {
                 if (huodongstate == "0")
                 {
-                    sqlWhere += " AND State IS NULL";
+                    sqlWhere1 += " AND State IS NULL";
                 }
                 else
                 {
-                    sqlWhere += " AND State=@State";
+                    sqlWhere1 += " AND State=@State";
                 }
                 parameters.Add(new SqlParameter() { ParameterName = "@State", Value = huodongstate });
             }
             if (ishot == 1)
             {
-                sqlWhere += " AND IsHot=1";
+                sqlWhere1 += " AND IsHot=1";
             }
-            if (jiexiaotype == 1)
-            {
-                sqlWhere += " AND FinishedTime BETWEEN GETDATE() AND GETDATE()+1";
-            }
-            sql = string.Format(sql, sqlWhere);
+            //更改逻辑  所有正在众筹的商品都是即将揭晓
+            //if (jiexiaotype == 1)
+            //{
+            //    sqlWhere2 += " ZhongChouCount>=(0.6*Price)";
+            //}
+            sql = string.Format(sql, sqlWhere1,sqlWhere2);
             parameters.Add(new SqlParameter() { ParameterName = "@PageSize", Value = pageSize });
             parameters.Add(new SqlParameter() { ParameterName = "@CurrentPage", Value = currentPage });
 
             //记录总数计算
             var countParameters = new List<SqlParameter>();
             parameters.ForEach(h => countParameters.Add(new SqlParameter() { ParameterName = h.ParameterName, Value = h.Value }));
-            var sqlCount = string.Format("SELECT COUNT(*) CNT FROM [GoodsBaseInfo] G LEFT JOIN HuodongInfo H ON G.ID=H.GoodsID  WHERE G.IsDelete=0 {0} ", sqlWhere);
+            var sqlCount = string.Format("SELECT COUNT(*) CNT FROM [GoodsBaseInfo] G LEFT JOIN HuodongInfo H ON G.ID=H.GoodsID  WHERE G.IsDelete=0 {0} ", sqlWhere1);
             allCount = Converter.TryToInt32(SqlHelper.ExecuteScalar(sqlCount, countParameters.ToArray()));
 
             if (allCount == 0)

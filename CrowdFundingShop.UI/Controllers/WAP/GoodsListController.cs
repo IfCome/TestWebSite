@@ -26,7 +26,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             return View();
         }
         //获取商品列表
-        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, int ishot = 0, int jiexiaotype = 0, string keyWords = "", string huoDongState = "")
+        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, int ishot = 0, int jiexiaotype = 0, string keyWords = "",string huoDongState = "")
         {
             List<Model.GoodsBaseInfo> goodsInfoList = new List<Model.GoodsBaseInfo>();
             int allCount = 0;

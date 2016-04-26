@@ -115,6 +115,7 @@
     <Compile Include="Controllers\WAP\GoodsListController.cs" />
     <Compile Include="Controllers\WAP\OauthController.cs" />
     <Compile Include="Controllers\WAP\OrderController.cs" />
+    <Compile Include="Controllers\WAP\UserCenterController.cs" />
     <Compile Include="Models\PC\AddGoodsCallBackIn.cs" />
     <Compile Include="Models\PC\AddHuoDongInfoIn.cs" />
     <Compile Include="Models\PC\GetGoodsInfoIn.cs" />
@@ -276,10 +277,16 @@
     <Content Include="Resources\wap\css\com\com.css" />
     <Content Include="Resources\wap\css\com\index.css" />
     <Content Include="Resources\wap\css\home\index.css" />
+    <Content Include="Resources\wap\css\usercenter\member.css" />
     <Content Include="Resources\wap\images\cart\index.gif" />
     <Content Include="Resources\wap\images\goods\index.gif" />
     <Content Include="Resources\wap\images\home\bg.png" />
     <Content Include="Resources\wap\images\home\left.png" />
+    <Content Include="Resources\wap\images\usercenter\ajax-loader.gif" />
+    <Content Include="Resources\wap\images\usercenter\base.png" />
+    <Content Include="Resources\wap\images\usercenter\member.jpg" />
+    <Content Include="Resources\wap\images\usercenter\member.png" />
+    <Content Include="Resources\wap\images\usercenter\user.png" />
     <Content Include="Resources\wap\js\com\com.js" />
     <Content Include="Resources\wap\js\com\index.js" />
     <Content Include="Resources\wap\js\com\jquery.touchslider.min.js" />
@@ -380,6 +387,10 @@
     <Content Include="Views\GoodsList\BuyIt.cshtml" />
     <Content Include="Resources\wap\css\cart\zip.touch.cart.css" />
     <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\UserCenter\Index.cshtml" />
+    <Content Include="Views\UserCenter\PurchaseHistory.cshtml" />
+    <Content Include="Resources\wap\css\usercenter\meber2.0.css" />
+    <Content Include="Views\Order\MyLuckInfo.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

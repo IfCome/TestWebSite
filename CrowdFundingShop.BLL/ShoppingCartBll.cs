@@ -15,6 +15,10 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.ShoppingCartDal.Delete(entity);
         }
+        public static bool DeleteByHuoDongID(Model.ShoppingCart entity)
+        {
+            return DAL.ShoppingCartDal.DeleteByHuoDongID(entity);
+        }
         public static List<Model.ShoppingCart> GetShoppingInfoByID(long id)
         {
             return DAL.ShoppingCartDal.GetShoppingInfoByID(id);

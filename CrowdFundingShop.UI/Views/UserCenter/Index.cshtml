@@ -1,0 +1,161 @@
+﻿@{
+    Layout = null;
+}
+@model CrowdFundingShop.Model.ConsumerInfo
+<!doctype html>
+<html>
+<head>
+    <title>会员中心</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
+    <!--离线应用的另一个技巧-->
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/usercenter/member.css" rel="stylesheet" />
+    <script src="~/Resources/js/jquery-1.9.1.min.js"></script>
+    <style type="text/css">
+        .m_header,
+        .body {
+            max-width: 640px;
+        }
+
+        .m_header {
+            left: 50%;
+            margin-left: -320px;
+        }
+    </style>
+    <script type="text/javascript">function remReSize() { var w = $(window).width(); try { w = $(parent.window).width(); } catch (ex) { }; if (w > 640) { w = 640; }; $('html').css('font-size', 100 / 640 * w + 'px'); $('#js_style_for_pc').remove(); $('body').append('<style id="js_style_for_pc">.m_header{margin-left: -' + w / 2 + 'px;}.m_menu{margin-left: -' + w / 2 + 'px;}</style>'); }; remReSize(); $(window).resize(remReSize); $(document).ready(function () { remReSize(); }); for (var i = 0; i < 3; i++) { setTimeout(remReSize, 100 * i); };</script>
+</head>
+<body>
+    <div class="body">
+        <div class="m_header">
+            <p>
+                <a class="bt_prev" href="javascript:window.history.back();void(0);" style="z-index:1000">
+                    <span class="prev rotate45"></span>
+                    <span class="prev rotate135"></span>
+                </a>
+            </p>
+        </div>
+        <div class="lib_content" id="js_lib_content">
+            <div class="m_index_header">
+                <div class="m_index_info">
+                    <a class="portrait_box" href="">
+                        <img class="portrait_img" src="http://img-cdn2.paixie.net/sign_pic/20140717/01.jpg" />
+                        <div class="box_bg"></div>
+                        <i class="clear"></i>
+                    </a>
+                    <div class="portrait_name">
+                        <span class="ellipsis">@Model.Nickname</span>
+                    </div>
+                    <i class="clear"></i>
+                </div>
+                <div class="m_operate_bg"></div>
+                <div class="m_operate">
+                    <a href="/goodslist/myshoppingcart">
+                        @Model.CartCount<br />
+                        <span>购物车</span>
+                    </a>
+                    <a href="/usercenter/purchasehistory?type=1">
+                        @Model.JiJiangJieXiao<br />
+                        <span>即将揭晓</span>
+                    </a>
+                    <a href="/usercenter/purchasehistory?type=2">
+                        @Model.YiJieXiao<br />
+                        <span>已揭晓</span>
+                    </a>
+                </div>
+                <i class="clear"></i>
+            </div>
+            <div class="placeholder"></div><div class="placeholder"></div>
+            <ul class="m_list m_list_top_line bg_white p_index_menu">
+                @*<li class="p_menu">
+                        <a href="/member/orderlist?type=1">
+                            <i class="m_icon"></i><br />
+                            待付款
+                        </a>
+                        <a href="/member/orderlist?type=2">
+                            <i class="m_icon"></i><br />
+                            待发货
+                        </a>
+                        <a href="/member/orderlist?type=3">
+                            <i class="m_icon"></i><br />
+                            待收货
+                        </a>
+                        <a href="/member/orderlist?type=4">
+                            <i class="m_icon"></i><br />
+                            待评价
+                        </a>
+                        <i class="clear"></i>
+                    </li>*@
+                <li class="link">
+                    <a href="/usercenter/purchasehistory?type=0">
+                        <i class="m_icon m_icon_order"></i>
+                        购买记录
+                        <div class="right">
+                            查看全部已购商品
+                            <span class="m_arrow">
+                                <i class="rotate45"></i>
+                                <i class="rotate135"></i>
+                            </span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <div class="placeholder"></div><div class="placeholder"></div>
+            <ul class="m_list m_list_top_line bg_white p_index_menu">
+                <li class="link">
+                    <a href="/member/coupon">
+                        <i class="m_icon m_icon_sale"></i>
+                        幸运记录
+                        <div class="right">
+                            <span class="m_arrow">
+                                <i class="rotate45"></i>
+                                <i class="rotate135"></i>
+                            </span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <div class="placeholder"></div><div class="placeholder"></div>
+            <ul class="m_list m_list_top_line bg_white p_index_menu">
+                <li class="link">
+                    <a href="/member/account">
+                        <i class="m_icon m_icon_user"></i>
+                        账户管理
+                        <div class="right">
+                            <span class="m_arrow">
+                                <i class="rotate45"></i>
+                                <i class="rotate135"></i>
+                            </span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <div class="placeholder"></div><div class="placeholder"></div>
+            <ul class="m_list m_list_top_line bg_white p_index_menu">
+                <li class="link">
+                    <a href="/help2.0/">
+                        <i class="m_icon m_icon_help"></i>
+                        联系我们
+                        <div class="right">
+                            <span class="m_arrow">
+                                <i class="rotate45"></i>
+                                <i class="rotate135"></i>
+                            </span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <div class="placeholder"></div><div class="placeholder"></div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(function () {
+        $(".tabnav").click(function () {
+            location.href = "/goodslist/list";
+        });
+    });
+</script>

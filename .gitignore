@@ -187,3 +187,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/SQLQuery1.sql
+/SQLQuery2.sql
+/aaaaaa.sql

@@ -45,6 +45,15 @@ namespace CrowdFundingShop.DAL
             int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
             return i > 0 ? true : false;
         }
+        public static bool DeleteByHuoDongID(Model.ShoppingCart entity)
+        {
+            var sql = @"DELETE FROM ShoppingCart WHERE HuoDongID=@HuoDongID AND ConsumerID=@ConsumerID";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = entity.HuoDongID });
+            parameters.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = entity.ConsumerID });
+            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
+            return i > 0 ? true : false;
+        }
         #endregion
         #region 改
         public static bool UpdateStoreCount(Model.ShoppingCart entity)
@@ -56,7 +65,7 @@ namespace CrowdFundingShop.DAL
                 sql = @"UPDATE ShoppingCart SET StoreCount=(StoreCount+@StoreCount) WHERE HuoDongID=@HuoDongID AND ConsumerID=@ConsumerID";
                 parameters.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = entity.HuoDongID });
             }
-            else if (entity.Type == 2) 
+            else if (entity.Type == 2)
             {
                 sql = @"UPDATE ShoppingCart SET StoreCount=@StoreCount WHERE ID=@ID AND ConsumerID=@ConsumerID";
                 parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = entity.ID });
