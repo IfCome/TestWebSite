@@ -61,13 +61,14 @@ namespace CrowdFundingShop.Model
         public int ZhongChouCount { get; set; }
 
         public double ZhongChouPercent { get; set; }
-
         public long HuoDongID { get; set; }
-
+        public int HuoDongNumber { get; set; }
         public DateTime FinishedTime { get; set; }
         //取奖号码
         public string Number { get; set; }
         //购买数量
         public int StoreCount { get; set; }
+        public string LuckNickName { get; set; }
+        public long LuckNumber { get; set; }
     }
 }

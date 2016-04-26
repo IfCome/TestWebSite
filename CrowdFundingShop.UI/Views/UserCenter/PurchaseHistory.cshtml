@@ -5,7 +5,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>购买记录</title>
+    <title>一元易购物</title>
     <meta charset="utf-8">
     <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
     <!--离线应用的另一个技巧-->
@@ -55,7 +55,7 @@
                         <div class="m_order" id="order_2016042421212875788">
                             <div class="m_order_title">
                                 <span class="m_order_pay gray6" style="font-size:14px;">
-                                    <a onclick="MyNumber('@item.Number')">查看该商品我的取奖号码 >>></a>
+                                    <a onclick="MyNumber('@item.Number')"></a>
                                 </span>
                             </div>
                             <ul class="m_list m_list_top_line bg_white m_order_list">
@@ -63,8 +63,12 @@
                                     <a href="/goodslist/detail?goodsid=@item.ID">
                                         <img class="img100" src="@item.ShowIcons">
                                         <div class="info">
-                                            <p class="name gray3">@item.GoodsName</p>
-                                            <p class="sku gray9">剩余@(Convert.ToInt32(item.Price) - item.ZhongChouCount)人次</p>
+                                            <p class="name gray3">@(item.GoodsName + "（第" + item.HuoDongNumber + "期）")</p>
+                                            <p class="sku gray9" style="font-size:14px">
+                                                中奖号码：@(item.LuckNumber == 0 ? "暂未开奖" : item.LuckNumber.ToString())
+                                                <br />
+                                                中奖账号：@(item.LuckNickName == "" ? "暂未开奖" : item.LuckNickName)
+                                            </p>
                                         </div>
                                         <div class="price">
                                             <p class="">¥1</p>
@@ -80,6 +84,12 @@
                         </div>
                     }
                 }
+                else
+                {
+                    <p style="text-align:center;font-size:14px;margin-top:150px">
+                        暂无记录！
+                    </p>
+                }
             </form>
         </div>
     </div>
@@ -91,8 +101,7 @@
         $("#@("type"+ViewBag.Type)").addClass("selected").siblings().removeClass("selected");
         //弹出取奖号码
     });
-    function MyNumber(number)
-    {
+    function MyNumber(number) {
         Model.alert(number);
     }
 </script>

@@ -11,7 +11,7 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.OrderInfoDal.Add(entity);
         }
-        public static List<Model.GoodsBaseInfo> GetList(int type, long consumerid)
+        public static List<Model.GoodsBaseInfo> GetList(int type, long consumerid,int isMine)
         {
             string huodongstate = "";
             if (type == 1)
@@ -22,7 +22,7 @@ namespace CrowdFundingShop.BLL
             {
                 huodongstate = "30";
             }
-            List<Model.GoodsBaseInfo> list = DAL.OrderInfoDal.GetList(type, huodongstate, consumerid);
+            List<Model.GoodsBaseInfo> list = DAL.OrderInfoDal.GetList(type, huodongstate, consumerid, isMine);
             if (list != null)
             {
                 string number = "";

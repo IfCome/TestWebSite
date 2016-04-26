@@ -47,7 +47,7 @@ namespace CrowdFundingShop.DAL
         #region 改
         #endregion
         #region 查
-        public static List<Model.GoodsBaseInfo> GetList(int type, string huodongstate, long consumerid)
+        public static List<Model.GoodsBaseInfo> GetList(int type, string huodongstate, long consumerid, int isMine)
         {
             string sql = @"SELECT 
                                         G.ID
@@ -65,9 +65,13 @@ namespace CrowdFundingShop.DAL
                                         ,ZhongChouCount=(SELECT COUNT(1) FROM OrderInfo WHERE HuoDongID=H.ID)
                                         ,FinishedTime
                                         ,H.ID AS HuoDongID
+                                        ,S.NickName
+                                        ,H.LuckNumber
+                                        ,H.HuoDongNumber
                                     FROM GoodsBaseInfo G WITH (NOLOCK) JOIN CategoryInfo C WITH (NOLOCK)
                                     ON G.Category=C.ID LEFT JOIN dbo.HuodongInfo H
-                                    ON G.ID=H.GoodsID 
+                                    ON G.ID=H.GoodsID LEFT JOIN ConsumerInfo S
+                                    ON H.LuckDogID=S.ID
                                     WHERE G.IsDelete=0 AND C.IsDelete=0 AND H.ID IN (SELECT HuodongID FROM OrderInfo WHERE ConsumerID=@ConsumerID) {0}";
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = consumerid });
@@ -81,6 +85,10 @@ namespace CrowdFundingShop.DAL
             {
                 sqlWhere1 += " AND State=@State";
                 parameters.Add(new SqlParameter() { ParameterName = "@State", Value = huodongstate });
+            }
+            if (isMine == 1)
+            {
+                sqlWhere1 += " AND LuckDogID=@ConsumerID";
             }
             sql = string.Format(sql, sqlWhere1);
             DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
@@ -101,6 +109,9 @@ namespace CrowdFundingShop.DAL
                     ZhongChouCount = Converter.TryToInt32(row["ZhongChouCount"], 0),
                     FinishedTime = Converter.TryToDateTime(row["FinishedTime"], DateTime.MinValue),
                     HuoDongID = Converter.TryToInt64(row["HuoDongID"], -1),
+                    LuckNickName = Converter.TryToString(row["NickName"], string.Empty),
+                    LuckNumber = Converter.TryToInt64(row["LuckNumber"], -1),
+                    HuoDongNumber = Converter.TryToInt32(row["HuoDongNumber"], -1),
                 }).ToList();
             }
             return null;
@@ -174,7 +185,7 @@ namespace CrowdFundingShop.DAL
                     ID = Converter.TryToInt32(row["ID"], 0),
                     WeiXinAccount = Converter.TryToString(row["WeiXinAccount"], ""),
                     HeadIcon = Converter.TryToString(row["HeadIcon"], ""),
-                    Nickname = Converter.TryToString(row["Nickname"], ""),
+                    NickName = Converter.TryToString(row["Nickname"], ""),
                     Phone = Converter.TryToString(row["Phone"], ""),
                     JiJiangJieXiao = Converter.TryToInt32(row["JiJiangJieXiao"], 0),
                     YiJieXiao = Converter.TryToInt32(row["YiJieXiao"], 0),

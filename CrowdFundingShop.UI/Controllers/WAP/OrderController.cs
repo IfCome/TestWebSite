@@ -79,6 +79,8 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult MyLuckInfo()
         {
+            long consumerid = 1;//微信验证获取得到
+            List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(2, consumerid, 1);
             return View();
         }
 

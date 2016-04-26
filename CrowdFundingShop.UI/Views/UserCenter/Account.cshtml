@@ -1,0 +1,129 @@
+﻿@{
+    Layout = null;
+}
+@model CrowdFundingShop.Model.ConsumerInfo
+<!doctype html>
+<html>
+<head>
+    <title>一元易购物</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
+    <!--离线应用的另一个技巧-->
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/usercenter/meber2.0.css" rel="stylesheet" />
+    <script src="~/Resources/wap/js/zepto.min.js"></script>
+    <script src="~/Resources/wap/js/shoppingcart.js"></script>
+    <style type="text/css">
+        .m_header,
+        .body {
+            max-width: 640px;
+        }
+
+        .m_header {
+            left: 50%;
+            margin-left: -320px;
+        }
+    </style>
+    <script type="text/javascript">function remReSize() { var w = $(window).width(); try { w = $(parent.window).width(); } catch (ex) { }; if (w > 640) { w = 640; }; $('html').css('font-size', 100 / 640 * w + 'px'); $('#js_style_for_pc').remove(); $('body').append('<style id="js_style_for_pc">.m_header{margin-left: -' + w / 2 + 'px;}.m_menu{margin-left: -' + w / 2 + 'px;}</style>'); }; remReSize(); $(window).resize(remReSize); $(document).ready(function () { remReSize(); }); for (var i = 0; i < 3; i++) { setTimeout(remReSize, 100 * i); };</script>
+</head>
+<body>
+    <div class="body">
+        <div class="m_header">
+            <p>
+                <a class="bt_prev" href="address">
+                    <span class="prev rotate45"></span>
+                    <span class="prev rotate135"></span>
+                </a>
+            </p>
+            <h1 class="ellipsis bt_title">
+                我的个人信息
+            </h1>
+            <p>
+                <a class="bt_rtext">修改</a>
+            </p>
+        </div>
+        <div class="lib_content" id="js_lib_content">
+            <ul class="m_list m_list_form bg_white">
+                <li>
+                    <label>
+                        我的昵称
+                    </label>
+                    <input id="js_name" type="text" value="@Model.NickName" />
+                    <div class="right text-v">
+                        <a class="m_icon m_icon_del">
+                            <dfn class="rotate45"></dfn>
+                            <dfn class="rotate135"></dfn>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <label>
+                        手机号码
+                    </label>
+                    <input id="js_phone" type="text" maxlength="11" value="@Model.Phone" />
+                    <div class="right text-v">
+                        <a class="m_icon m_icon_del">
+                            <dfn class="rotate45"></dfn>
+                            <dfn class="rotate135"></dfn>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <label>
+                        详细地址
+                    </label>
+                    <input id="js_address" type="text" value="@Model.Address" />
+                    <div class="right text-v">
+                        <a class="m_icon m_icon_del">
+                            <dfn class="rotate45"></dfn>
+                            <dfn class="rotate135"></dfn>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <label>
+                        邮政编码
+                    </label>
+                    <input id="js_zipcode" type="text" maxlength="6" value="@Model.PostCode" />
+                    <div class="right text-v">
+                        <a class="m_icon m_icon_del">
+                            <dfn class="rotate45"></dfn>
+                            <dfn class="rotate135"></dfn>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".bt_rtext").click(function () {
+            update();
+        });
+    })
+
+    function update() {
+        var data = {};
+        data.ID = @Model.ID;
+        data.NickName = $("#js_name").val();
+        data.Phone = $("#js_phone").val();
+        data.Address = $("#js_address").val();
+        data.PostCode = $("#js_zipcode").val();
+        // 提交数据
+        $.post('@Url.RouteUrl(new { controller = "UserCenter", action = "Update" })', data, function (result) {
+            alert(result.Message)
+            if (result.Message == "OK") {
+                alert("aaa")
+                Model.message("修改成功");
+            }
+            else {
+                alert("asd")
+                Model.message(result.Message);
+            }
+        }, 'JSON');
+    }
+</script>

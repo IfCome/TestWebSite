@@ -42,6 +42,7 @@
     <Compile Include="BackgroundUserInfoDal.cs" />
     <Compile Include="BackgroundUserInfoDal_log.cs" />
     <Compile Include="CategoryInfoDal.cs" />
+    <Compile Include="ConsumerInfoDal.cs" />
     <Compile Include="GoodsBaseInfoDal.cs" />
     <Compile Include="HuoDongInfoDal.cs" />
     <Compile Include="OrderInfoDal.cs" />

@@ -42,6 +42,7 @@
     <Compile Include="BackgroundUserBll.cs" />
     <Compile Include="BackgroundUserBll_log.cs" />
     <Compile Include="CategoryInfoBll.cs" />
+    <Compile Include="ConsumerInfoBll.cs" />
     <Compile Include="GoodsBaseInfoBll.cs" />
     <Compile Include="HuoDongInfoBll.cs" />
     <Compile Include="OrderInfoBll.cs" />

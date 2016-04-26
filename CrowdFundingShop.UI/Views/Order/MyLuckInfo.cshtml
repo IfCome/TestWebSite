@@ -2,16 +2,107 @@
     Layout = null;
 }
 
-<!DOCTYPE html>
-
+@{
+    Layout = null;
+}
+@model IEnumerable<CrowdFundingShop.Model.GoodsBaseInfo>
+<!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>MyLuckInfo</title>
+    <title>一元易购物</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
+    <!--离线应用的另一个技巧-->
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/usercenter/meber2.0.css" rel="stylesheet" />
+    <script src="~/Resources/wap/js/zepto.min.js"></script>
+    <script src="~/Resources/wap/js/shoppingcart.js"></script>
+    <style type="text/css">
+        .m_header,
+        .body {
+            max-width: 640px;
+        }
+
+        .m_header {
+            left: 50%;
+            margin-left: -320px;
+        }
+    </style>
+    <script type="text/javascript">function remReSize() { var w = $(window).width(); try { w = $(parent.window).width(); } catch (ex) { }; if (w > 640) { w = 640; }; $('html').css('font-size', 100 / 640 * w + 'px'); $('#js_style_for_pc').remove(); $('body').append('<style id="js_style_for_pc">.m_header{margin-left: -' + w / 2 + 'px;}.m_menu{margin-left: -' + w / 2 + 'px;}</style>'); }; remReSize(); $(window).resize(remReSize); $(document).ready(function () { remReSize(); }); for (var i = 0; i < 3; i++) { setTimeout(remReSize, 100 * i); };</script>
 </head>
 <body>
-    <div>
-        
+    <div class="body">
+        <div class="m_header">
+            <p>
+                <a class="bt_prev" href="javascript:window.history.back();void(0);">
+                    <span class="prev rotate45"></span>
+                    <span class="prev rotate135"></span>
+                </a>
+            </p>
+            <h1 class="ellipsis bt_title">
+                幸运记录
+            </h1>
+        </div>
+        <div class="lib_content" id="js_lib_content">
+            
+            <form autocomplete="off" id="js_form">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="m_order" id="order_2016042421212875788">
+                            <div class="m_order_title">
+                                <span class="m_order_pay gray6" style="font-size:14px;">
+                                    <a onclick="MyNumber('@item.Number')">查看该商品我的取奖号码 >>></a>
+                                </span>
+                            </div>
+                            <ul class="m_list m_list_top_line bg_white m_order_list">
+                                <li class="link" data-goodsid="">
+                                    <a href="/goodslist/detail?goodsid=@item.ID">
+                                        <img class="img100" src="@item.ShowIcons">
+                                        <div class="info">
+                                            <p class="name gray3">@(item.GoodsName + "（第" + item.HuoDongNumber + "期）")</p>
+                                            <p class="sku gray9" style="font-size:14px">
+                                                中奖号码：@(item.LuckNumber == 0 ? "暂未开奖" : item.LuckNumber.ToString())
+                                                <br />
+                                                中奖账号：@(item.LuckNickName == "" ? "暂未开奖" : item.LuckNickName)
+                                            </p>
+                                        </div>
+                                        <div class="price">
+                                            <p class="">¥1</p>
+                                            <p>×@(item.StoreCount)</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="pay">
+                                <span class="freight gray9">共1件，实付款：</span>
+                                <span class="payprice orange">¥@(item.StoreCount).00</span>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                { 
+                    <p style="text-align:center;font-size:14px;margin-top:150px">
+                        很遗憾，您未中任何奖项！<br />
+                        老玩家提示您，买的越多中的概率越大哟~
+                    </p>
+                }
+            </form>
+        </div>
     </div>
 </body>
 </html>
+<script type="text/javascript">
+    $(function () {
+        //顶部导航栏切换
+        $("#@("type"+ViewBag.Type)").addClass("selected").siblings().removeClass("selected");
+        //弹出取奖号码
+    });
+    function MyNumber(number) {
+        Model.alert(number);
+    }
+</script>

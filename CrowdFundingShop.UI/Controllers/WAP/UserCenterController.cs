@@ -22,9 +22,30 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult PurchaseHistory(int type = 0)
         {
             long consumerid = 1;//微信验证获取得到
-            List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(type, consumerid);
+            List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(type, consumerid, 0);
             ViewBag.Type = type;
             return View(outModel);
+        }
+
+        public ActionResult Account()
+        {
+            int consumerid = 1;//微信获取
+            Model.ConsumerInfo outModel = BLL.ConsumerInfoBll.GetByID(consumerid);
+            return View(outModel);
+        }
+
+        public ActionResult Update(Model.ConsumerInfo inModel)
+        {
+            string errorType = "";
+            string msg = "OK";
+            bool result = false;
+            result = BLL.ConsumerInfoBll.Update(inModel);
+            if (!result)
+            {
+                errorType = "alert";
+                msg = "添加失败，请重试";
+            }
+            return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
         }
     }
 }
