@@ -194,6 +194,33 @@ namespace CrowdFundingShop.DAL
             }
             return null;
         }
+        //查这个活动下的获奖信息
+        public static List<Model.OrderInfo> GetDrawnPrizeUser(long huodongid)
+        {
+            string sql = @"SELECT 
+                                     Nickname,
+                                     Max(CreateTime) AS 'CreateTime',
+                                     COUNT(1) AS 'StoreCount'
+                                 FROM ORDERINFO O JOIN CONSUMERINFO C
+                                 ON O.ConsumerID=C.ID
+                                 WHERE HuodongID=@HuoDongID
+                                 GROUP BY Nickname,HuodongID
+                                 ORDER BY StoreCount DESC";
+            List<SqlParameter> parameter = new List<SqlParameter>();
+            parameter.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
+            DataTable dataTable = new DataTable();
+            dataTable = SqlHelper.ExecuteDataTable(sql, parameter.ToArray());
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                return dataTable.AsEnumerable().Select(row => new Model.OrderInfo()
+                {
+                    NickName = Converter.TryToString(row["NickName"], ""),
+                    CreateTime = Converter.TryToDateTime(row["CreateTime"], DateTime.MinValue),
+                    StoreCount = Converter.TryToInt32(row["StoreCount"], 0),
+                }).ToList();
+            }
+            return null;
+        }
         #endregion
     }
 }

@@ -15,5 +15,7 @@ namespace CrowdFundingShop.Model
         public int JiJiangJieXiao { get; set; }
         public int YiJieXiao { get; set; }
         public int CartCount { get; set; }
+        public int StoreCount { get; set; }
+        public string NickName { get; set; }
     }
 }

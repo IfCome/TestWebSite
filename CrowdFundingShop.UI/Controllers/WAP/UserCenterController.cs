@@ -36,16 +36,14 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult Update(Model.ConsumerInfo inModel)
         {
-            string errorType = "";
             string msg = "OK";
             bool result = false;
             result = BLL.ConsumerInfoBll.Update(inModel);
             if (!result)
             {
-                errorType = "alert";
                 msg = "添加失败，请重试";
             }
-            return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
+            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
         }
     }
 }

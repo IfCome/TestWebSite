@@ -32,7 +32,7 @@
     <div class="body">
         <div class="m_header">
             <p>
-                <a class="bt_prev" href="javascript:window.history.back();void(0);">
+                <a class="bt_prev" href="/usercenter/index">
                     <span class="prev rotate45"></span>
                     <span class="prev rotate135"></span>
                 </a>
@@ -55,17 +55,24 @@
                         <div class="m_order" id="order_2016042421212875788">
                             <div class="m_order_title">
                                 <span class="m_order_pay gray6" style="font-size:14px;">
-                                    <a onclick="MyNumber('@item.Number')"></a>
+                                    <a onclick="MyNumber('@item.Number')">点击查看我的取奖号码>></a>
                                 </span>
                             </div>
                             <ul class="m_list m_list_top_line bg_white m_order_list">
                                 <li class="link" data-goodsid="">
-                                    <a href="/goodslist/detail?goodsid=@item.ID">
-                                        <img class="img100" src="@item.ShowIcons">
+                                    <a>
+                                        <img onclick="GoodsDetail(@item.ID)" class="img100" src="@item.ShowIcons">
                                         <div class="info">
                                             <p class="name gray3">@(item.GoodsName + "（第" + item.HuoDongNumber + "期）")</p>
                                             <p class="sku gray9" style="font-size:14px">
-                                                中奖号码：@(item.LuckNumber == 0 ? "暂未开奖" : item.LuckNumber.ToString())
+                                                @if (item.LuckNumber == 0)
+                                                {
+                                                    <span>中奖号码：暂未开奖</span>
+                                                }
+                                                else
+                                                {
+                                                    <span onclick="DrawnPrize(@item.HuoDongID)">中奖号码：@(item.LuckNumber == 0)</span>
+                                                }
                                                 <br />
                                                 中奖账号：@(item.LuckNickName == "" ? "暂未开奖" : item.LuckNickName)
                                             </p>
@@ -99,9 +106,15 @@
     $(function () {
         //顶部导航栏切换
         $("#@("type"+ViewBag.Type)").addClass("selected").siblings().removeClass("selected");
-        //弹出取奖号码
     });
     function MyNumber(number) {
-        Model.alert(number);
+        alert(number);
+    }
+    function GoodsDetail(goodsid) {
+        location.href = "/goodslist/detail?goodsid=" + goodsid;
+    }
+    function DrawnPrize(huodongid)
+    {
+        location.href="/order/drawnprize?huodongid="+huodongid;
     }
 </script>

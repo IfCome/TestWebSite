@@ -32,7 +32,7 @@
     <div class="body">
         <div class="m_header">
             <p>
-                <a class="bt_prev" href="address">
+                <a class="bt_prev" href="index">
                     <span class="prev rotate45"></span>
                     <span class="prev rotate135"></span>
                 </a>
@@ -104,24 +104,24 @@
         $(".bt_rtext").click(function () {
             update();
         });
+        $(".m_icon_del").click(function(){
+            $(this).parent().prev().val("");
+        });
     })
 
     function update() {
         var data = {};
-        data.ID = @Model.ID;
+        data.ID = "@Model.ID";
         data.NickName = $("#js_name").val();
         data.Phone = $("#js_phone").val();
         data.Address = $("#js_address").val();
         data.PostCode = $("#js_zipcode").val();
         // 提交数据
-        $.post('@Url.RouteUrl(new { controller = "UserCenter", action = "Update" })', data, function (result) {
-            alert(result.Message)
-            if (result.Message == "OK") {
-                alert("aaa")
+        $.post('/UserCenter/Update', data, function (result) {
+            if (JSON.parse(result).Message == "OK") {
                 Model.message("修改成功");
             }
             else {
-                alert("asd")
                 Model.message(result.Message);
             }
         }, 'JSON');

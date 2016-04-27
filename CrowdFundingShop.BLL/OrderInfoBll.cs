@@ -52,5 +52,10 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.OrderInfoDal.GetKeyCount(consumerid);
         }
+
+        public static List<Model.OrderInfo> GetDrawnPrizeUser(long huodongid)
+        {
+            return DAL.OrderInfoDal.GetDrawnPrizeUser(huodongid);
+        }
     }
 }

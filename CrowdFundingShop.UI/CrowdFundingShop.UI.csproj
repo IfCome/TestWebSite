@@ -131,6 +131,7 @@
     <Compile Include="Models\PC\BackGroundUserInfoModelIn.cs" />
     <Compile Include="Models\PC\HomeIndexPageModelOut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\WAP\DrawnPrizeController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -394,6 +395,7 @@
     <Content Include="Views\UserCenter\PurchaseHistory.cshtml" />
     <Content Include="Resources\wap\css\usercenter\meber2.0.css" />
     <Content Include="Views\Order\MyLuckInfo.cshtml" />
+    <Content Include="Views\DrawnPrize\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
