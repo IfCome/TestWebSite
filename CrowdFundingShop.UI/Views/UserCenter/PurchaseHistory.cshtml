@@ -71,7 +71,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <span onclick="DrawnPrize(@item.HuoDongID)">中奖号码：@(item.LuckNumber == 0)</span>
+                                                    <span style="color:red" onclick="DrawnPrize(@item.HuoDongID)">中奖号码：@(item.LuckNumber)</span>
                                                 }
                                                 <br />
                                                 中奖账号：@(item.LuckNickName == "" ? "暂未开奖" : item.LuckNickName)
@@ -113,8 +113,7 @@
     function GoodsDetail(goodsid) {
         location.href = "/goodslist/detail?goodsid=" + goodsid;
     }
-    function DrawnPrize(huodongid)
-    {
-        location.href="/order/drawnprize?huodongid="+huodongid;
+    function DrawnPrize(huodongid) {
+        location.href = "/drawnprize/index?huodongid=" + huodongid;
     }
 </script>

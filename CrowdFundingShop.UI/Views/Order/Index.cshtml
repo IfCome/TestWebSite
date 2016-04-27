@@ -1,17 +1,46 @@
 ﻿@{
     Layout = null;
 }
+@model IEnumerable<CrowdFundingShop.Model.ShoppingCart>
 
-<!DOCTYPE html>
-
+<!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Pay</title>
+    <title>一元易购物</title>
+    <meta charset="utf-8">
+    <meta content=" width = device-width , initial-scale = 1.0 , maximum-scale = 1.0 , user-scalable = no " id="viewport" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/cart/index.css" rel="stylesheet" />
+    <!--改版后 com1-3.css可以去掉-->
+    <link href="~/Resources/wap/css/cart/com1-3.css" rel="stylesheet" />
+    <!--新改的-->
 </head>
 <body>
-    <div>
-        来来来，过来把手剁了。
+    <div class="com-content">
+        <div class="clearboth"></div>
+        <div class="com-content-area" id="js-com-content-area">
+            <div class="mask hidden"></div>
+            <div class="page-role payed-page">
+                <div class="com-title">
+                    <a title="返回" href="javascript:history.back();void(0)" class="return">
+                    </a>
+                    <a title="菜单" href="javascript:void(0);" class="home_menu">
+                        <span></span>
+                    </a>
+                    订单完成
+                </div>
+                <div class="spaceholder"></div>
+                <div class="pxui-area">
+                    <h2><i></i>恭喜您！<br />成功购买该商品！</h2>
+                    <input type="button" class="pxui-light-button" onclick="location.href='/usercenter/index'" value="返回个人中心" />
+                    <div class="app_result_tip">
+                        <span>安全提醒：下单后，为了您的财产安全，任何有涉及汇款、退款等内容的信息或电话，请不要相信，谨防假冒客服电话诈骗！</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

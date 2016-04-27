@@ -18,5 +18,7 @@ namespace CrowdFundingShop.Model
         public long LuckDogID { get; set; }
         public int LuckNumber { get; set; }
         public int IsDelete { get; set; }
+
+        public List<Model.OrderInfo> LIstOrderInfo { get; set; }
     }
 }

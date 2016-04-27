@@ -118,5 +118,29 @@ namespace CrowdFundingShop.DAL
 
             return dataTable;
         }
+
+        public static Model.HuoDongInfo GetLuckNumberByID(long huodongid)
+        {
+            var sql = @"
+                              SELECT 
+                                    ID
+                                    ,LuckNumber
+                                FROM HuoDongInfo
+                                WHERE ID=@ID";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = huodongid });
+            sql = string.Format(sql);
+            DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
+            if (dataTable.Rows.Count > 0)
+            {
+                var row = dataTable.Rows[0];
+                return new Model.HuoDongInfo()
+                {
+                    ID = Converter.TryToInt32(row["ID"], -1),
+                    LuckNumber = Converter.TryToInt32(row["LuckNumber"], -1),
+                };
+            }
+            return null;
+        }
     }
 }

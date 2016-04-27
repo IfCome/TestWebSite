@@ -41,9 +41,14 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             result = BLL.ConsumerInfoBll.Update(inModel);
             if (!result)
             {
-                msg = "添加失败，请重试";
+                msg = "更新失败，请重试";
             }
             return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ContactUs(Model.ConsumerInfo inModel)
+        {
+            return View();
         }
     }
 }

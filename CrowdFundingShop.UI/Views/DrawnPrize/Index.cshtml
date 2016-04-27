@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null;
 }
-@model IEnumerable<CrowdFundingShop.Model.OrderInfo>
+@model CrowdFundingShop.Model.HuoDongInfo
 <!doctype html>
 <html>
 <head>
@@ -43,34 +43,43 @@
         </div>
         <div class="lib_content" id="js_lib_content">
             <form autocomplete="off" id="js_form">
-                @if (Model != null) {
-                <div class="m_order" id="order_2016042421212875788">
-                         <ul class="m_list m_list_top_line bg_white m_order_list">
-                        <li class="link" data-goodsid="">
-                            <a>
-                                <div style="width:30%;display:inline">中奖者昵称</div>
-                                <div style="width:30%;display:inline">购买数量</div>
-                                <div style="width:30%;display:inline">购买时间</div>
-                            </a>
-                        </li>  
-                        @foreach (var item in Model)
-                        {
-                            <li class="link" data-goodsid="">
-                            <a>
-                                <div style="width:30%;display:inline">@item.NickName</div>
-                                <div style="width:30%;display:inline">@item.Number</div>
-                                <div style="width:30%;display:inline">@item.CreateTime</div>
-                            </a>
-                        </li>  
-                        }
-                    </ul>
-                </div>
-                       }
+                @if (Model != null)
+                {
+                    <div class="m_order" id="order_2016042421212875788">
+                        <ul class="m_list m_list_top_line bg_white m_order_list">
+                            <li class="link">
+                                <a style="font-size:30px;background-color:rgb(255,80,0);font-family:FZJingLeiS-R-GB;text-align:center;color:white">
+                                    <div style="height:80px;line-height:80px;">本期中奖号码：@Model.LuckNumber</div>
+                                </a>
+                            </li>
+                            <li class="link">
+                                <a style="font-size:14px;">
+                                    <div style="width:150px;float:left;">购买时间</div>
+                                    <div style="width:130px;float:left">中奖者昵称</div>
+                                    <div>购买数量</div>
+                                </a>
+                            </li>
+                            @if (Model.LIstOrderInfo != null)
+                            {
+                                foreach (var item in Model.LIstOrderInfo)
+                                {
+                                    <li class="link">
+                                        <a style="font-size:14px;background-color:@(item.Number==Model.LuckNumber?"rgb(255,80,0)":"white");color:@(item.Number == Model.LuckNumber ? "white" : "black")">
+                                            <div style="width:150px;float:left">@item.CreateTime</div>
+                                            <div style="width:130px;float:left">@(item.NickName.Length > 8 ? item.NickName.Remove(7) + "..." : item.NickName)</div>
+                                            <div>@item.StoreCount</div>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
                 else
                 {
-                <p style="text-align:center;font-size:14px;margin-top:150px">
-                    当前商品还未有人购买
-                </p>
+                    <p style="text-align:center;font-size:14px;margin-top:150px">
+                        当前商品还未有人购买
+                    </p>
                 }
             </form>
         </div>

@@ -17,5 +17,10 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.HuoDongInfoDal.GetTop10SimpleInfo();
         }
+
+        public static Model.HuoDongInfo GetLuckNumberByID(long huodongid)
+        {
+            return DAL.HuoDongInfoDal.GetLuckNumberByID(huodongid);
+        }
     }
 }

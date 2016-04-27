@@ -396,6 +396,7 @@
     <Content Include="Resources\wap\css\usercenter\meber2.0.css" />
     <Content Include="Views\Order\MyLuckInfo.cshtml" />
     <Content Include="Views\DrawnPrize\Index.cshtml" />
+    <Content Include="Views\UserCenter\ContactUs.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
