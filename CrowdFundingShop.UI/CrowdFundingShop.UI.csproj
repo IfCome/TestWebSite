@@ -397,6 +397,7 @@
     <Content Include="Views\Order\MyLuckInfo.cshtml" />
     <Content Include="Views\DrawnPrize\Index.cshtml" />
     <Content Include="Views\UserCenter\ContactUs.cshtml" />
+    <Content Include="Views\GoodsManager\EditCategoryInfo.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

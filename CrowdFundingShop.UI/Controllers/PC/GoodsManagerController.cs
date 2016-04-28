@@ -39,6 +39,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
                         g.CreateTime,
                         g.State,
                         g.ZhongChouCount,
+                        g.HuoDongID,
                         ZhongChouPercent = (g.Price != "0" && g.Price != "" && g.ZhongChouCount != 0) ? ((g.ZhongChouCount * 100.0 / Converter.TryToInt32(g.Price)) < 1 ? 2 : (g.ZhongChouCount * 100.0 / Converter.TryToInt32(g.Price))) : 0
                     }),
                     AllCount = allCount
@@ -163,16 +164,25 @@ namespace CrowdFundingShop.UI.Controllers.PC
         {
             string errorType = "";
             string msg = "OK";
+            int huodongNumber = 1;
+            //先查这种商品在活动里存在的话他的活动期数就在原有的基础上加，否则从1开始
+            huodongNumber = BLL.HuoDongInfoBll.GetMaxHuoDongNumByGoodsID(Converter.TryToInt32(InModel.GoodsID)) + 1;
             Model.HuoDongInfo huodongInfo = new Model.HuoDongInfo()
             {
                 GoodsID = Converter.TryToInt64(InModel.GoodsID),
                 FinishedTime = Converter.TryToDateTime(InModel.FinishedTime),
                 ShareCount = Converter.TryToInt32(InModel.ShareCount),
                 State = 10,//开始众筹
+                HuodongNumber = huodongNumber,
                 CreateTime = DateTime.Now,
                 CreateUser = Identity.LoginUserInfo.ID.ToString(),
             };
             bool result = BLL.HuoDongInfoBll.Add(huodongInfo);
+            if (result && huodongNumber > 1)
+            {
+                //前一期的活动隐藏 设置State=40
+                result = BLL.HuoDongInfoBll.UpdateState(Converter.TryToInt32(InModel.ID), (huodongNumber - 1));
+            }
             if (!result)
             {
                 errorType = "alert";
@@ -192,6 +202,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
             Model.GoodsBaseInfo outModel = BLL.GoodsBaseInfoBll.GetGoodsInfoByID(goodsID);
             return View(outModel);
         }
+        //删除商品
         public ActionResult DeleteGoodsInfo(string id)
         {
             string errorType = "";
@@ -203,6 +214,11 @@ namespace CrowdFundingShop.UI.Controllers.PC
                 msg = "删除失败，请重试";
             }
             return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
+        }
+        //编辑分类
+        public ActionResult EditCategoryInfo()
+        {
+            return View();
         }
     }
 }

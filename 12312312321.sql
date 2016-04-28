@@ -1,0 +1,1 @@
+﻿UPDATE HuodongInfo SET FinishedTime=GETDATE(),LuckDogID=1,LuckNumber=1 WHERE ID=1

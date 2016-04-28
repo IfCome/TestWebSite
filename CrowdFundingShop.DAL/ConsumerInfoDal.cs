@@ -58,6 +58,28 @@ namespace CrowdFundingShop.DAL
             }
             return null;
         }
+
+        public static Model.OrderInfo GetByNumber(int number, long huodongid)
+        {
+            var sql = @"SELECT 
+                                 ConsumerID
+                               FROM OrderInfo
+                               WHERE HuodongID=@HuodongID AND Number=@Number";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@HuodongID", Value = huodongid });
+            parameters.Add(new SqlParameter() { ParameterName = "@Number", Value = number });
+            sql = string.Format(sql);
+            DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
+            if (dataTable.Rows.Count > 0)
+            {
+                var row = dataTable.Rows[0];
+                return new Model.OrderInfo()
+                {
+                    ConsumerID = Converter.TryToInt64(row["ConsumerID"], 0)
+                };
+            }
+            return null;
+        }
         #endregion
     }
 }

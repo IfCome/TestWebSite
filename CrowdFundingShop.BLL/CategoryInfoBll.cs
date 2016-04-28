@@ -7,6 +7,10 @@ namespace CrowdFundingShop.BLL
 {
     public class CategoryInfoBll
     {
+        public static bool Add(Model.CategoryInfo entity)
+        {
+            return DAL.CategoryInfoDal.Add(entity);
+        }
         public static List<Model.CategoryInfo> GetListByParentID(int parentID)
         {
             return DAL.CategoryInfoDal.GetListByParentID(parentID);

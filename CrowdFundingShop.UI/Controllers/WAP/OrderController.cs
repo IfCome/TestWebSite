@@ -19,6 +19,8 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult Pay(string huodongids = "", string storecount = "", string allprice = "", string zhongchoucount = "")
         {
             long consumerid = 1;//微信接口获取;
+            bool reslut = false;//用来标记交易阶段的状态
+            var flagCount = 0;//标记位置
             string msg = "OK";
             try
             {
@@ -37,7 +39,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                         storecount = storecount.Remove(storecount.Length - 1);
                         allprice = allprice.Remove(allprice.Length - 1);
                         zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
-                        var flagCount = 0;
                         foreach (var item in huodongids.Split(','))
                         {
                             int ThisOneStoreCount = Converter.TryToInt32(storecount.Split(',')[flagCount]);
@@ -51,7 +52,8 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                                 };
                                 if (msg == "OK")
                                 {
-                                    if (!BLL.OrderInfoBll.Add(entity))
+                                    reslut = BLL.OrderInfoBll.Add(entity);
+                                    if (!reslut)
                                     {
                                         msg = "网络连接超时";
                                         return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
@@ -66,6 +68,20 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                             };
                             BLL.ShoppingCartBll.DeleteByHuoDongID(scart);
                             flagCount++;
+                        }
+                    }
+                    //判断是不是该商品的最后最后一个购买者，确定开不开奖
+                    if (reslut)
+                    {
+                        flagCount = 0;
+                        huodongids = huodongids.Remove(huodongids.Length - 1);
+                        foreach (var item in huodongids.Split(','))
+                        {
+                            int maxnum = BLL.OrderInfoBll.GetMaxNumber(Converter.TryToInt32(item), consumerid) - 1000000;
+                            if (Converter.TryToInt32(allprice.Split(',')[flagCount]) == maxnum)
+                            {
+                                KaiJiang(Converter.TryToInt32(allprice), Converter.TryToInt64(item));
+                            }
                         }
                     }
                 }
@@ -92,6 +108,35 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             int maxnumber = BLL.OrderInfoBll.GetMaxNumber(huodongid, consumerid);
             number = maxnumber + 1;
             return number;
+        }
+        public static bool KaiJiang(int allPrice, long huodongid)
+        {
+            bool result = false;
+            int lucknumber = 0;
+            int sum = 0;
+            string randomS = string.Empty;
+            int x = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                Random random = new Random();
+                x = random.Next(1000000, 1000000 + allPrice + 1);
+                sum += x;
+                randomS += x + ",";
+            }
+            //记日志（存活动ID和random以便查询）
+            BLL.OrderInfoBll.AddRandom(randomS, huodongid);
+            //产生幸运号码后查出获奖者并更新活动表
+            lucknumber = sum % (allPrice + 1);
+            Model.OrderInfo orderinfo = BLL.ConsumerInfoBll.GetByNumber(lucknumber, huodongid);
+            Model.HuoDongInfo huodonginfo = new Model.HuoDongInfo()
+            {
+                ID = huodongid,
+                State = 30,
+                LuckDogID = orderinfo.ConsumerID,
+                LuckNumber = lucknumber
+            };
+            result = BLL.HuoDongInfoBll.Update(huodonginfo);
+            return result;
         }
         #endregion
     }

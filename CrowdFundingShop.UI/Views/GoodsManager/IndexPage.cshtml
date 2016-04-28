@@ -25,9 +25,11 @@
         <div id="doc-oc-demo1" class="am-offcanvas">
             <div class="am-offcanvas-bar">
                 <ul class="am-list admin-sidebar-list">
-                    <li><a href="~/Home/IndexPage"><span></span> 全部</a></li>
+                    <li><a href="~/goodsmanager/IndexPage"><span></span> 全部</a></li>
                     <li class="admin-parent">
-                        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span></span> 手机数码 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}">
+                            <span></span> 手机数码 <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                        </a>
                         <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
                             <li><a href="admin-user.html" class="am-cf"><span></span> 手机</a></li>
                             <li><a href="admin-help.html"><span></span> 台式机</a></li>
@@ -36,7 +38,18 @@
                             <li><a href="admin-404.html"><span></span> 手机周边</a></li>
                         </ul>
                     </li>
-                    <li><a href="admin-table.html"><span></span> 电器电脑</a></li>
+                    <li>
+                        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}">
+                            <span></span> 电器电脑
+                        </a>
+                        <ul class="am-list am-collapse admin-sidebar-sub" id="collapse-nav">
+                            <li><a href="admin-user.html" class="am-cf"><span></span> 手机</a></li>
+                            <li><a href="admin-help.html"><span></span> 台式机</a></li>
+                            <li><a href="admin-gallery.html"><span></span> 笔记本</a></li>
+                            <li><a href="admin-log.html"><span></span> 电脑周边</a></li>
+                            <li><a href="admin-404.html"><span></span> 手机周边</a></li>
+                        </ul>
+                    </li>
                     <li><a href="admin-form.html"><span></span> 家居日用</a></li>
                     <li><a href="#"><span></span>  衣服鞋帽</a></li>
                     <li><a href="#"><span></span>  图书音像</a></li>
@@ -68,7 +81,7 @@
                             <option value="-1">所有商品</option>
                             <option value="0">未众筹</option>
                             <option value="10">众筹中</option>
-                            <option value="20">未开奖</option>
+                            @*<option value="20">未开奖</option>*@
                             <option value="30">已开奖</option>
                         </select>
                     </div>
@@ -100,7 +113,7 @@
                                     <th class="table-id am-text-center">ID</th>
                                     <th class="table-title">商品名称</th>
                                     <th class="table-author">商品分类</th>
-                                    <th class="table-author">商品描述</th>
+                                    @*<th class="table-author">商品描述</th>*@
                                     <th class="table-type am-hide-sm-only">众筹价格</th>
                                     <th class="table-type am-hide-sm-only">众筹状态</th>
                                     <th class="table-date am-hide-sm-only">创建时间</th>
@@ -122,7 +135,7 @@
                         <td class="am-text-center">{Index}</td>
                         <td><a href="javascript:void(0)" onclick="ShowUserDetails('{ID}');">{GoodsName}</a></td>
                         <td>{Category}</td>
-                        <td>{Describe}</td>
+                        @*<td>{Describe}</td>*@
                         <td class="am-hide-sm-only">{Price}</td>
                         <td class="am-hide-sm-only">{State}</td>
                         <td class="am-hide-sm-only">{CreateTime}</td>
@@ -132,7 +145,7 @@
                                     <button type="button" onclick="ShowGoods('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-eye"></span> 查看</button>
                                     <button type="button" onclick="EditGoods('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only"><span class="am-icon-edit"></span> 编辑</button>
                                     <button type="button" flag="{Display}" onclick="DeleteGoods('{ID}');" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
-                                    <button type="button" flag="{Display}" onclick="AddToHuoDong('{ID}','{Price}');" class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-align-justify"></span> 加入众筹</button>
+                                    <button type="button" flag="{Display}" onclick="AddToHuoDong('{ID}','{Price}','{HuoDongID}');" class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-align-justify"></span> 加入众筹</button>
                                 </div>
                             </div>
                         </td>
@@ -317,13 +330,14 @@
                             var rowHtml = $("#dataTableTemplet>tbody").html();
                             rowHtml = rowHtml.replace("{Index}", i + 1);
                             rowHtml = rowHtml.replace(/{GoodsName}/g, row.GoodsName);
-                            rowHtml = rowHtml.replace("{Describe}", row.Describe);
+                            //rowHtml = rowHtml.replace("{Describe}", row.Describe);
                             rowHtml = rowHtml.replace(/{Price}/g, row.Price);
                             rowHtml = rowHtml.replace("{Category}", row.Category);
                             rowHtml = rowHtml.replace("{CreateTime}", row.CreateTime);
                             rowHtml = rowHtml.replace(/{ID}/g, row.ID);
-                            rowHtml = rowHtml.replace("{State}", row.State == "0" ? "<span style='color:red'>未众筹</span>" : (row.State == "10" ? "<span style='color:green'>众筹中</span>" : (row.State == "20" ? "待开奖" : "已开奖")));
-                            if (row.State != "0") {
+                            rowHtml = rowHtml.replace(/{HuoDongID}/g, row.HuoDongID);
+                            rowHtml = rowHtml.replace("{State}", row.State == "0" ? "<span style='color:red'>未众筹</span>" : (row.State == "10" ? "<span style='color:green'>众筹中</span>" : (row.State == "20" ? "待开奖" : "已开奖(可重新加入到下一期众筹)")));
+                            if (row.State == "10" || row.State=="20") {
                                 rowHtml = rowHtml.replace(/{Display}/g, "None");
                             }
                             else {
@@ -351,14 +365,15 @@
             location.href = '/GoodsManager/EditGoodsInfo?goodsid=' + id;
         }
 
-        function AddToHuoDong(id, price) {
+        function AddToHuoDong(id, price,huodongid) {
             $('#my-prompt').modal({
                 relatedTarget: this,
                 onConfirm: function (e) {
                     var data = {
                         GoodsID: id,
                         ShareCount: price,
-                        FinishedTime: $("#txtFinishedTime").val()
+                        FinishedTime: $("#txtFinishedTime").val(),
+                        ID: huodongid
                     };
 
                     $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "AddHuoDong" })', data, function (result) {

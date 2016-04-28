@@ -28,6 +28,7 @@ namespace CrowdFundingShop.DAL
                                 ,CreateUserID
                                 ,CreateTime               
                                 ,IsDelete
+                                ,IsHot
                                )
                          VALUES
                                (
@@ -37,6 +38,7 @@ namespace CrowdFundingShop.DAL
                                 ,@Category
                                 ,@CreateUserID
                                 ,@CreateTime
+                                ,0
                                 ,0
                                );SELECT SCOPE_IDENTITY()";
             var parameters = new List<SqlParameter>();
@@ -74,7 +76,7 @@ namespace CrowdFundingShop.DAL
         }
         #endregion
 
-        #region 删除
+        #region 修改
         public static bool UpDateGoodsInfo(Model.GoodsBaseInfo entity)
         {
             var sql = @"UPDATE [GoodsBaseInfo] SET {0} WHERE ID=@ID";
@@ -156,10 +158,11 @@ namespace CrowdFundingShop.DAL
                                    ,ROW_NUMBER() OVER (ORDER BY G.CreateTime DESC) AS [RowNumber] 
                                    ,ZhongChouCount=(SELECT COUNT(1) FROM OrderInfo WHERE HuoDongID=H.ID)
                                    ,FinishedTime
+                                   ,H.ID AS HuoDongID
                              FROM GoodsBaseInfo G WITH (NOLOCK) JOIN CategoryInfo C WITH (NOLOCK)
                              ON G.Category=C.ID LEFT JOIN dbo.HuodongInfo H
                              ON G.ID=H.GoodsID
-                            WHERE G.IsDelete=0 AND C.IsDelete=0 {0}
+                            WHERE G.IsDelete=0 AND C.IsDelete=0 AND  (State !=40 OR State IS NULL)  {0}
                         )
                         SELECT * FROM Virtual_T 
                         WHERE @PageSize * (@CurrentPage - 1) < RowNumber AND RowNumber <= @PageSize * @CurrentPage {1}
@@ -190,6 +193,10 @@ namespace CrowdFundingShop.DAL
                     sqlWhere1 += " AND State=@State";
                 }
                 parameters.Add(new SqlParameter() { ParameterName = "@State", Value = huodongstate });
+            }
+            else
+            {
+                sqlWhere1 += " AND (State!=40 OR State IS NULL)";
             }
             if (ishot == 1)
             {
@@ -231,7 +238,8 @@ namespace CrowdFundingShop.DAL
                     CreateTime = Converter.TryToString(row["CreateTime"], DateTime.MinValue.ToString()),
                     State = Converter.TryToInt32(row["State"], -1),
                     ZhongChouCount = Converter.TryToInt32(row["ZhongChouCount"], 0),
-                    FinishedTime = Converter.TryToDateTime(row["FinishedTime"], DateTime.MinValue)
+                    FinishedTime = Converter.TryToDateTime(row["FinishedTime"], DateTime.MinValue),
+                    HuoDongID = Converter.TryToInt64(row["HuoDongID"], 0),
                 }).ToList();
             }
             return null;
@@ -254,9 +262,9 @@ namespace CrowdFundingShop.DAL
                                    ,H.ID AS HuoDongID
                                    ,ZhongChouCount=(SELECT Count(1) FROM OrderInfo where huodongid=H.ID)
                                 FROM dbo.GoodsBaseInfo G JOIN dbo.CategoryInfo C
-                                ON C.ID=G.Category JOIN HuoDongInfo H
+                                ON C.ID=G.Category LEFT JOIN HuoDongInfo H
                                 ON G.ID=H.GoodsID
-                                WHERE G.IsDelete=0 AND C.IsDelete=0 AND G.ID=@ID
+                                WHERE G.IsDelete=0 AND C.IsDelete=0 AND G.ID=@ID AND H.State!=40
                               ";
             var parameters = new List<SqlParameter>();
             sql = string.Format(sql);

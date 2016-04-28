@@ -1,0 +1,186 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>编辑分类</title>
+    <meta name="description" content="编辑分类">
+    <meta name="keywords" content="编辑分类">
+    @Html.Partial("~/Views/Common/SharePart.cshtml")
+</head>
+<body>
+    <header class="am-topbar admin-header">
+        @Html.Partial("~/Views/Common/TopBar.cshtml")
+    </header>
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <ol class="am-breadcrumb">
+                <li><a href="~/Home/IndexPage" class="am-icon-home">首页</a></li>
+                <li><a href="~/GoodsManager/IndexPage">商品管理</a></li>
+                <li class="am-active">编辑分类</li>
+            </ol>
+            <hr />
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+                    <div class="am-container am-hide-sm-only" style=" height: 50px; "></div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+                    <form class="am-form am-form-horizontal" id="formAddUserInfo">
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-form-label"> 编辑商品分类信息</label>
+                            <div class="am-u-sm-9">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 类别</label>
+                            <div class="am-u-sm-9">
+                                <select data-am-selected="{btnSize: 'sm'}" id="slctParent"></select>
+                                <select id="goods-category" data-am-selected="{btnSize: 'sm'}"></select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 商品名</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="required" id="goods-name" placeholder="该商品名称" data-foolish-msg="该商品已存在！">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 商品描述</label>
+                            <div class="am-u-sm-9">
+                                <textarea class="required" id="goods-describe" placeholder="对该商品的详尽描述" rows="20"></textarea>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label">价格</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="goods-price" placeholder="该商品众筹价格">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button id="btncommit" type="button" class="am-btn am-btn-primary">下一步：添加物品图片</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- content end -->
+    </div>
+    @Html.Partial("~/Views/Common/FootPart.cshtml")
+</body>
+</html>
+<script>
+
+    $(function () {
+        bindFunction();
+    });
+
+    // 绑定事件
+    function bindFunction() {
+        // 文本框获取焦点，隐藏tips
+        $('input').focus(function () {
+            if (tipInput && $(this).attr('id') == tipInput.attr('id')) {
+                tipInput.removeClass('am-field-error').parent().parent().removeClass('am-form-error');
+                tipInput = null;
+                hideToolTips();
+            }
+        });
+        //label标签字体细化
+        $("label").css("font-weight", "normal");
+        //初始化下拉列表
+        LoadCategory(0, 1);
+        $("#slctParent").on("change", function () {
+            LoadCategory($(this).val(), 2)
+        });
+        // 提交用户信息
+        $('#btncommit').click(commitUserInfo);
+    }
+    //1查第一级别 2查第二级别
+    function LoadCategory(parentID, type) {
+        $.get('@Url.RouteUrl(new { controller = "GoodsManager", action = "GetCategoryInfo" })', { ParentID: parentID }, function (result) {
+            //清除第二级列表
+            $('#goods-category option').remove();
+            if (result) {
+                if (type == 1) {
+                    $('#slctParent option').remove();
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            $('#slctParent').append("<option id='opParent" + i + "' value='" + row.ID + "'>" + row.CategoryName + "</option>")
+                        }
+                    }
+                }
+                else if (type == 2) {
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            $('#goods-category').append("<option id='opParent" + i + "' value='" + row.ID + "'>" + row.CategoryName + "</option>")
+                        }
+                    }
+                }
+            }
+        }, 'json');
+    }
+
+    var data = {};
+    var tipInput;
+    function commitUserInfo() {
+        data.GoodsName = $.trim($('#goods-name').val());
+        data.Describe = $.trim($('#goods-describe').val());
+        data.Price = $.trim($('#goods-price').val());
+        data.Category = $('#goods-category').val();
+        if (checkData()) {
+            // 提交数据
+            $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "AddGoodsCallBack" })', data, function (result) {
+                if (result && result.Message == 'OK') {
+                    location.href = '/GoodsManager/EditPic?id=' + result.InsertID;
+                }
+                else {
+                    if (result.ErrorType == 'GoodsName') {
+                        tipInput = $('#goods-name');
+                    } else if (result.ErrorType == 'Describe') {
+                        tipInput = $('#goods-describe');
+                    } else if (result.ErrorType == 'Price') {
+                        tipInput = $('#goods-price');
+                    } else if (result.ErrorType == 'Category') {
+                        tipInput = $('#goods-price');
+                    } else {
+                        tipInput = null;
+                        alert(result.Message);
+                        return;
+                    }
+                    showToolTips(tipInput, result.Message);
+                    tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+                }
+            }, 'JSON');
+        }
+    }
+
+    function checkData() {
+        var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+        if (!data.GoodsName || data.GoodsName.length == 0) {
+            tipInput = $('#goods-name');
+            showToolTips(tipInput, "请输入商品名");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!data.Describe || data.Describe.length < 10) {
+            tipInput = $('#goods-describe');
+            showToolTips(tipInput, "商品描述必须大于10个字");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        if (!reg.test(data.Price)) {
+            tipInput = $('#goods-price');
+            showToolTips(tipInput, "价格填写不正确");
+            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
+            return false;
+        }
+        return true;
+    }
+</script>

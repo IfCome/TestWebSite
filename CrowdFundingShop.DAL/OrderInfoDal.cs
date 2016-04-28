@@ -41,6 +41,32 @@ namespace CrowdFundingShop.DAL
                 return false;
             }
         }
+
+        public static bool AddRandom(string randomnum,long huodongid)
+        {
+            var sql = @"
+                        INSERT INTO [RandomInfo]
+                               (
+                                    RandomNum
+                                    ,HuodongID
+                               )
+                         VALUES
+                               (
+                                    @RandomNum
+                                    ,@HuodongID     
+                               )";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@RandomNum", Value = randomnum });
+            parameters.Add(new SqlParameter() { ParameterName = "@HuodongID", Value = huodongid });
+            try
+            {
+                return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         #endregion
         #region 删
         #endregion

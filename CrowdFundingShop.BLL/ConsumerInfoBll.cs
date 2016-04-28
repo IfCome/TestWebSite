@@ -15,6 +15,9 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.ConsumerInfoDal.Update(entity);
         }
-
+        public static Model.OrderInfo GetByNumber(int number,long huodongid)
+        {
+            return DAL.ConsumerInfoDal.GetByNumber(number,huodongid);
+        }
     }
 }

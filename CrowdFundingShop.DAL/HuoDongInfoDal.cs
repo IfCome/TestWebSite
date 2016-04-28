@@ -60,6 +60,43 @@ namespace CrowdFundingShop.DAL
         }
         #endregion
 
+        #region 修改
+        public static bool Update(Model.HuoDongInfo entity)
+        {
+            var sql = @"UPDATE HuodongInfo SET FinishedTime=GETDATE(),State=@State,LuckDogID=@LuckDogID,LuckNumber=@LuckNumber WHERE ID=@ID";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = entity.ID });
+            parameters.Add(new SqlParameter() { ParameterName = "@State", Value = entity.State });
+            parameters.Add(new SqlParameter() { ParameterName = "@LuckDogID", Value = entity.LuckDogID });
+            parameters.Add(new SqlParameter() { ParameterName = "@LuckNumber", Value = entity.LuckNumber });
+            try
+            {
+                return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public static bool UpdateState(long huodongid, int huodongnumber)
+        {
+            var sql = @"UPDATE HuodongInfo SET State=@State WHERE ID=@ID AND HuoDongNumber=@HuoDongNumber";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@ID", Value = huodongid });
+            parameters.Add(new SqlParameter() { ParameterName = "@State", Value = 40 });
+            parameters.Add(new SqlParameter() { ParameterName = "@HuoDongNumber", Value = huodongnumber });
+            try
+            {
+                return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 查询
         public static DataTable GetTop10SimpleInfo()
         {
             var sql = @"
@@ -118,7 +155,6 @@ namespace CrowdFundingShop.DAL
 
             return dataTable;
         }
-
         public static Model.HuoDongInfo GetLuckNumberByID(long huodongid)
         {
             var sql = @"
@@ -142,5 +178,23 @@ namespace CrowdFundingShop.DAL
             }
             return null;
         }
+        public static int GetMaxHuoDongNumByGoodsID(long goodsid)
+        {
+            var sql = @"SELECT 
+                                   Max(HuoDongNumber)
+                               FROM HuoDongInfo
+                               WHERE GoodsID=@GoodsID";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@GoodsID", Value = goodsid });
+            sql = string.Format(sql);
+            DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
+            if (dataTable.Rows.Count > 0)
+            {
+                var row = dataTable.Rows[0];
+                return Converter.TryToInt32(row[0], 0);
+            }
+            return 0;
+        }
+        #endregion
     }
 }

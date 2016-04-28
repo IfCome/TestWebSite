@@ -22,5 +22,19 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.HuoDongInfoDal.GetLuckNumberByID(huodongid);
         }
+
+        public static bool Update(Model.HuoDongInfo entity)
+        {
+            return DAL.HuoDongInfoDal.Update(entity);
+        }
+
+        public static bool UpdateState(long huodongid,int huodongnumber)
+        {
+            return DAL.HuoDongInfoDal.UpdateState(huodongid, huodongnumber);
+        }
+        public static int GetMaxHuoDongNumByGoodsID(long goodsid)
+        {
+            return DAL.HuoDongInfoDal.GetMaxHuoDongNumByGoodsID(goodsid);
+        }
     }
 }

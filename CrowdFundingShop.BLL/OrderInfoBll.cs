@@ -11,7 +11,11 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.OrderInfoDal.Add(entity);
         }
-        public static List<Model.GoodsBaseInfo> GetList(int type, long consumerid,int isMine)
+        public static bool AddRandom(string randomnum, long huodongid)
+        {
+            return DAL.OrderInfoDal.AddRandom(randomnum, huodongid);
+        }
+        public static List<Model.GoodsBaseInfo> GetList(int type, long consumerid, int isMine)
         {
             string huodongstate = "";
             if (type == 1)

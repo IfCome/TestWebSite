@@ -10,6 +10,37 @@ namespace CrowdFundingShop.DAL
 {
     public class CategoryInfoDal
     {
+        #region 增加
+        public static bool Add(Model.CategoryInfo entity)
+        {
+            var sql = @"
+                        INSERT INTO [CategoryInfo]
+                               (
+                                    CategoryName
+                                    ,ParentId
+                                    ,IsDelete
+                               )
+                         VALUES
+                               (
+                                    @CategoryName
+                                    ,@ParentId
+                                    ,@IsDelete
+                               )";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@GoodsID", Value = entity.CategoryName });
+            parameters.Add(new SqlParameter() { ParameterName = "@ShareCount", Value = entity.ParentId });
+            parameters.Add(new SqlParameter() { ParameterName = "@IsDelete", Value = 0 });
+            try
+            {
+                return SqlHelper.ExecuteNonQuery(sql, parameters.ToArray()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
         #region 查询
         public static List<Model.CategoryInfo> GetListByParentID(int parentID)
         {
@@ -27,7 +58,7 @@ namespace CrowdFundingShop.DAL
             }
             else
             {
-                sqlWhere = " AND ParentId !=0 AND ParentId IS NOT NULL";
+                sqlWhere = " AND ParentId=0 AND ParentId IS NOT NULL";
             }
             sql = string.Format(sql, sqlWhere);
             DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
