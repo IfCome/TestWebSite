@@ -35,7 +35,6 @@ namespace CrowdFundingShop.DAL
             parameters.Add(new SqlParameter() { ParameterName = "@HeadIcon", Value = entity.HeadIcon });
             parameters.Add(new SqlParameter() { ParameterName = "@Address", Value = entity.Address });
             parameters.Add(new SqlParameter() { ParameterName = "@Phone", Value = "" });
-            int i = SqlHelper.ExecuteNonQuery(sql, parameters.ToArray());
             try
             {
                 return SqlHelper.ExecuteScalar(sql, parameters.ToArray()).ToString();

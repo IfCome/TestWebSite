@@ -81,9 +81,9 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                     if (data == null || data["openid"] == null)
                         return View("~/Views/GoodsList/List.cshtml?userinfo=错误0");
                     if (url.Contains("?"))
-                        return Redirect(url + "&unionid=" + data["unionid"].ToString());
+                        return Redirect(url + "&unionid=" + data["openid"].ToString());
                     else
-                        return Redirect(url + "?unionid=" + data["unionid"].ToString());
+                        return Redirect(url + "?unionid=" + data["openid"].ToString());
                 }
             }
             catch (Exception e)
