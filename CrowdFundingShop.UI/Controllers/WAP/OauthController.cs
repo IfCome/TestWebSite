@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrowdFundingShop.Utility;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,10 +16,11 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         //
         // GET: /Oauth/
         JavaScriptSerializer Jss = new JavaScriptSerializer();
-        public ActionResult Index()
-        {
-            return View();
-        }
+
+        //public OauthController()
+        //{
+        //    usercenter();
+        //}
 
         //用户中心																														
         public ActionResult usercenter()
@@ -61,7 +63,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             try
             {
-                BLL.BackgroundUserBll_log.AddLog("微信获取用户1", "state：" + state + "；" + "code：" + code, "0.0.0.0");
                 var AppID = ConfigurationManager.AppSettings["AppID"];
                 var AppSecret = ConfigurationManager.AppSettings["AppSecret"];
                 string userString = "";
@@ -113,7 +114,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         /// <returns>获取用户信息（json格式）</returns>
         public string GetUserInfo(string Appid, string Appsecret, string Code)
         {
-            BLL.BackgroundUserBll_log.AddLog("标记", "进GetUserInfo了 appid：" + Appid + "；appsecret：" + Appsecret + "；code：" + Code, "0.0.0.0");
             try
             {
                 var url = string.Format("https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code", Appid, Appsecret, Code);
@@ -210,8 +210,9 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             }
             catch (Exception ex)
             {
-                //WriteTxt_Log(ex);																												
-                return ex.Message;//url错误时候回报错																												
+                //WriteTxt_Log(ex);
+                BLL.BackgroundUserBll_log.AddLog("标记112", "错误内容：" + ex.Message, "0.0.0.0");
+                return ex.Message;//url错误时候回报错
             }
         }
         #endregion
@@ -219,8 +220,42 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         #region 保存用户信息到服务器
         public ActionResult SaveUser()
         {
-            string outModel = Session["user"].ToString();
-            return View("~/Views/GoodsList/List.cshtml?userinfo=" + outModel);
+            try
+            {
+                string userString = Session["user"].ToString();
+                var data = (Dictionary<string, object>)Jss.DeserializeObject(userString);
+                Model.ConsumerInfo consumerInfo = new Model.ConsumerInfo()
+                {
+                    WeiXinAccount = data["openid"].ToString(),
+                    NickName = data["nickname"].ToString(),
+                    Address = data["country"].ToString() + data["province"].ToString() + data["city"].ToString(),
+                    HeadIcon = data["headimgurl"].ToString()
+                };
+                Model.ConsumerInfo currentConsumer = BLL.ConsumerInfoBll.GetByWeiXinAccount(data["openid"].ToString());
+                if (currentConsumer == null)
+                {
+                    string consumerid = BLL.ConsumerInfoBll.Add(consumerInfo);
+                    if (!string.IsNullOrEmpty(consumerid))
+                    {
+                        consumerInfo.ID = Converter.TryToInt64(consumerid);
+                        Identity.LoginConsumer = consumerInfo;
+                    }
+                    else
+                    {
+                        return View(ConfigurationManager.AppSettings["domainurl"] + "/oauth/usercenter");
+                    }
+                }
+                else
+                {
+                    consumerInfo.ID = currentConsumer.ID;
+                    Identity.LoginConsumer = consumerInfo;
+                }
+            }
+            catch (Exception e)
+            {
+                BLL.BackgroundUserBll_log.AddLog("标记119", "存用户时发生错误：" + e.Message, "0.0.0.0");
+            }
+            return View("~/Views/GoodsList/List.cshtml");
         }
         #endregion
     }

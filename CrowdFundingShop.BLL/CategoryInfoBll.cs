@@ -11,9 +11,9 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.CategoryInfoDal.Add(entity);
         }
-        public static List<Model.CategoryInfo> GetListByParentID(int parentID)
+        public static List<Model.CategoryInfo> GetListByParentID(int parentID, string type)
         {
-            return DAL.CategoryInfoDal.GetListByParentID(parentID);
+            return DAL.CategoryInfoDal.GetListByParentID(parentID,type);
         }
     }
 }

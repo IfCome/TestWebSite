@@ -196,7 +196,7 @@ namespace CrowdFundingShop.DAL
                                     )
                                     ,D AS
                                     (
-	                                    SELECT ID,WeiXinAccount,Nickname,Phone,HeadIcon FROM ConsumerInfo WHERE ID=1
+	                                    SELECT ID,WeiXinAccount,Nickname,Phone,HeadIcon FROM ConsumerInfo WHERE ID=@ConsumerID
                                     )
                                     SELECT * FROM A,B,C,D";
             List<SqlParameter> parameter = new List<SqlParameter>();

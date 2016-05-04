@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrowdFundingShop.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,14 +7,14 @@ using System.Web.Mvc;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class UserCenterController : Controller
+    public class UserCenterController : OauthController
     {
         //
         // GET: /UserInfo/
 
         public ActionResult Index()
         {
-            long consumerid = 1;//要走微信端
+            long consumerid = Identity.LoginConsumer.ID;
             //查3个关键数据
             Model.ConsumerInfo consumerinfo = BLL.OrderInfoBll.GetKeyCount(consumerid);
             return View(consumerinfo);
@@ -21,7 +22,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult PurchaseHistory(int type = 0)
         {
-            long consumerid = 1;//微信验证获取得到
+            long consumerid = Identity.LoginConsumer.ID;
             List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(type, consumerid, 0);
             ViewBag.Type = type;
             return View(outModel);
@@ -29,7 +30,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult Account()
         {
-            int consumerid = 1;//微信获取
+            long consumerid = Identity.LoginConsumer.ID;
             Model.ConsumerInfo outModel = BLL.ConsumerInfoBll.GetByID(consumerid);
             return View(outModel);
         }

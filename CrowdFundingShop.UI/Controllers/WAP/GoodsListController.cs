@@ -11,7 +11,7 @@ using System.Web.Script.Serialization;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class GoodsListController : Controller
+    public class GoodsListController : OauthController
     {
         //
         // GET: /GoodsList/
@@ -58,7 +58,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
-            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID);
+            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID,"WAP");
             if (categoryInfoList != null)
             {
                 return Json(new
@@ -91,7 +91,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             bool result = false;
             Model.ShoppingCart shoppingCart = new Model.ShoppingCart()
             {
-                ConsumerID = 1,//通过微信账号来判断该角色的顾客ID
+                ConsumerID = Identity.LoginConsumer.ID,//通过微信账号来判断该角色的顾客ID
                 HuoDongID = HuoDongID,
                 StoreCount = StoreCount,
                 Type = 1
@@ -117,7 +117,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         //我的购物车
         public ActionResult MyShoppingCart()
         {
-            long consumerID = 1;//通过微信账号来判断该角色的顾客ID
+            long consumerID = Identity.LoginConsumer.ID;//通过微信账号来判断该角色的顾客ID
             List<Model.ShoppingCart> shoppingCartList = BLL.ShoppingCartBll.GetShoppingInfoByID(consumerID);
             if (shoppingCartList != null)
             {
@@ -136,7 +136,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             Model.ShoppingCart shoppingCart = new Model.ShoppingCart()
             {
                 ID = shoppingid,
-                ConsumerID = 1,//通过微信账号来判断该角色的顾客ID
+                ConsumerID = Identity.LoginConsumer.ID,//通过微信账号来判断该角色的顾客ID
             };
             bool result = BLL.ShoppingCartBll.Delete(shoppingCart);
             if (!result)
@@ -149,36 +149,44 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         //结算进入购买页
         public ActionResult BuyIt(string shoppingcartid = "")
         {
-            List<Model.ShoppingCart> outModel = null;
-            if (shoppingcartid != "")
+            try
             {
-                //1、更新购物车数量shopping
-                string[] strs = shoppingcartid.Remove(shoppingcartid.Length - 1).Split(',');
-                foreach (var item in strs)
+                List<Model.ShoppingCart> outModel = null;
+                if (shoppingcartid != "")
                 {
-                    Model.ShoppingCart entity = new Model.ShoppingCart()
+                    //1、更新购物车数量shopping
+                    string[] strs = shoppingcartid.Remove(shoppingcartid.Length - 1).Split(',');
+                    foreach (var item in strs)
                     {
-                        ID = Converter.TryToInt64(item.Split(':')[0]),
-                        StoreCount = Converter.TryToInt32(item.Split(':')[1]),
-                        ConsumerID = 1,//通过微信账号来判断该角色的顾客ID
-                        Type = 2
-                    };
-                    if (!BLL.ShoppingCartBll.UpdateStoreCount(entity))
-                    {
-                        Response.Write("<script>Model.message('网络不稳定，请稍后再试');<script>");
-                        return null;
+                        Model.ShoppingCart entity = new Model.ShoppingCart()
+                        {
+                            ID = Converter.TryToInt64(item.Split(':')[0]),
+                            StoreCount = Converter.TryToInt32(item.Split(':')[1]),
+                            ConsumerID = Identity.LoginConsumer.ID,//通过微信账号来判断该角色的顾客ID
+                            Type = 2
+                        };
+                        if (!BLL.ShoppingCartBll.UpdateStoreCount(entity))
+                        {
+                            Response.Write("<script>Model.message('网络不稳定，请稍后再试');<script>");
+                            return null;
+                        }
                     }
+                    //2、查当前购物车的信息返回前台
+                    string sids = string.Empty;
+                    foreach (var item in strs)
+                    {
+                        sids += item.Split(':')[0] + ",";
+                    }
+                    sids = sids.Remove(sids.Length - 1);
+                    outModel = BLL.ShoppingCartBll.GetShoppingInfoBySID(sids);
                 }
-                //2、查当前购物车的信息返回前台
-                string sids = string.Empty;
-                foreach (var item in strs)
-                {
-                    sids += item.Split(':')[0] + ",";
-                }
-                sids = sids.Remove(sids.Length - 1);
-                outModel = BLL.ShoppingCartBll.GetShoppingInfoBySID(sids);
+                return View(outModel);
             }
-            return View(outModel);
+            catch (Exception e)
+            {
+                BLL.BackgroundUserBll_log.AddLog("标记120", "支付时发生：" + e.Message, "0.0.0.0");
+                return null;
+            }
         }
     }
 }

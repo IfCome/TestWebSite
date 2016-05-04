@@ -42,7 +42,7 @@ namespace CrowdFundingShop.DAL
         #endregion
 
         #region 查询
-        public static List<Model.CategoryInfo> GetListByParentID(int parentID)
+        public static List<Model.CategoryInfo> GetListByParentID(int parentID, string type)
         {
             var sql = @"
                                 SELECT ID,ParentId,CategoryName 
@@ -51,14 +51,19 @@ namespace CrowdFundingShop.DAL
                             ";
             var parameters = new List<SqlParameter>();
             string sqlWhere = string.Empty;
-            if (parentID != 0)
+            if (type == "PC")
+                if (parentID != 0)
+                {
+                    sqlWhere = " AND ParentID = @ParentId";
+                    parameters.Add(new SqlParameter() { ParameterName = "@ParentId", Value = parentID });
+                }
+                else
+                {
+                    sqlWhere = " AND ParentID=0 AND ParentId IS NOT NULL";
+                }
+            else if (type == "WAP")
             {
-                sqlWhere = " AND ParentID = @ParentId";
-                parameters.Add(new SqlParameter() { ParameterName = "@ParentId", Value = parentID });
-            }
-            else
-            {
-                sqlWhere = " AND ParentId=0 AND ParentId IS NOT NULL";
+                sqlWhere = " AND ParentID !=0 AND ParentID IS NOT NULL";
             }
             sql = string.Format(sql, sqlWhere);
             DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());

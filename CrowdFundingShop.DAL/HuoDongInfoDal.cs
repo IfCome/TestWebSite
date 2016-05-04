@@ -46,7 +46,7 @@ namespace CrowdFundingShop.DAL
             parameters.Add(new SqlParameter() { ParameterName = "@State", Value = entity.State });
             parameters.Add(new SqlParameter() { ParameterName = "@CreateUser", Value = entity.CreateUser });
             parameters.Add(new SqlParameter() { ParameterName = "@FinishedTime", Value = entity.FinishedTime });
-            parameters.Add(new SqlParameter() { ParameterName = "@HuodongNumber", Value = 0 });
+            parameters.Add(new SqlParameter() { ParameterName = "@HuodongNumber", Value = entity.HuodongNumber });
             parameters.Add(new SqlParameter() { ParameterName = "@LuckDogID", Value = 0 });
             parameters.Add(new SqlParameter() { ParameterName = "@LuckNumber", Value = 0 });
             try

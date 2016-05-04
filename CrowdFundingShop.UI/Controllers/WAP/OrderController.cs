@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class OrderController : Controller
+    public class OrderController : OauthController
     {
         //
         // GET: /Order/
@@ -18,84 +18,92 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         }
         public ActionResult Pay(string huodongids = "", string storecount = "", string allprice = "", string zhongchoucount = "")
         {
-            long consumerid = 1;//微信接口获取;
-            bool reslut = false;//用来标记交易阶段的状态
-            var flagCount = 0;//标记位置
-            string msg = "OK";
             try
             {
-                if (huodongids != "")
+                long consumerid = Identity.LoginConsumer.ID;//微信接口获取;
+                bool reslut = false;//用来标记交易阶段的状态
+                var flagCount = 0;//标记位置
+                string msg = "OK";
+                try
                 {
-                    int total = 0;
-                    foreach (var item in storecount.Split(','))
+                    if (huodongids != "")
                     {
-                        total += Converter.TryToInt32(item);
-                    }
-                    //请求微信支付接口
-                    bool weixinresult = true;
-                    if (weixinresult)
-                    {
-                        huodongids = huodongids.Remove(huodongids.Length - 1);
-                        storecount = storecount.Remove(storecount.Length - 1);
-                        allprice = allprice.Remove(allprice.Length - 1);
-                        zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
-                        foreach (var item in huodongids.Split(','))
+                        int total = 0;
+                        foreach (var item in storecount.Split(','))
                         {
-                            int ThisOneStoreCount = Converter.TryToInt32(storecount.Split(',')[flagCount]);
-                            for (int i = 0; i < ThisOneStoreCount; i++)
+                            total += Converter.TryToInt32(item);
+                        }
+                        //请求微信支付接口
+                        bool weixinresult = true;
+                        if (weixinresult)
+                        {
+                            huodongids = huodongids.Remove(huodongids.Length - 1);
+                            storecount = storecount.Remove(storecount.Length - 1);
+                            allprice = allprice.Remove(allprice.Length - 1);
+                            zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
+                            foreach (var item in huodongids.Split(','))
                             {
-                                Model.OrderInfo entity = new Model.OrderInfo()
+                                int ThisOneStoreCount = Converter.TryToInt32(storecount.Split(',')[flagCount]);
+                                for (int i = 0; i < ThisOneStoreCount; i++)
                                 {
-                                    ConsumerID = consumerid,
-                                    HuodongID = Converter.TryToInt64(item),
-                                    Number = ShoppingNumber(Converter.TryToInt64(item), consumerid)
-                                };
-                                if (msg == "OK")
-                                {
-                                    reslut = BLL.OrderInfoBll.Add(entity);
-                                    if (!reslut)
+                                    Model.OrderInfo entity = new Model.OrderInfo()
                                     {
-                                        msg = "网络连接超时";
-                                        return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+                                        ConsumerID = consumerid,
+                                        HuodongID = Converter.TryToInt64(item),
+                                        Number = ShoppingNumber(Converter.TryToInt64(item), consumerid)
+                                    };
+                                    if (msg == "OK")
+                                    {
+                                        reslut = BLL.OrderInfoBll.Add(entity);
+                                        if (!reslut)
+                                        {
+                                            msg = "网络连接超时";
+                                            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+                                        }
                                     }
                                 }
+                                //买完之后删除购物车该商品
+                                Model.ShoppingCart scart = new Model.ShoppingCart()
+                                {
+                                    ConsumerID = Identity.LoginConsumer.ID,
+                                    HuoDongID = Converter.TryToInt32(item)
+                                };
+                                BLL.ShoppingCartBll.DeleteByHuoDongID(scart);
+                                flagCount++;
                             }
-                            //买完之后删除购物车该商品
-                            Model.ShoppingCart scart = new Model.ShoppingCart()
-                            {
-                                ConsumerID = 1,
-                                HuoDongID = Converter.TryToInt32(item)
-                            };
-                            BLL.ShoppingCartBll.DeleteByHuoDongID(scart);
-                            flagCount++;
                         }
-                    }
-                    //判断是不是该商品的最后最后一个购买者，确定开不开奖
-                    if (reslut)
-                    {
-                        flagCount = 0;
-                        huodongids = huodongids.Remove(huodongids.Length - 1);
-                        foreach (var item in huodongids.Split(','))
+                        //判断是不是该商品的最后最后一个购买者，确定开不开奖
+                        if (reslut)
                         {
-                            int maxnum = BLL.OrderInfoBll.GetMaxNumber(Converter.TryToInt32(item), consumerid) - 1000000;
-                            if (Converter.TryToInt32(allprice.Split(',')[flagCount]) == maxnum)
+                            flagCount = 0;
+                            huodongids = huodongids.Remove(huodongids.Length - 1);
+                            foreach (var item in huodongids.Split(','))
                             {
-                                KaiJiang(Converter.TryToInt32(allprice), Converter.TryToInt64(item));
+                                int maxnum = BLL.OrderInfoBll.GetMaxNumber(Converter.TryToInt32(item), consumerid) - 1000000;
+                                if (Converter.TryToInt32(allprice.Split(',')[flagCount]) == maxnum)
+                                {
+                                    KaiJiang(Converter.TryToInt32(allprice), Converter.TryToInt64(item));
+                                }
                             }
                         }
                     }
                 }
+                catch
+                {
+                    return Json(new { Message = "网络连接超时" }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
             }
-            catch
+            catch (Exception e)
             {
-                return Json(new { Message = "网络连接超时" }, JsonRequestBehavior.AllowGet);
+                BLL.BackgroundUserBll_log.AddLog("标记120", "支付时发生：" + e.Message, "0.0.0.0");
+                return null;
             }
-            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MyLuckInfo()
         {
-            long consumerid = 1;//微信验证获取得到
+            long consumerid = Identity.LoginConsumer.ID;//微信验证获取得到
             List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(2, consumerid, 1);
             return View();
         }
