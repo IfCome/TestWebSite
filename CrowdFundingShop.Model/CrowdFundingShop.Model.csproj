@@ -47,7 +47,9 @@
     <Compile Include="OrderInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BackgroundUserInfo.cs" />
+    <Compile Include="returnUnifyOrder.cs" />
     <Compile Include="ShoppingCart.cs" />
+    <Compile Include="UnifyOrder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

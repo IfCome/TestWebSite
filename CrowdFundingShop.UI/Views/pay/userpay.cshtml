@@ -1,0 +1,170 @@
+﻿@using mmlxViewModel
+@{
+    ViewBag.Title = "View1";
+    Layout = null;
+    WeixinApi.JsIncomeModel entity = ViewBag.entity as WeixinApi.JsIncomeModel;
+}
+
+<!DOCTYPE html>
+<!-- saved from url=(0046)https://secure.ctrip.com/webapp/payment2/index
+-->
+<html style="font-size: 24.1875px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>
+        来吧旅游，用户付款
+    </title>
+    <meta charset="utf-8">
+    <meta name="description" content="支付">
+    <meta name="keywords" content="支付">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="browsermode" content="application">
+    <meta name="x5-page-mode" content="app">
+    <link rel="stylesheet" href="/Content/css/paymain.css">
+    <link rel="stylesheet" href="/Content/css/pay.css">
+    <script type="text/javascript">
+        var useragent = navigator.userAgent.toLowerCase();
+        if (useragent.indexOf("micromessenger") <= 0) {
+            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=noauth&connect_redirect=1#wechat_redirect";
+        }
+    </script>
+</head>
+<body class="gray" onselectstart="return false">
+    <div id="headerview" style="height: 44px; visibility: visible;">
+        <div class="cm-header cm-header--no-right" id="ui-view-14" style="">
+            <span class=" cm-header-icon fl  js_back">
+                <i class="icon-back">
+                </i>
+            </span>
+            <h1 class="cm-page-title" style="padding-right:40px">
+                订单支付
+            </h1>
+        </div>
+    </div>
+    <div id="main">
+        <div class="main-frame">
+            <div class="main-viewport">
+                <div id="client_id_viewport_1_1454470873887" page-url="index" data-view-name="index"
+                     style="">
+                    <article class="cont_wrapnew" style="margin-top: 0px;">
+                        <div class="payable">
+                            <div class="p0_15">
+                                <div id="order_title" class="font16 ellips">
+                                    @ViewBag.body
+                                </div>
+                                <div id="sub_order_title" class="cgray ellips_line2 font13">
+                                    订单编号： @ViewBag.orderno
+                                </div>
+                            </div>
+                            <div class="relative plr_15 pay-c666 mb5" id="c_payment_index_amount">
+                                应付总额：
+                                <div style="display:inline">
+                                    <i class="corange">
+                                        ￥
+                                        <span class="ft18">
+                                            @Convert.ToInt32(ViewBag.total_fee)
+                                        </span>
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="c_pay_index_lpk" style="display: none;" class="mb10">
+                        </div>
+                        <div class="pay-c666 plr_15 mb5" id="order_leaveamount_p" style="display:none">
+                        </div>
+
+                        <ul id="paywaylist_ul" class="payicon mb10 pay_autowidth dsp_none" style="display: block;">
+                            @*<li id="c_payment_global_bankcard" data-defaultsort="3" data-sort="1">
+                                  <i class="pay_2 i_box">
+                                  </i>
+                                  <div class="r_content padtop9 padtop9">
+                                    银联支付
+                                  </div>
+                                </li>*@
+                            <li id="wxpay" data-defaultsort="1" data-sort="3"
+                                class="">
+                                <i class="pay_3 i_box">
+                                </i>
+                                <div class="r_content padtop9 pt3 padtop9">
+                                    <a href="javascript:void(0)">微信支付</a>
+                                    @* <em class="payicon_tips3">
+                                          推荐
+                                        </em>*@
+                                </div>
+                            </li>
+                            @*   <li id="c_payment_global_mobileali" data-defaultsort="4" data-sort="4"
+                                class="opacity_9">
+                                  <i class="pay_4 i_box">
+                                  </i>
+                                  <div class="r_content padtop9 padtop9">
+                                    支付宝支付
+                                  </div>
+                                </li>*@
+                        </ul>
+                    </article>
+                </div>
+            </div>
+            <div class="main-state">
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+    </div>
+</body>
+</html>
+<script src="/Content/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".js_back").click(function () {
+            window.history.go(-1);
+        });
+
+        $("#wxpay").click(function () {
+            callpay();
+        });
+    });
+</script>
+<script type="text/javascript">
+          function jsApiCall() {
+              WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                  "appId": "@entity.appId",
+                  "timeStamp": "@entity.timeStamp",
+                  "nonceStr": "@entity.nonceStr",
+                  "package": "@entity.package",
+                  "signType": "MD5",
+                  "paySign": "@entity.paySign"
+              }, function (res) {
+                  if (res.err_msg == "get_brand_wcpay_request:ok") {
+                      var btype = '@ViewBag.btype';
+                      if (btype == "cars")
+                          window.location = "http://m.laibaly.com/OrderManage/PayAction?id=@ViewBag.id&btype=@ViewBag.btype&ptype=wx&openid=@ViewBag.openid";
+                      else if (btype == "kanjia")
+                          window.location = "http://service.lbuxc.cn/kanjia/PayAction?id=@ViewBag.id&btype=@ViewBag.btype";
+                      else if (btype == "fanxian")
+                          window.location = "http://service.laibaly.com/pay/PayAction?id=@ViewBag.id&btype=@ViewBag.btype";
+                  } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                      alert("您取消了支付!");
+                  } else {
+                      alert(res.err_msg);
+                      alert("您支付失败了!");
+                  }
+              });
+          };
+          function callpay() {
+              if (typeof WeixinJSBridge == "undefined") {
+                  if (document.addEventListener) {
+                      document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                  }
+                  else if (document.attachEvent) {
+                      document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                      document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                  }
+              }
+              else {
+                  jsApiCall();
+              }
+          };
+</script>

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="FileUpToImg.cs" />
+    <Compile Include="JsIncomHelp.cs" />
     <Compile Include="StringExtension.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Identity.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Security.cs" />
     <Compile Include="SqlHelper.cs" />
     <Compile Include="UploadImageFolderType.cs" />
+    <Compile Include="WxIncomeHelp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CrowdFundingShop.Model\CrowdFundingShop.Model.csproj">

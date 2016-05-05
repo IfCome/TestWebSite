@@ -258,5 +258,10 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             return View("~/Views/GoodsList/List.cshtml");
         }
         #endregion
+
+
+        #region 支付相关
+
+        #endregion
     }
 }
