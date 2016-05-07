@@ -138,6 +138,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="File\XMLToken.xml" />
     <Content Include="Global.asax" />
     <Content Include="images\UserIcons\2016032111151815.png" />
     <Content Include="images\UserIcons\2016032111151815_t.png" />

@@ -39,8 +39,8 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 }
                 else
                 {
-                    return null;
                     //具体逻辑  用户信息写入数据库并且跳转至商品页
+                    return View("~/Views/GoodsList/List.cshtml");
                 }
             }
             catch (Exception e)
@@ -311,60 +311,60 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         /// <param name="AppID"></param>
         /// <param name="AppSecret"></param>
         /// <returns></returns>
-        public static string IsExistAccess_Token(string AppID, string AppSecret, out DateTime? expiresDate)
-        {
-            expiresDate = null;
-            string Token = string.Empty;
-            string ExpiresDateStr = string.Empty;
-            string expires_in = string.Empty;
-            try
-            {
+        //public static string IsExistAccess_Token(string AppID, string AppSecret, out DateTime? expiresDate)
+        //{
+        //    expiresDate = null;
+        //    string Token = string.Empty;
+        //    string ExpiresDateStr = string.Empty;
+        //    string expires_in = string.Empty;
+        //    try
+        //    {
 
-                // 读取XML文件中的数据，并显示出来 ，注意文件路径
-                string filepath = HttpContext.Current.Server.MapPath("~/configs/CommonVariable.xml");
-                StreamReader str = new StreamReader(filepath, System.Text.Encoding.UTF8);
-                XmlDocument xml = new XmlDocument();
-                xml.Load(str);
-                str.Close();
-                str.Dispose();
-                Token = xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token").InnerText;
-                ExpiresDateStr = xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token_Expires").InnerText;
+        //        // 读取XML文件中的数据，并显示出来 ，注意文件路径
+        //        string filepath = HttpContext.Current.Server.MapPath("~/configs/CommonVariable.xml");
+        //        StreamReader str = new StreamReader(filepath, System.Text.Encoding.UTF8);
+        //        XmlDocument xml = new XmlDocument();
+        //        xml.Load(str);
+        //        str.Close();
+        //        str.Dispose();
+        //        Token = xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token").InnerText;
+        //        ExpiresDateStr = xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token_Expires").InnerText;
 
-                //过期时间为空，初始化数据
-                if (!string.IsNullOrEmpty(ExpiresDateStr))
-                {
-                    DateTime ExpiresDate = Convert.ToDateTime(ExpiresDateStr);
-                    //是否过期,过期就需要重新获取数据并更新
-                    if (DateTime.Compare(DateTime.Now, ExpiresDate) > 0)
-                    {
-                        Token = GetAccessToken(AppID, AppSecret, out expires_in);
-                        DateTime _ExpiresDate = DateTime.Now;
-                        xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token").InnerText = Token;
-                        _ExpiresDate = _ExpiresDate.AddSeconds(int.Parse(expires_in) - 200);//int.Parse(expires_in) - 200
-                        expiresDate = Convert.ToDateTime(_ExpiresDate);
-                        xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token_Expires").InnerText = _ExpiresDate.ToString();
-                        CommonMethod.WriteTo_Txt("Save");
-                        xml.Save(filepath);
-                    }
-                }
-                else
-                {
-                    Token = GetAccessToken(AppID, AppSecret, out expires_in);
-                    CommonMethod.WriteTo_Txt("Save" + Token);
-                    DateTime _ExpiresDate = DateTime.Now;
-                    xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token").InnerText = Token;
-                    _ExpiresDate = _ExpiresDate.AddSeconds(int.Parse(expires_in) - 200);//
-                    expiresDate = Convert.ToDateTime(_ExpiresDate);
-                    xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token_Expires").InnerText = _ExpiresDate.ToString();
-                    xml.Save(filepath);
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonMethod.WriteTo_Txt("IsExistAccess_Token:" + ex.Message);
-            }
-            return Token;
-        }
+        //        //过期时间为空，初始化数据
+        //        if (!string.IsNullOrEmpty(ExpiresDateStr))
+        //        {
+        //            DateTime ExpiresDate = Convert.ToDateTime(ExpiresDateStr);
+        //            //是否过期,过期就需要重新获取数据并更新
+        //            if (DateTime.Compare(DateTime.Now, ExpiresDate) > 0)
+        //            {
+        //                Token = GetAccessToken(AppID, AppSecret, out expires_in);
+        //                DateTime _ExpiresDate = DateTime.Now;
+        //                xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token").InnerText = Token;
+        //                _ExpiresDate = _ExpiresDate.AddSeconds(int.Parse(expires_in) - 200);//int.Parse(expires_in) - 200
+        //                expiresDate = Convert.ToDateTime(_ExpiresDate);
+        //                xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token_Expires").InnerText = _ExpiresDate.ToString();
+        //                CommonMethod.WriteTo_Txt("Save");
+        //                xml.Save(filepath);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Token = GetAccessToken(AppID, AppSecret, out expires_in);
+        //            CommonMethod.WriteTo_Txt("Save" + Token);
+        //            DateTime _ExpiresDate = DateTime.Now;
+        //            xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token").InnerText = Token;
+        //            _ExpiresDate = _ExpiresDate.AddSeconds(int.Parse(expires_in) - 200);//
+        //            expiresDate = Convert.ToDateTime(_ExpiresDate);
+        //            xml.SelectSingleNode("Variable").SelectSingleNode("Wx_Access_Token_Expires").InnerText = _ExpiresDate.ToString();
+        //            xml.Save(filepath);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommonMethod.WriteTo_Txt("IsExistAccess_Token:" + ex.Message);
+        //    }
+        //    return Token;
+        //}
 
     }
 }
