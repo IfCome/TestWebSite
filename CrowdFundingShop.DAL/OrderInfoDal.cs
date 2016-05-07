@@ -163,7 +163,7 @@ namespace CrowdFundingShop.DAL
         //查当前已有号码最大的
         public static int GetMaxNumber(long huodongid, long consumerid)
         {
-            string sql = @"SELECT MAX(Number) from OrderInfo WHERE HuodongID=@HuoDongID AND ConsumerID=@ConsumerID";
+            string sql = @"SELECT MAX(Number) from OrderInfo WHERE HuodongID=@HuoDongID";
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
             parameters.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = consumerid });

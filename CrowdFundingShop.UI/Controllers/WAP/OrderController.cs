@@ -18,6 +18,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         }
         public ActionResult Pay(string huodongids = "", string storecount = "", string allprice = "", string zhongchoucount = "")
         {
+            BLL.BackgroundUserBll_log.AddLog("支付错误", "进来了", "0.0.0.0");
             try
             {
                 long consumerid = Identity.LoginConsumer.ID;//微信接口获取;
@@ -28,8 +29,12 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 {
                     if (huodongids != "")
                     {
+                        string[] huodongstrs = huodongids.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] storecountstrs = storecount.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] zhongchoucountstrs = zhongchoucount.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] allpricestrs = allprice.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                         int total = 0;
-                        foreach (var item in storecount.Split(','))
+                        foreach (var item in storecountstrs)
                         {
                             total += Converter.TryToInt32(item);
                         }
@@ -41,9 +46,9 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                             storecount = storecount.Remove(storecount.Length - 1);
                             allprice = allprice.Remove(allprice.Length - 1);
                             zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
-                            foreach (var item in huodongids.Split(','))
+                            foreach (var item in huodongstrs)
                             {
-                                int ThisOneStoreCount = Converter.TryToInt32(storecount.Split(',')[flagCount]);
+                                int ThisOneStoreCount = Converter.TryToInt32(storecountstrs[flagCount]);
                                 for (int i = 0; i < ThisOneStoreCount; i++)
                                 {
                                     Model.OrderInfo entity = new Model.OrderInfo()
@@ -76,13 +81,12 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                         if (reslut)
                         {
                             flagCount = 0;
-                            huodongids = huodongids.Remove(huodongids.Length - 1);
-                            foreach (var item in huodongids.Split(','))
+                            foreach (var item in huodongstrs)
                             {
                                 int maxnum = BLL.OrderInfoBll.GetMaxNumber(Converter.TryToInt32(item), consumerid) - 1000000;
-                                if (Converter.TryToInt32(allprice.Split(',')[flagCount]) == maxnum)
+                                if (Converter.TryToInt32(allpricestrs[flagCount]) == maxnum)
                                 {
-                                    KaiJiang(Converter.TryToInt32(allprice), Converter.TryToInt64(item));
+                                    KaiJiang(Converter.TryToInt32(allpricestrs[flagCount]), Converter.TryToInt64(item));
                                 }
                             }
                         }
