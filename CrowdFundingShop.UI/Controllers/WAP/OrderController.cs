@@ -88,6 +88,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                                 {
                                     KaiJiang(Converter.TryToInt32(allpricestrs[flagCount]), Converter.TryToInt64(item));
                                 }
+                                flagCount++;
                             }
                         }
                     }
