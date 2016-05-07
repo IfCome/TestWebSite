@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CrowdFundingShop.Utility;
 
 namespace CrowdFundingShop.BLL
 {
@@ -60,6 +61,39 @@ namespace CrowdFundingShop.BLL
         public static List<Model.OrderInfo> GetDrawnPrizeUser(long huodongid)
         {
             return DAL.OrderInfoDal.GetDrawnPrizeUser(huodongid);
+        }
+
+        public static long GetTop10OrderTimeSum(long huodongid, int allPrice)
+        {
+            Random rd = new Random();
+            long result = (rd.Next(0, allPrice) + 1000001) * 10; // 默认随机取一个值*10
+            List<DateTime> timeList = DAL.OrderInfoDal.GetTop10OrderTimeList(huodongid);
+            if (timeList != null && timeList.Count > 0)
+            {
+                result = 0;
+                foreach (DateTime item in timeList)
+                {
+                    result += Converter.TryToInt64(item.ToString("ddHHmmss"));
+                }
+            }
+            return result;
+        }
+
+
+        public static long GetLast10OrderTimeSum(long huodongid, int allPrice)
+        {
+            Random rd = new Random();
+            long result = (rd.Next(0, allPrice) + 1000001) * 10; // 默认随机取一个值*10
+            List<DateTime> timeList = DAL.OrderInfoDal.GetLast10OrderTimeList(huodongid);
+            if (timeList != null && timeList.Count > 0)
+            {
+                result = 0;
+                foreach (DateTime item in timeList)
+                {
+                    result += Converter.TryToInt64(item.ToString("ddHHmmss"));
+                }
+            }
+            return result;
         }
     }
 }
