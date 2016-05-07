@@ -125,20 +125,29 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             bool result = false;
             int lucknumber = 0;
-            int sum = 0;
-            string randomS = string.Empty;
-            int x = 0;
-            for (int i = 0; i < 20; i++)
-            {
-                Random random = new Random();
-                x = random.Next(1000000, 1000000 + allPrice + 1);
-                sum += x;
-                randomS += x + ",";
-            }
-            //记日志（存活动ID和random以便查询）
-            BLL.OrderInfoBll.AddRandom(randomS, huodongid);
+            //int sum = 0;
+            //string randomS = string.Empty;
+            //int x = 0;
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    Random random = new Random();
+            //    x = random.Next(1000000, 1000000 + allPrice + 1);
+            //    sum += x;
+            //    randomS += x + ",";
+            //}
+            ////记日志（存活动ID和random以便查询）
+            //BLL.OrderInfoBll.AddRandom(randomS, huodongid);
             //产生幸运号码后查出获奖者并更新活动表
-            lucknumber = sum % (allPrice + 1);
+            //lucknumber = sum % (allPrice + 1);
+
+
+            // 开奖机制 (A+B)%商品总价+1000001
+            // A=前十笔订单下单时间数字之和
+            // B=最后十笔下单时间数字之和
+            long dataA = BLL.OrderInfoBll.GetTop10OrderTimeSum(huodongid, allPrice);
+            long dataB = BLL.OrderInfoBll.GetLast10OrderTimeSum(huodongid, allPrice);
+            lucknumber = (int)((dataA + dataB) % allPrice) + 1000000;
+
             Model.OrderInfo orderinfo = BLL.ConsumerInfoBll.GetByNumber(lucknumber, huodongid);
             Model.HuoDongInfo huodonginfo = new Model.HuoDongInfo()
             {

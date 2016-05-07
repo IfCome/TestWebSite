@@ -26,7 +26,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             return View();
         }
         //获取商品列表
-        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, int ishot = 0, int jiexiaotype = 0, string keyWords = "",string huoDongState = "")
+        public ActionResult GetGoodsList(int pageSize, int currentPage, int category = 0, int ishot = 0, int jiexiaotype = 0, string keyWords = "", string huoDongState = "")
         {
             List<Model.GoodsBaseInfo> goodsInfoList = new List<Model.GoodsBaseInfo>();
             int allCount = 0;
@@ -58,7 +58,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
-            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID,"WAP");
+            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID, "WAP");
             if (categoryInfoList != null)
             {
                 return Json(new
@@ -97,7 +97,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 Type = 1
             };
             #region 先查是否存在，是则累加，否则新增记录
-            bool isExist = BLL.ShoppingCartBll.IsExistShoppingCartByHuoDongID(HuoDongID);
+            bool isExist = BLL.ShoppingCartBll.IsExistShoppingCartByHuoDongID(HuoDongID, Identity.LoginConsumer.ID);
             if (isExist)
             {
                 result = BLL.ShoppingCartBll.UpdateStoreCount(shoppingCart);

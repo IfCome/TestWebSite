@@ -23,13 +23,13 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.ShoppingCartDal.GetShoppingInfoByID(id);
         }
-        public static List<Model.ShoppingCart> GetShoppingInfoBySID(string  sids)
+        public static List<Model.ShoppingCart> GetShoppingInfoBySID(string sids)
         {
             return DAL.ShoppingCartDal.GetShoppingInfoBySID(sids);
         }
-        public static bool IsExistShoppingCartByHuoDongID(long huodongid)
+        public static bool IsExistShoppingCartByHuoDongID(long huodongid, long consumerID)
         {
-            return DAL.ShoppingCartDal.IsExistShoppingCartByHuoDongID(huodongid);
+            return DAL.ShoppingCartDal.IsExistShoppingCartByHuoDongID(huodongid, consumerID);
         }
         public static bool UpdateStoreCount(Model.ShoppingCart entity)
         {
