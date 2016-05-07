@@ -147,12 +147,13 @@ namespace CrowdFundingShop.DAL
             return null;
         }
         //根据活动id判断是否已经存在这样商品
-        public static bool IsExistShoppingCartByHuoDongID(long huodongid)
+        public static bool IsExistShoppingCartByHuoDongID(long huodongid, long consumerID)
         {
-            var sql = @"select count(1) from shoppingcart where huodongid=@HuoDongID";
+            var sql = @"select count(1) from shoppingcart where huodongid=@HuoDongID AND ConsumerID=@ConsumerID";
             var parameters = new List<SqlParameter>();
             sql = string.Format(sql);
             parameters.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
+            parameters.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = consumerID });
             DataTable dataTable = SqlHelper.ExecuteDataTable(sql, parameters.ToArray());
             if (dataTable.Rows.Count > 0)
             {
