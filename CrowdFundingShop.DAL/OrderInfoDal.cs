@@ -272,6 +272,43 @@ namespace CrowdFundingShop.DAL
             }
             return null;
         }
+
+        public static List<DateTime> GetTop10OrderTimeList(long huodongid)
+        {
+            string sql = @"
+                            SELECT
+	                            CreateTime
+                            FROM OrderInfo
+                            WHERE huodongid = @HuoDongID
+                            ORDER BY CreateTime ASC";
+            List<SqlParameter> parameter = new List<SqlParameter>();
+            parameter.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
+            DataTable dataTable = new DataTable();
+            dataTable = SqlHelper.ExecuteDataTable(sql, parameter.ToArray());
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                return dataTable.AsEnumerable().Select(row => Converter.TryToDateTime(row["CreateTime"], DateTime.MinValue)).ToList();
+            }
+            return null;
+        }
+        public static List<DateTime> GetLast10OrderTimeList(long huodongid)
+        {
+            string sql = @"
+                            SELECT
+	                            CreateTime
+                            FROM OrderInfo
+                            WHERE huodongid = @HuoDongID
+                            ORDER BY CreateTime DESC";
+            List<SqlParameter> parameter = new List<SqlParameter>();
+            parameter.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
+            DataTable dataTable = new DataTable();
+            dataTable = SqlHelper.ExecuteDataTable(sql, parameter.ToArray());
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                return dataTable.AsEnumerable().Select(row => Converter.TryToDateTime(row["CreateTime"], DateTime.MinValue)).ToList();
+            }
+            return null;
+        }
         #endregion
     }
 }
