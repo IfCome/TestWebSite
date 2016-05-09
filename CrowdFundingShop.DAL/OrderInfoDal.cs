@@ -53,7 +53,7 @@ namespace CrowdFundingShop.DAL
                          VALUES
                                (
                                     @RandomNum
-                                    ,@HuodongID     
+                                    ,@HuodongID    
                                )";
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter() { ParameterName = "@RandomNum", Value = randomnum });
@@ -75,7 +75,7 @@ namespace CrowdFundingShop.DAL
         #region 查
         public static List<Model.GoodsBaseInfo> GetList(int type, string huodongstate, long consumerid, int isMine)
         {
-            string sql = @"SELECT 
+            string sql = @"SELECT
                                         G.ID
                                         ,G.GoodsName
                                         ,G.Describe
@@ -163,7 +163,7 @@ namespace CrowdFundingShop.DAL
         //查当前已有号码最大的
         public static int GetMaxNumber(long huodongid, long consumerid)
         {
-            string sql = @"SELECT MAX(Number) from OrderInfo WHERE HuodongID=@HuoDongID";
+            string sql = @"SELECT MAX(Number) from OrderInfo WHERE HuodongID=@HuoDongID AND ConsumerID=@ConsumerID";
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
             parameters.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = consumerid });
@@ -178,25 +178,25 @@ namespace CrowdFundingShop.DAL
         {
             string sql = @"WITH A AS
                                     (
-	                                    SELECT COUNT(1) AS 'JiJiangJieXiao' FROM OrderInfo O join HuodongInfo H
-	                                    ON O.HuodongID=H.ID
+                                                    SELECT COUNT(1) AS 'JiJiangJieXiao' FROM OrderInfo O join HuodongInfo H
+                                                    ON O.HuodongID=H.ID
                                         WHERE H.State=10 AND ConsumerID=@ConsumerID
                                     )
                                     , B AS
-                                    ( 
+                                    (
                                        SELECT COUNT(1) AS 'YiJieXiao' FROM OrderInfo O join HuodongInfo H
-	                                    ON O.HuodongID=H.ID
+                                                    ON O.HuodongID=H.ID
                                         WHERE H.State=30 AND ConsumerID=@ConsumerID
                                     )
                                     ,C AS
                                     (
-	                                    SELECT SUM(StoreCount) AS 'CartCount' FROM ShoppingCart S JOIN HuodongInfo H
-	                                    ON S.HuodongID=H.ID
-	                                    WHERE ConsumerID=@ConsumerID AND STATE=10
+                                                    SELECT SUM(StoreCount) AS 'CartCount' FROM ShoppingCart S JOIN HuodongInfo H
+                                                    ON S.HuodongID=H.ID
+                                                    WHERE ConsumerID=@ConsumerID AND STATE=10
                                     )
                                     ,D AS
                                     (
-	                                    SELECT ID,WeiXinAccount,Nickname,Phone,HeadIcon FROM ConsumerInfo WHERE ID=@ConsumerID
+                                                    SELECT ID,WeiXinAccount,Nickname,Phone,HeadIcon FROM ConsumerInfo WHERE ID=@ConsumerID
                                     )
                                     SELECT * FROM A,B,C,D";
             List<SqlParameter> parameter = new List<SqlParameter>();
@@ -223,7 +223,8 @@ namespace CrowdFundingShop.DAL
         //查这个活动下的获奖信息
         public static List<Model.OrderInfo> GetDrawnPrizeUser(long huodongid)
         {
-            string sql = @"SELECT 
+            string sql = @"SELECT
+                                     C.ID AS ConsumerID
                                      Nickname,
                                      Max(CreateTime) AS 'CreateTime',
                                      COUNT(1) AS 'StoreCount'
@@ -240,6 +241,7 @@ namespace CrowdFundingShop.DAL
             {
                 return dataTable.AsEnumerable().Select(row => new Model.OrderInfo()
                 {
+                    ID = Converter.TryToInt32(row["ConsumerID"], 0),
                     NickName = Converter.TryToString(row["NickName"], ""),
                     CreateTime = Converter.TryToDateTime(row["CreateTime"], DateTime.MinValue),
                     StoreCount = Converter.TryToInt32(row["StoreCount"], 0),
@@ -247,43 +249,29 @@ namespace CrowdFundingShop.DAL
             }
             return null;
         }
-        #endregion
 
-        public static List<DateTime> GetTop10OrderTimeList(long huodongid)
+
+        //查某个人的信息
+        public static List<Model.OrderInfo> GetNumberByHuoDongAndUser(long huodongid, long consumerid)
         {
-            string sql = @"
-                            SELECT
-	                            CreateTime
-                            FROM OrderInfo
-                            WHERE huodongid = @HuoDongID
-                            ORDER BY CreateTime ASC";
+            string sql = @"SELECT
+                                      Number
+                                   FROM OrderInfo
+                                   WHERE HuodongID=@HuodongID AND ConsumerID=@ConsumerID";
             List<SqlParameter> parameter = new List<SqlParameter>();
             parameter.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
+            parameter.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = consumerid });
             DataTable dataTable = new DataTable();
             dataTable = SqlHelper.ExecuteDataTable(sql, parameter.ToArray());
             if (dataTable != null && dataTable.Rows.Count > 0)
             {
-                return dataTable.AsEnumerable().Select(row => Converter.TryToDateTime(row["CreateTime"], DateTime.MinValue)).ToList();
+                return dataTable.AsEnumerable().Select(row => new Model.OrderInfo()
+                {
+                    Number = Converter.TryToInt32(row["Number"], 0),
+                }).ToList();
             }
             return null;
         }
-        public static List<DateTime> GetLast10OrderTimeList(long huodongid)
-        {
-            string sql = @"
-                            SELECT
-	                            CreateTime
-                            FROM OrderInfo
-                            WHERE huodongid = @HuoDongID
-                            ORDER BY CreateTime DESC";
-            List<SqlParameter> parameter = new List<SqlParameter>();
-            parameter.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });
-            DataTable dataTable = new DataTable();
-            dataTable = SqlHelper.ExecuteDataTable(sql, parameter.ToArray());
-            if (dataTable != null && dataTable.Rows.Count > 0)
-            {
-                return dataTable.AsEnumerable().Select(row => Converter.TryToDateTime(row["CreateTime"], DateTime.MinValue)).ToList();
-            }
-            return null;
-        }
+        #endregion
     }
 }

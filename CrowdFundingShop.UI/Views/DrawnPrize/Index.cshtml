@@ -33,8 +33,9 @@
         <div class="m_header">
             <p>
                 <a class="bt_prev" href="javascript:window.history.back();void(0);">
-                    <span class="prev rotate45"></span>
-                    <span class="prev rotate135"></span>
+                    <span class="prev rotate45">
+                        </ span>
+                        <span class="prev rotate135"></ span>
                 </a>
             </p>
             <h1 class="ellipsis bt_title">
@@ -48,15 +49,15 @@
                     <div class="m_order" id="order_2016042421212875788">
                         <ul class="m_list m_list_top_line bg_white m_order_list">
                             <li class="link">
-                                <a style="font-size:30px;background-color:rgb(255,80,0);text-align:center;color:white">
-                                    <div style="height:80px;line-height:80px;">本期中奖号码：<span style="font-family: Impact;">10004560</span></div>
+                                <a style=" font-size:20px ;background-color: rgb(255,80,0);text-align :center; color:white">
+                                    <div style=" height:80px ;line-height: 80px;"> 本期中奖号码： <span style="font-family : Impact; ">@Model.LuckNumber</span></div>
                                 </a>
                             </li>
                             <li class="link">
-                                <a style="font-size:14px;">
-                                    <div style="width:150px;float:left;">购买时间</div>
-                                    <div style="width:130px;float:left">中奖者昵称</div>
-                                    <div>购买数量</div>
+                                <a style=" font-size:14px ;">
+                                    <div style=" width:150px ;float:left;">购买时间 </div>
+                                    <div style=" width:130px ;float:left">中奖者昵称 </div>
+                                    <div> 购买数量</div>
                                 </a>
                             </li>
                             @if (Model.LIstOrderInfo != null)
@@ -64,10 +65,11 @@
                                 foreach (var item in Model.LIstOrderInfo)
                                 {
                                     <li class="link">
-                                        <a style="font-size:14px;background-color:@(item.Number==Model.LuckNumber?"rgb(255,80,0)":"white");color:@(item.Number == Model.LuckNumber ? "white" : "black")">
-                                            <div style="width:150px;float:left">@item.CreateTime</div>
-                                            <div style="width:130px;float:left">@(item.NickName.Length > 8 ? item.NickName.Remove(7) + "..." : item.NickName)</div>
-                                            <div>@item.StoreCount</div>
+                                        <a style="font-size:14px;background-color:@( item.Numbers.Contains(Model.LuckNumber.ToString()) ? "rgb(255,80,0)" : "white") ;color:@(item.Numbers.Contains(Model.LuckNumber.ToString()) ? "white" : "black")">
+                                            <div style=" width:150px ;float:left">
+                                                @item.CreateTime</ div>
+                                                <div style=" width:130px ;float:left">@( item.NickName.Length > 8 ? item.NickName.Remove(7) + "..." : item.NickName) </div>
+                                                <div> @item.StoreCount </div>
                                         </a>
                                     </li>
                                 }
@@ -77,7 +79,7 @@
                 }
                 else
                 {
-                    <p style="text-align:center;font-size:14px;margin-top:150px">
+                    <p style=" text-align:center ;font-size: 14px;margin-top :150px">
                         当前商品还未有人购买
                     </p>
                 }
@@ -86,3 +88,4 @@
     </div>
 </body>
 </html>
+

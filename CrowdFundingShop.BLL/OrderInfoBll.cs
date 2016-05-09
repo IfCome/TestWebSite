@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CrowdFundingShop.Utility;
 
 namespace CrowdFundingShop.BLL
 {
@@ -63,37 +62,20 @@ namespace CrowdFundingShop.BLL
             return DAL.OrderInfoDal.GetDrawnPrizeUser(huodongid);
         }
 
-        public static long GetTop10OrderTimeSum(long huodongid, int allPrice)
+        public static string GetNumberByHuoDongAndUser(long huodongid, long consumerid)
         {
-            Random rd = new Random();
-            long result = (rd.Next(0, allPrice) + 1000001) * 10; // 默认随机取一个值*10
-            List<DateTime> timeList = DAL.OrderInfoDal.GetTop10OrderTimeList(huodongid);
-            if (timeList != null && timeList.Count > 0)
+            string str = string.Empty;
+            List<Model.OrderInfo> list = DAL.OrderInfoDal.GetNumberByHuoDongAndUser(huodongid, consumerid);
+            if (list != null)
             {
-                result = 0;
-                foreach (DateTime item in timeList)
+                foreach (var item in list)
                 {
-                    result += Converter.TryToInt64(item.ToString("ddHHmmss"));
+                    str += item.Number + ",";
                 }
             }
-            return result;
-        }
-
-
-        public static long GetLast10OrderTimeSum(long huodongid, int allPrice)
-        {
-            Random rd = new Random();
-            long result = (rd.Next(0, allPrice) + 1000001) * 10; // 默认随机取一个值*10
-            List<DateTime> timeList = DAL.OrderInfoDal.GetLast10OrderTimeList(huodongid);
-            if (timeList != null && timeList.Count > 0)
-            {
-                result = 0;
-                foreach (DateTime item in timeList)
-                {
-                    result += Converter.TryToInt64(item.ToString("ddHHmmss"));
-                }
-            }
-            return result;
+            str = string.IsNullOrEmpty(str) ? "" : str.Remove(str.Length - 1);
+            return str;
+            //return DAL.OrderInfoDal.GetNumberByHuoDongAndUser(huodongid, consumerid);
         }
     }
 }

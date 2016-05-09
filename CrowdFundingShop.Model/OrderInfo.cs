@@ -17,5 +17,7 @@ namespace CrowdFundingShop.Model
         public int CartCount { get; set; }
         public int StoreCount { get; set; }
         public string NickName { get; set; }
+
+        public string Numbers { get; set; }
     }
 }

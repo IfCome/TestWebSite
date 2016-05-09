@@ -15,6 +15,13 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             List<Model.OrderInfo> listorder = BLL.OrderInfoBll.GetDrawnPrizeUser(huodongid);
             Model.HuoDongInfo outModel = BLL.HuoDongInfoBll.GetLuckNumberByID(huodongid);
+            if (listorder != null)
+            {
+                foreach (var item in listorder)
+                {
+                    item.Numbers = BLL.OrderInfoBll.GetNumberByHuoDongAndUser(huodongid, item.ID);
+                }
+            }
             outModel.LIstOrderInfo = listorder;
             return View(outModel);
         }
