@@ -224,14 +224,14 @@ namespace CrowdFundingShop.DAL
         public static List<Model.OrderInfo> GetDrawnPrizeUser(long huodongid)
         {
             string sql = @"SELECT
-                                     C.ID AS ConsumerID
+                                     C.ID AS ConsumerID,
                                      Nickname,
                                      Max(CreateTime) AS 'CreateTime',
                                      COUNT(1) AS 'StoreCount'
                                  FROM ORDERINFO O JOIN CONSUMERINFO C
                                  ON O.ConsumerID=C.ID
                                  WHERE HuodongID=@HuoDongID
-                                 GROUP BY Nickname,HuodongID
+                                 GROUP BY C.ID,Nickname,HuodongID
                                  ORDER BY StoreCount DESC";
             List<SqlParameter> parameter = new List<SqlParameter>();
             parameter.Add(new SqlParameter() { ParameterName = "@HuoDongID", Value = huodongid });

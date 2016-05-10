@@ -67,9 +67,10 @@
                                     <li class="link">
                                         <a style="font-size:14px;background-color:@( item.Numbers.Contains(Model.LuckNumber.ToString()) ? "rgb(255,80,0)" : "white") ;color:@(item.Numbers.Contains(Model.LuckNumber.ToString()) ? "white" : "black")">
                                             <div style=" width:150px ;float:left">
-                                                @item.CreateTime</ div>
-                                                <div style=" width:130px ;float:left">@( item.NickName.Length > 8 ? item.NickName.Remove(7) + "..." : item.NickName) </div>
-                                                <div> @item.StoreCount </div>
+                                                @item.CreateTime
+                                            </div>
+                                            <div style=" width:130px ;float:left">@( item.NickName.Length > 8 ? item.NickName.Remove(7) + "..." : item.NickName) </div>
+                                            <div> @item.StoreCount </div>
                                         </a>
                                     </li>
                                 }
