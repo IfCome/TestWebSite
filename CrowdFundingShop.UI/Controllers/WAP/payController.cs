@@ -20,16 +20,16 @@
 //    public class payController : OauthController
 //    {
 
-//        /// <summary>
-//        /// 公共确认订单
-//        /// </summary>
-//        /// <returns></returns>
-//        public ActionResult NotarizePayOrder()
-//        {
-//            string id = Request.QueryString["id"];
-//            string url = Request.QueryString["url"];
-//            return Redirect(ViewBag.url);
-//        }
+//        //        /// <summary>
+//        //        /// 公共确认订单
+//        //        /// </summary>
+//        //        /// <returns></returns>
+//        //        public ActionResult NotarizePayOrder()
+//        //        {
+//        //            string id = Request.QueryString["id"];
+//        //            string url = Request.QueryString["url"];
+//        //            return Redirect(ViewBag.url);
+//        //        }
 
 
 //        /// <summary>
@@ -47,37 +47,6 @@
 //                string body = null;
 //                int total_fee = 0;
 //                string orderno = "";
-//                ViewModelOrder model = new ViewModelOrder();
-//                if (btype != "kanjia")
-//                {
-//                    using (OrderServiceClient oclient = new OrderServiceClient())
-//                    {
-//                        model = oclient.GetById(Convert.ToInt32(id));
-//                    }
-//                    //CommonMethod.WriteTo_Txt("id" + id);
-//                    if (model != null)
-//                    {
-//                        //CommonMethod.WriteTo_Txt("model" + model.TotalFee);
-//                        total_fee = Convert.ToInt32(model.TotalFee) * 100;
-//                        body = model.ProductName;
-//                        orderno = model.OrderNo;
-//                    }
-//                }
-//                else
-//                {
-//                    WinningInfoViewModel wmodel = new WinningInfoViewModel();
-//                    using (WinningInfoService wclient = new WinningInfoService())
-//                    {
-//                        wmodel = wclient.Get(Convert.ToInt32(id));
-//                        if (wmodel != null)
-//                        {
-//                            total_fee = Convert.ToInt32(wmodel.WinningMoney) * 100;
-//                            body = wmodel.WinningName;
-//                            orderno = wmodel.scene_str;
-//                        }
-//                    }
-//                }
-
 
 //                #region 向微信下订单
 //                WxIncomeHelp client = new WxIncomeHelp();
@@ -106,7 +75,7 @@
 //                    JsIncomeModel q = new JsIncomeModel();
 //                    q.appId = ConfigurationManager.AppSettings["AppID"].ToString();
 //                    q.timeStamp = GetDateTimeStamp();
-//                    q.nonceStr = CommonMethod.GetRandCode(32);
+//                    q.nonceStr = GetRandCode(32);
 //                    q.package = "prepay_id=" + resultEntity.prepay_id;
 //                    q.signType = "MD5";
 //                    q.paySign = new JsIncomHelp().DoDataForsign(q, key);
@@ -274,7 +243,7 @@
 //            }
 //            catch (Exception ex)
 //            {
-//                CommonMethod.WriteTo_Txt("notify" + ex.Message);
+//                //CommonMethod.WriteTo_Txt("notify" + ex.Message);
 //            }
 //            return Content("success");
 //        }
@@ -286,38 +255,39 @@
 //            Response.End();
 //            return View();
 //        }
-
-//        /// <summary>
-//        /// 根据订单Id获取订单信息
-//        /// 根据业务类型获取返回的配置好的返回地址
-//        /// </summary>
-//        /// <param name="id">订单编号</param>
-//        /// <param name="btype">业务类型</param>
-//        /// <param name="url">返回地址</param>
-//        /// <returns></returns>
-//        public ViewModelOrder GetData(string id, string btype)
-//        {
-//            var obj = new ViewModelOrder();
-//            if (!string.IsNullOrEmpty(id))
-//            {
-//                #region 获取订单相关信息
-//                using (OrderServiceClient client = new OrderServiceClient())
-//                {
-//                    var entity = client.GetById(Convert.ToInt32(id));
-//                    if (entity != null)
-//                        obj = entity;
-//                    else
-//                        obj = null;
-//                }
-//                #endregion
-//            }
-//            else
-//            {
-//                obj = null;
-//            }
-//            return obj;
-//        }
-
-
 //    }
 //}
+////        /// <summary>
+////        /// 根据订单Id获取订单信息
+////        /// 根据业务类型获取返回的配置好的返回地址
+////        /// </summary>
+////        /// <param name="id">订单编号</param>
+////        /// <param name="btype">业务类型</param>
+////        /// <param name="url">返回地址</param>
+////        /// <returns></returns>
+////        public ViewModelOrder GetData(string id, string btype)
+////        {
+////            var obj = new ViewModelOrder();
+////            if (!string.IsNullOrEmpty(id))
+////            {
+////                #region 获取订单相关信息
+////                using (OrderServiceClient client = new OrderServiceClient())
+////                {
+////                    var entity = client.GetById(Convert.ToInt32(id));
+////                    if (entity != null)
+////                        obj = entity;
+////                    else
+////                        obj = null;
+////                }
+////                #endregion
+////            }
+////            else
+////            {
+////                obj = null;
+////            }
+////            return obj;
+////        }
+
+
+////    }
+////}

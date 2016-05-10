@@ -15,20 +15,22 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 {
     public class OauthController : Controller
     {
+        //protected override void OnAuthorization(AuthorizationContext filterContext)
+        //{
+        //    usercenter();
+        //}
         //
         // GET: /Oauth/
         JavaScriptSerializer Jss = new JavaScriptSerializer();
-        public static string urlParameters ="iscallback=1&";
+        public static string urlParameters = "iscallback=1&";
         public static int CurrentPageType = 0;
         //用户中心                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-        public ActionResult usercenter(int type=0,string param="")
+        public ActionResult usercenter()
         {
             try
             {
-                //Session.Clear();
-                CurrentPageType = type;
-                urlParameters += param;
-                if ((Session == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
+                Session.Clear();
+                if ((Session["user"] == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
                 {
                     var AppID = ConfigurationManager.AppSettings["AppID"];
                     var domainurl = ConfigurationManager.AppSettings["domainurl"];
@@ -89,7 +91,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             catch (Exception e)
             {
                 BLL.BackgroundUserBll_log.AddLog("错误了", e.Message, "0.0.0.0");
-                return View("~/Views/GoodsList/List.cshtml?userinfo=错误2");  
+                return View("~/Views/GoodsList/List.cshtml?userinfo=错误2");
             }
         }
 
@@ -281,10 +283,15 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 BLL.BackgroundUserBll_log.AddLog("标记当前的type", CurrentPageType.ToString(), "0.0.0.0");
                 //商品列表
                 if (CurrentPageType == 1)
-                    return View("~/Views/AddToCart/.cshtml?"+urlParameters);
+                {
+                    BLL.BackgroundUserBll_log.AddLog("真的来到这了哟", "参数有" + urlParameters, Request.UserHostAddress);
+                    return View("~/Views/AddToCart/.cshtml?" + urlParameters);
+                }
                 //我的易购
                 if (CurrentPageType == 2)
+                {
                     return View("~/Views/UserCenter/Index.cshtml");
+                }
                 //易购记录
                 if (CurrentPageType == 3)
                     return View("~/Views/UserCenter/PurchaseHistory.cshtml?Type=0");

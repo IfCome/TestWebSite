@@ -106,6 +106,11 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             }
         }
 
+        public ActionResult PaySuccessBack()
+        {
+            return View();
+        }
+
         public ActionResult MyLuckInfo()
         {
             usercenter();

@@ -86,11 +86,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         //添加至我的购物车
         public ActionResult AddToCart(long HuoDongID = 0, int StoreCount = 0, int isCallback = 0)
         {
-            if (isCallback == 0)
-            {
-                string param = "huodongid=" + HuoDongID + "&storecount=" + StoreCount;
-                return RedirectToAction("usercenter","Oauth",new{1, param}));
-            }
             string errorType = "";
             string msg = "OK";
             bool result = false;

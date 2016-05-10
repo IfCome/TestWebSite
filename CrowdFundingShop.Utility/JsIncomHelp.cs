@@ -4,6 +4,8 @@
 //using System.Text;
 //using System.Security.Cryptography;
 //using WeixinCommonApi;
+//using CrowdFundingShop.Model;
+//using System.IO;
 
 //namespace CrowdFundingShop.Utility
 //{
@@ -85,6 +87,27 @@
 //               ret += Convert.ToString(bytes[i], 16).PadLeft(2, '0');
 //           }
 //           return ret.PadLeft(32, '0');
+//       }
+
+//       /// <summary>
+//       /// 把对象序列化 JSON 字符串 
+//       /// </summary>
+//       /// <typeparam name="T">对象类型</typeparam>
+//       /// <param name="obj">对象实体</param>
+//       /// <returns>JSON字符串</returns>
+//       public static string GetJson<T>(T obj)
+//       {
+//           //记住 添加引用 System.ServiceModel.Web 
+//           /**
+//            * 如果不添加上面的引用,System.Runtime.Serialization.Json; Json是出不来的哦
+//            * */
+//           DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(T));
+//           using (MemoryStream ms = new MemoryStream())
+//           {
+//               json.WriteObject(ms, obj);
+//               string szJson = Encoding.UTF8.GetString(ms.ToArray());
+//               return szJson;
+//           }
 //       }
 //    }
 //}

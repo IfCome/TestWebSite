@@ -41,9 +41,11 @@
   <ItemGroup>
     <Compile Include="BackgroundUserInfo_log.cs" />
     <Compile Include="CategoryInfo.cs" />
+    <Compile Include="CompanyPayment.cs" />
     <Compile Include="ConsumerInfo.cs" />
     <Compile Include="GoodsBaseInfo.cs" />
     <Compile Include="HuoDongInfo.cs" />
+    <Compile Include="JsIncomeModel.cs" />
     <Compile Include="OrderInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BackgroundUserInfo.cs" />
