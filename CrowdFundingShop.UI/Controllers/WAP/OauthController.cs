@@ -40,8 +40,8 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 }
                 else
                 {
-                    return null;
-                    //具体逻辑  用户信息写入数据库并且跳转至商品页
+                    //具体逻辑
+                    return View("~/Views/GoodsList/List.cshtml");
                 }
             }
             catch (Exception e)
@@ -142,7 +142,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 //throw;                                                                                                                                                                                                                                                                                                                                                                                                                                                  
             }
         }
-
 
         /// <summary>
         /// 判断access_token是否过期
