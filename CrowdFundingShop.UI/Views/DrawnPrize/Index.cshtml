@@ -50,7 +50,7 @@
                         <ul class="m_list m_list_top_line bg_white m_order_list">
                             <li class="link">
                                 <a style=" font-size:24px ;background-color: rgb(255,80,0);text-align :center; color:white">
-                                    <div style=" height:80px ;line-height: 80px;"> 本期中奖号码： <span style="font-family : Impact; ">@Model.LuckNumber</span></div>
+                                    <div style=" height:80px ;line-height: 80px;"> 本期中奖号码：<span style="font-family : Impact; ">@Model.LuckNumber</span></div>
                                 </a>
                             </li>
                             <li class="link">
@@ -66,7 +66,7 @@
                                 {
                                     <li class="link">
                                         <a style="font-size:14px;background-color:@( item.Numbers.Contains(Model.LuckNumber.ToString()) ? "rgb(255,80,0)" : "white") ;color:@(item.Numbers.Contains(Model.LuckNumber.ToString()) ? "white" : "black")">
-                                            <div style=" width:150px ;float:left">
+                                            <div style=" width:140px ;float:left">
                                                 @item.CreateTime
                                             </div>
                                             <div style=" width:130px ;float:left">@( item.NickName.Length > 8 ? item.NickName.Remove(7) + "..." : item.NickName) </div>
