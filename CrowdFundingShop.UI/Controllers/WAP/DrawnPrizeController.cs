@@ -13,7 +13,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult Index(long huodongid = 0)
         {
-            huodongid = 8;
             List<Model.OrderInfo> listorder = BLL.OrderInfoBll.GetDrawnPrizeUser(huodongid);
             Model.HuoDongInfo outModel = BLL.HuoDongInfoBll.GetLuckNumberByID(huodongid);
             if (listorder != null)
