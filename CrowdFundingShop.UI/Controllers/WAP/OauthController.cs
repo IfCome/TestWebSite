@@ -29,7 +29,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             try
             {
-                //Session.Clear();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                Session.Clear();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
                 if ((Session["userid"] == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
                 {
                     var AppID = ConfigurationManager.AppSettings["AppID"];
