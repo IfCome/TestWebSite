@@ -264,7 +264,7 @@ namespace CrowdFundingShop.DAL
                                 FROM dbo.GoodsBaseInfo G JOIN dbo.CategoryInfo C
                                 ON C.ID=G.Category LEFT JOIN HuoDongInfo H
                                 ON G.ID=H.GoodsID
-                                WHERE G.IsDelete=0 AND C.IsDelete=0 AND G.ID=@ID AND H.State!=40
+                                WHERE G.IsDelete=0 AND C.IsDelete=0 AND G.ID=@ID AND (H.State!=40 OR H.State IS NULL)
                               ";
             var parameters = new List<SqlParameter>();
             sql = string.Format(sql);
