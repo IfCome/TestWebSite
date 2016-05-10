@@ -18,7 +18,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         }
         public ActionResult Pay(string huodongids = "", string storecount = "", string allprice = "", string zhongchoucount = "")
         {
-            BLL.BackgroundUserBll_log.AddLog("支付错误", "进来了", "0.0.0.0");
             try
             {
                 long consumerid = Identity.LoginConsumer.ID;//微信接口获取;
