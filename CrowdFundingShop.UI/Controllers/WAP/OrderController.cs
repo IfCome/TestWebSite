@@ -11,7 +11,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
     {
         //
         // GET: /Order/
-
+        
         public ActionResult Index()
         {
             return View();
@@ -20,6 +20,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         {
             try
             {
+                usercenter();
                 long consumerid = Identity.LoginConsumer.ID;//微信接口获取;
                 bool reslut = false;//用来标记交易阶段的状态
                 var flagCount = 0;//标记位置
@@ -107,6 +108,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult MyLuckInfo()
         {
+            usercenter();
             long consumerid = Identity.LoginConsumer.ID;//微信验证获取得到
             List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(2, consumerid, 1);
             return View();

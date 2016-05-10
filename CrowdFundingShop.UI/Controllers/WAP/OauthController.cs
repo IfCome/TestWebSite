@@ -18,19 +18,17 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         //
         // GET: /Oauth/
         JavaScriptSerializer Jss = new JavaScriptSerializer();
-
-        //public OauthController()
-        //{
-        //    usercenter();
-        //}
-
-        //用户中心                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-        public ActionResult usercenter()
+        public static string urlParameters ="iscallback=1&";
+        public static int CurrentPageType = 0;
+        //用户中心                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+        public ActionResult usercenter(int type=0,string param="")
         {
             try
             {
-                Session.Clear();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-                if ((Session["userid"] == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
+                //Session.Clear();
+                CurrentPageType = type;
+                urlParameters += param;
+                if ((Session == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
                 {
                     var AppID = ConfigurationManager.AppSettings["AppID"];
                     var domainurl = ConfigurationManager.AppSettings["domainurl"];
@@ -91,7 +89,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             catch (Exception e)
             {
                 BLL.BackgroundUserBll_log.AddLog("错误了", e.Message, "0.0.0.0");
-                return View("~/Views/GoodsList/List.cshtml?userinfo=错误2");
+                return View("~/Views/GoodsList/List.cshtml?userinfo=错误2");  
             }
         }
 
@@ -272,7 +270,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                     }
                     else
                     {
-                        return View(ConfigurationManager.AppSettings["domainurl"] + "/oauth/usercenter");
+                        Response.Redirect(ConfigurationManager.AppSettings["domainurl"] + "/oauth/usercenter");
                     }
                 }
                 else
@@ -280,12 +278,27 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                     consumerInfo.ID = currentConsumer.ID;
                     Identity.LoginConsumer = consumerInfo;
                 }
+                BLL.BackgroundUserBll_log.AddLog("标记当前的type", CurrentPageType.ToString(), "0.0.0.0");
+                //商品列表
+                if (CurrentPageType == 1)
+                    return View("~/Views/AddToCart/.cshtml?"+urlParameters);
+                //我的易购
+                if (CurrentPageType == 2)
+                    return View("~/Views/UserCenter/Index.cshtml");
+                //易购记录
+                if (CurrentPageType == 3)
+                    return View("~/Views/UserCenter/PurchaseHistory.cshtml?Type=0");
+                //中奖纪录
+                if (CurrentPageType == 4)
+                    return View("~/Views/Order/MyLuckInfo.cshtml");
+                else
+                    return null;
             }
             catch (Exception e)
             {
                 BLL.BackgroundUserBll_log.AddLog("标记119", "存用户时发生错误：" + e.Message + "；" + Session["user"].ToString(), "0.0.0.0");
+                return null;
             }
-            return View("~/Views/GoodsList/List.cshtml");
         }
         #endregion
 

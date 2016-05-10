@@ -14,10 +14,11 @@
     <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/com/com.css" />
     <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/home/index.css" />
     <script src="~/Resources/js/jquery-1.9.1.min.js"></script>
-
     @*进度条引用*@
     <link href="~/Resources/progressbar/css/ProgressBarWars.css" rel="stylesheet" />
     @*<script src="~/Resources/progressbar/js/jquery-2.1.1.min.js"></script>*@
+    @*滑动引用*@
+    <script src="~/Resources/wap/js/iscroll.js"></script>
 </head>
 <body>
     <div class="com-content" style="margin-bottom: 60px;">
@@ -35,12 +36,19 @@
                     </div>
                 </div>
                 <div class="pxui-area">
-                    <div class="pxui-shoes">
-                        @*ajax填充数据*@
+                        <div class="pxui-shoes">
+                            @*ajax填充数据*@
+                        </div>
                     </div>
                 </div>
-            </div>
             <!--content-end-->
+        </div>
+        <div id="wrapper">
+            <div id="wrapper" style="position:fixed;top:100px;" >
+                <div class="scroll">
+                    这个区域可以滑动
+                </div>
+            </div>
         </div>
         <div class="com-footer-area home-page" id="js-com-footer-area">
             <div class="pxui-tab pxui-tab-nav pxui-tab-no-top">
@@ -60,6 +68,8 @@
         LoadCategory();
         //加载底部切换
         BottomTab();
+        //页面滑动
+        var Scroll = new iScroll('wrapper', { hScrollbar: true, vScrollbar: false });
     });
 
     function LoadCategory() {
