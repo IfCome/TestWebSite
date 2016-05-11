@@ -34,7 +34,10 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +48,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="FileUpToImg.cs" />
     <Compile Include="JsIncomHelp.cs" />
+    <Compile Include="JsonEntityExchange.cs" />
     <Compile Include="StringExtension.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Identity.cs" />
@@ -53,6 +57,8 @@
     <Compile Include="SqlHelper.cs" />
     <Compile Include="UploadImageFolderType.cs" />
     <Compile Include="WxIncomeHelp.cs" />
+    <Compile Include="WxPayForHelp.cs" />
+    <Compile Include="XmlEntityExchange.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CrowdFundingShop.Model\CrowdFundingShop.Model.csproj">
