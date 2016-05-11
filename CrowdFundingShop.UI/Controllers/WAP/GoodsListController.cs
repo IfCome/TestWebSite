@@ -11,7 +11,7 @@ using System.Web.Script.Serialization;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class GoodsListController : OauthController
+    public class GoodsListController : WAPBaseController
     {
         //
         // GET: /GoodsList/

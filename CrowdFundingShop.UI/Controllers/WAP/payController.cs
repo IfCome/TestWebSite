@@ -13,7 +13,7 @@ using CrowdFundingShop.Utility;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class payController : OauthController
+    public class payController : WAPBaseController
     {
 
         //        /// <summary>

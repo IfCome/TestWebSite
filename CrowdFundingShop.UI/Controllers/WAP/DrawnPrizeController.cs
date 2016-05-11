@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class DrawnPrizeController : OauthController
+    public class DrawnPrizeController : WAPBaseController
     {
         //
         // GET: /DrawnPrize/

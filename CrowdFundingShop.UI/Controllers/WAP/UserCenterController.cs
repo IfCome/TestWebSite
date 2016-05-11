@@ -7,14 +7,13 @@ using System.Web.Mvc;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class UserCenterController : OauthController
+    public class UserCenterController : WAPBaseController
     {
         //
         // GET: /UserInfo/
 
         public ActionResult Index()
         {
-            usercenter();
             long consumerid = Identity.LoginConsumer.ID;
             //查3个关键数据
             Model.ConsumerInfo consumerinfo = BLL.OrderInfoBll.GetKeyCount(consumerid);
@@ -23,7 +22,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult PurchaseHistory(int type = 0)
         {
-            usercenter();
             long consumerid = Identity.LoginConsumer.ID;
             List<Model.GoodsBaseInfo> outModel = BLL.OrderInfoBll.GetList(type, consumerid, 0);
             ViewBag.Type = type;
@@ -32,7 +30,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 
         public ActionResult Account()
         {
-            usercenter();
             long consumerid = Identity.LoginConsumer.ID;
             Model.ConsumerInfo outModel = BLL.ConsumerInfoBll.GetByID(consumerid);
             return View(outModel);
