@@ -118,6 +118,7 @@
     <Compile Include="Controllers\WAP\OrderController.cs" />
     <Compile Include="Controllers\WAP\payController.cs" />
     <Compile Include="Controllers\WAP\UserCenterController.cs" />
+    <Compile Include="Controllers\WAP\WAPBaseController.cs" />
     <Compile Include="Models\PC\AddGoodsCallBackIn.cs" />
     <Compile Include="Models\PC\AddHuoDongInfoIn.cs" />
     <Compile Include="Models\PC\GetGoodsInfoIn.cs" />

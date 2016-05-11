@@ -8,11 +8,24 @@ namespace CrowdFundingShop.Utility
 {
     public class Config
     {
-        //public static string ImagePath
-        //{
-        //    get { return ConfigurationManager.AppSettings["ImagePath"]; }
-        //}
+        public static string AppID
+        {
+            get { return ConfigurationManager.AppSettings["AppID"]; }
+        }
 
+        public static string AppSecret
+        {
+            get { return ConfigurationManager.AppSettings["AppSecret"]; }
+        }
 
+        public static string DomainUrl
+        {
+            get { return ConfigurationManager.AppSettings["domainurl"]; }
+        }
+
+        public static string OauthUrl
+        {
+            get { return ConfigurationManager.AppSettings["oauth_url"]; }
+        }
     }
 }
