@@ -48,7 +48,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 entity.appid = ConfigurationManager.AppSettings["AppID"].ToString();
                 entity.mch_id = ConfigurationManager.AppSettings["mch_id"].ToString();
                 //随机字符串不长于32位
-                entity.nonce_str = GetRandCode(32);
+                entity.nonce_str =GetRandCode(32);
                 //商户订单号32个字符内、可包含字母
                 entity.out_trade_no = orderno;
                 entity.body = body;
@@ -243,6 +243,25 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             Response.Write("orderDetail");
             Response.End();
             return View();
+        }
+
+        public static string GetRandCode(int iLength)
+        {
+            string sCode = "";
+            if (iLength == 0)
+            {
+                iLength = 4;
+            }
+            string codeSerial = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+            string[] arr = codeSerial.Split(',');
+            int randValue = -1;
+            Random rand = new Random(unchecked((int)DateTime.Now.Ticks));
+            for (int i = 0; i < iLength; i++)
+            {
+                randValue = rand.Next(0, arr.Length - 1);
+                sCode += arr[randValue];
+            }
+            return sCode;
         }
     }
 }
