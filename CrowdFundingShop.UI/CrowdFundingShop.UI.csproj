@@ -377,6 +377,7 @@
     <Content Include="Views\Common\TipsTool.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\MyWebSite.pubxml" />
     <None Include="Properties\PublishProfiles\TestPublishWeb.pubxml" />
     <Content Include="Views\UserInfo\EditUser.cshtml" />
     <Content Include="Views\GoodsManager\Edit.cshtml" />

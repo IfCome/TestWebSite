@@ -34,13 +34,13 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         /// <returns></returns>
         public ActionResult userpay()
         {
-            string openId = "ooqpuwaNp_FClIjYwEBe0DjdvTME";//Request.QueryString["openid"].ToString();
+            string openId = Identity.LoginConsumer.WeiXinAccount;//Request.QueryString["openid"].ToString();
 
             try
             {
-                string body = "Ipad mini  16G  白色";
-                int total_fee = 100;
-                string orderno = "20160511105602";
+                string body = "测试机";
+                int total_fee = 1;
+                string orderno = DateTime.Now.ToString("yyyyMMddhhmmss");
 
                 #region 向微信下订单
                 WxIncomeHelp client = new WxIncomeHelp();
@@ -48,12 +48,12 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 entity.appid = ConfigurationManager.AppSettings["AppID"].ToString();
                 entity.mch_id = ConfigurationManager.AppSettings["mch_id"].ToString();
                 //随机字符串不长于32位
-                entity.nonce_str =GetRandCode(32);
+                entity.nonce_str = GetRandCode(32);
                 //商户订单号32个字符内、可包含字母
                 entity.out_trade_no = orderno;
                 entity.body = body;
                 entity.total_fee = total_fee;
-                entity.spbill_create_ip = "101.201.142.71";
+                entity.spbill_create_ip = Request.UserHostAddress;
                 string url = ConfigurationManager.AppSettings["commonPayForReturnUrl"];
                 entity.notify_url = url;
                 entity.trade_type = "JSAPI";
@@ -68,7 +68,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 {
                     JsIncomeModel q = new JsIncomeModel();
                     q.appId = ConfigurationManager.AppSettings["AppID"].ToString();
-                    q.timeStamp = "";// GetDateTimeStamp();
+                    q.timeStamp = JsIncomHelp.GetTimeStamp();
                     q.nonceStr = GetRandCode(32);
                     q.package = "prepay_id=" + resultEntity.prepay_id;
                     q.signType = "MD5";
@@ -99,147 +99,147 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             //return View();
         }
 
-        //public ActionResult notify()
-        //{
-        //    try
-        //    {
-        //        string AppID = ConfigurationManager.AppSettings["AppID"];
-        //        StreamReader reader = new StreamReader(Request.InputStream);
-        //        string xml = reader.ReadToEnd();
-        //        reader.Close();
-        //        var resultEntity = XmlEntityExchange<PayNotify>.ConvertXmlToEntity(xml);
-        //        ViewModelOrder ordermodel = new ViewModelOrder();
-        //        using (OrderServiceClient client = new OrderServiceClient())
-        //        {
-        //            ordermodel = client.GetByOrderNo(resultEntity.out_trade_no);
-        //            int ispay = Convert.ToInt32(ordermodel.IsPay);
-        //            if (ordermodel != null && ordermodel.ID > 0 && ispay == 0)
-        //            {
-        //                ordermodel.IsPay = 1;
-        //                ordermodel.PayTime = DateTime.Now;
-        //                ordermodel.PayType = 8;//微信支付
-        //                int result = client.Update(ordermodel);
+        public ActionResult notify()
+        {
+            try
+            {
+                string AppID = ConfigurationManager.AppSettings["AppID"];
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string xml = reader.ReadToEnd();
+                reader.Close();
+                BLL.BackgroundUserBll_log.AddLog("我就是想证明进来了么", xml, Request.UserHostAddress);
+                //var resultEntity = XmlEntityExchange<PayNotify>.ConvertXmlToEntity(xml);
+                //ViewModelOrder ordermodel = new ViewModelOrder();
+                //using (OrderServiceClient client = new OrderServiceClient())
+                //{
+                //    ordermodel = client.GetByOrderNo(resultEntity.out_trade_no);
+                //    int ispay = Convert.ToInt32(ordermodel.IsPay);
+                //    if (ordermodel != null && ordermodel.ID > 0 && ispay == 0)
+                //    {
+                //        ordermodel.IsPay = 1;
+                //        ordermodel.PayTime = DateTime.Now;
+                //        ordermodel.PayType = 8;//微信支付
+                //        int result = client.Update(ordermodel);
 
-        //                //分销订单
-        //                if ((ordermodel.OrderType == 7 || ordermodel.OrderType == 8) && result > 0)
-        //                {
-        //                    ViewModelTOCUser fromuser = new ViewModelTOCUser();
-        //                    using (TOCUserServiceClient service = new TOCUserServiceClient())
-        //                    {
-        //                        fromuser = service.GetById(Convert.ToInt32(ordermodel.UserId));
-        //                    }
-        //                    string openid = "";
-        //                    string opneids = fromuser.WXOpenIds;
-        //                    string[] openidsarray = opneids.Split(',');
-        //                    foreach (var a in openidsarray)
-        //                    {
-        //                        if (a.Split('#')[0] == AppID)
-        //                            openid = a.Split('#')[1];
-        //                    }
+                //        //分销订单
+                //        if ((ordermodel.OrderType == 7 || ordermodel.OrderType == 8) && result > 0)
+                //        {
+                //            ViewModelTOCUser fromuser = new ViewModelTOCUser();
+                //            using (TOCUserServiceClient service = new TOCUserServiceClient())
+                //            {
+                //                fromuser = service.GetById(Convert.ToInt32(ordermodel.UserId));
+                //            }
+                //            string openid = "";
+                //            string opneids = fromuser.WXOpenIds;
+                //            string[] openidsarray = opneids.Split(',');
+                //            foreach (var a in openidsarray)
+                //            {
+                //                if (a.Split('#')[0] == AppID)
+                //                    openid = a.Split('#')[1];
+                //            }
 
-        //                    SqlParameter[] params_arc ={
-        //                        new SqlParameter("@AppKey",SqlDbType.NVarChar),
-        //                        new SqlParameter("@OrderID",SqlDbType.Int,4),
-        //                        new SqlParameter("@OrderNo",SqlDbType.NVarChar),
-        //                        new SqlParameter("@ActivityProductID",SqlDbType.Int,4),
-        //                        new SqlParameter("@ActivityProductName",SqlDbType.NVarChar),
-        //                        new SqlParameter("@OrderAmount",SqlDbType.Decimal),
-        //                        new SqlParameter("@FromUserID",SqlDbType.Int,4),
-        //                        new SqlParameter("@FromUserSex",SqlDbType.Int,4),
-        //                        new SqlParameter("@FromOpenID",SqlDbType.NVarChar),
-        //                        new SqlParameter("@FromUserLevel",SqlDbType.Int,4),
-        //                        new SqlParameter("@FromNickName",SqlDbType.NVarChar)
-        //                    };
+                //            SqlParameter[] params_arc ={
+                //                new SqlParameter("@AppKey",SqlDbType.NVarChar),
+                //                new SqlParameter("@OrderID",SqlDbType.Int,4),
+                //                new SqlParameter("@OrderNo",SqlDbType.NVarChar),
+                //                new SqlParameter("@ActivityProductID",SqlDbType.Int,4),
+                //                new SqlParameter("@ActivityProductName",SqlDbType.NVarChar),
+                //                new SqlParameter("@OrderAmount",SqlDbType.Decimal),
+                //                new SqlParameter("@FromUserID",SqlDbType.Int,4),
+                //                new SqlParameter("@FromUserSex",SqlDbType.Int,4),
+                //                new SqlParameter("@FromOpenID",SqlDbType.NVarChar),
+                //                new SqlParameter("@FromUserLevel",SqlDbType.Int,4),
+                //                new SqlParameter("@FromNickName",SqlDbType.NVarChar)
+                //            };
 
-        //                    params_arc[0].Value = AppID;
-        //                    params_arc[1].Value = ordermodel.ID;
-        //                    params_arc[2].Value = ordermodel.OrderNo;
-        //                    params_arc[3].Value = ordermodel.ActivityProductID;
-        //                    params_arc[4].Value = ordermodel.ProductName;
-        //                    params_arc[5].Value = ordermodel.TotalFee;
-        //                    params_arc[6].Value = fromuser.ID;
-        //                    params_arc[7].Value = fromuser.Sex == null ? 0 : Convert.ToInt32(fromuser.Sex);
-        //                    params_arc[8].Value = openid;
-        //                    params_arc[9].Value = fromuser.Level == null ? 0 : fromuser.Level;
-        //                    params_arc[10].Value = fromuser.LoginName;
-        //                    DataSet dsinfo = BIStone.Data.SurveyDbHelper.ExecuteDataset("pro_AddBackCashRecords", params_arc);
+                //            params_arc[0].Value = AppID;
+                //            params_arc[1].Value = ordermodel.ID;
+                //            params_arc[2].Value = ordermodel.OrderNo;
+                //            params_arc[3].Value = ordermodel.ActivityProductID;
+                //            params_arc[4].Value = ordermodel.ProductName;
+                //            params_arc[5].Value = ordermodel.TotalFee;
+                //            params_arc[6].Value = fromuser.ID;
+                //            params_arc[7].Value = fromuser.Sex == null ? 0 : Convert.ToInt32(fromuser.Sex);
+                //            params_arc[8].Value = openid;
+                //            params_arc[9].Value = fromuser.Level == null ? 0 : fromuser.Level;
+                //            params_arc[10].Value = fromuser.LoginName;
+                //            DataSet dsinfo = BIStone.Data.SurveyDbHelper.ExecuteDataset("pro_AddBackCashRecords", params_arc);
 
-        //                    //返现通知
-        //                    if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
-        //                    {
+                //            //返现通知
+                //            if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
+                //            {
 
-        //                        for (int i = 0; i < dsinfo.Tables[0].Rows.Count; i++)
-        //                        {
-        //                            string msgopenid = dsinfo.Tables[0].Rows[i]["openid"].ToString();
-        //                            string msgcontent = dsinfo.Tables[0].Rows[i]["msgcontent"].ToString();
-        //                            string content = ReturnJson.ReturnMessage(ReturnJson.ReText(msgopenid, msgcontent), AccessTokenStr);
-        //                        }
-        //                    }
+                //                for (int i = 0; i < dsinfo.Tables[0].Rows.Count; i++)
+                //                {
+                //                    string msgopenid = dsinfo.Tables[0].Rows[i]["openid"].ToString();
+                //                    string msgcontent = dsinfo.Tables[0].Rows[i]["msgcontent"].ToString();
+                //                    string content = ReturnJson.ReturnMessage(ReturnJson.ReText(msgopenid, msgcontent), AccessTokenStr);
+                //                }
+                //            }
 
-        //                    int coupon = 0;
-        //                    int amount = 0;
-        //                    string coupons = "";
-        //                    //生成专车优惠券
-        //                    if (ordermodel.TotalFee == 200)
-        //                    {
-        //                        coupon = 3;
-        //                        amount = 100;
-        //                    }
-        //                    if (ordermodel.TotalFee == 400)
-        //                    {
-        //                        coupon = 3;
-        //                        amount = 200;
-        //                    }
-        //                    if (ordermodel.TotalFee == 800)
-        //                    {
-        //                        coupon = 6;
-        //                        amount = 200;
-        //                    }
-        //                    for (int i = 0; i < coupon; i++)
-        //                    {
-        //                        string couponno = GetTimeStamp();
-        //                        System.Random random = new Random(Guid.NewGuid().GetHashCode());
-        //                        for (int c = 0; c < 4; c++)
-        //                        {
-        //                            couponno += random.Next(10).ToString();
-        //                        }
-        //                        if (coupons == "")
-        //                            coupons = couponno;
-        //                        else
-        //                            coupons += "," + couponno;
-        //                    }
+                //            int coupon = 0;
+                //            int amount = 0;
+                //            string coupons = "";
+                //            //生成专车优惠券
+                //            if (ordermodel.TotalFee == 200)
+                //            {
+                //                coupon = 3;
+                //                amount = 100;
+                //            }
+                //            if (ordermodel.TotalFee == 400)
+                //            {
+                //                coupon = 3;
+                //                amount = 200;
+                //            }
+                //            if (ordermodel.TotalFee == 800)
+                //            {
+                //                coupon = 6;
+                //                amount = 200;
+                //            }
+                //            for (int i = 0; i < coupon; i++)
+                //            {
+                //                string couponno = GetTimeStamp();
+                //                System.Random random = new Random(Guid.NewGuid().GetHashCode());
+                //                for (int c = 0; c < 4; c++)
+                //                {
+                //                    couponno += random.Next(10).ToString();
+                //                }
+                //                if (coupons == "")
+                //                    coupons = couponno;
+                //                else
+                //                    coupons += "," + couponno;
+                //            }
 
-        //                    SqlParameter[] paramsc ={
-        //                        new SqlParameter("@ActivityProductID",SqlDbType.Int,4),
-        //                        new SqlParameter("@userid",SqlDbType.Int,4),
-        //                        new SqlParameter("@coupons",SqlDbType.NVarChar),
-        //                        new SqlParameter("@Amount",SqlDbType.Int,4)
-        //                    };
+                //            SqlParameter[] paramsc ={
+                //                new SqlParameter("@ActivityProductID",SqlDbType.Int,4),
+                //                new SqlParameter("@userid",SqlDbType.Int,4),
+                //                new SqlParameter("@coupons",SqlDbType.NVarChar),
+                //                new SqlParameter("@Amount",SqlDbType.Int,4)
+                //            };
 
-        //                    paramsc[0].Value = ordermodel.ActivityProductID;
-        //                    paramsc[1].Value = ordermodel.UserId;
-        //                    paramsc[2].Value = coupons;
-        //                    paramsc[3].Value = amount;
-        //                    BIStone.Data.SurveyDbHelper.ExecuteDataset("pro_ADProductCoupons", paramsc);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                BIStone.Data.SurveyDbHelper.ExecuteScalar("update WinningInfo set Status = 1 where scene_str ='" + resultEntity.out_trade_no + "'");
-        //            }
+                //            paramsc[0].Value = ordermodel.ActivityProductID;
+                //            paramsc[1].Value = ordermodel.UserId;
+                //            paramsc[2].Value = coupons;
+                //            paramsc[3].Value = amount;
+                //            BIStone.Data.SurveyDbHelper.ExecuteDataset("pro_ADProductCoupons", paramsc);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        BIStone.Data.SurveyDbHelper.ExecuteScalar("update WinningInfo set Status = 1 where scene_str ='" + resultEntity.out_trade_no + "'");
+                //    }
 
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //CommonMethod.WriteTo_Txt("notify" + ex.Message);
-        //    }
-        //    return Content("success");
-        //}
+                //}
+            }
+            catch (Exception ex)
+            {
+                //CommonMethod.WriteTo_Txt("notify" + ex.Message);
+            }
+            return Content("success");
+        }
 
         public ActionResult orderDetail()
         {
-
             Response.Write("orderDetail");
             Response.End();
             return View();

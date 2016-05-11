@@ -124,40 +124,127 @@
         });
     });
 </script>
+
 <script type="text/javascript">
-    function jsApiCall() {
-        WeixinJSBridge.invoke('getBrandWCPayRequest', {
-            "appId": "@entity.appId",
-            "timeStamp": "@entity.timeStamp",
-            "nonceStr": "@entity.nonceStr",
-            "package": "@entity.package",
-            "signType": "MD5",
-            "paySign": "@entity.paySign"
-        }, function (res) {
-            if (res.err_msg == "get_brand_wcpay_request:ok") {
-                window.location = "/pay/PayAction";
-            }
-            else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                alert("您取消了支付!");
+    wx.checkJsApi({
+        jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+        success: function (res) {
+            alert(res.checkResult);
+            // 以键值对的形式返回，可用的api值true，不可用为false
+            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+        }
+    });
+    //通过config接口注入权限验证配置
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: "@entity.appId", // 必填，公众号的唯一标识
+        timestamp: "@entity.timeStamp", // 必填，生成签名的时间戳
+        nonceStr: "@entity.nonceStr", // 必填，生成签名的随机串
+        signature: "@entity.paySign",// 必填，签名
+        jsApiList: ['checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'translateVoice',
+        'startRecord',
+        'stopRecord',
+        'onRecordEnd',
+        'playVoice',
+        'pauseVoice',
+        'stopVoice',
+        'uploadVoice',
+        'downloadVoice',
+        'chooseImage',
+        'previewImage',
+        'uploadImage',
+        'downloadImage',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'closeWindow',
+        'scanQRCode',
+        'chooseWXPay',
+        'openProductSpecificView',
+        'addCard',
+        'chooseCard',
+        'openCard'] // 必填，需要使用的JS接口列表
+    });
+    //通过ready接口处理成功验证
+    wx.ready(function () {
+        // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后
+        document.querySelector('#wxpay').onclick = function () {
+            wx.chooseWXPay({
+                appId: "@entity.appId",
+                timestamp: "@entity.timeStamp", // 支付签名时间戳 注意这里的s 文档新版大写 但是我的小写才好使
+                nonceStr: "@entity.nonceStr",// 支付签名随机串
+                package: "@entity.package", // 统一支付接口返回的package包
+                signType: "MD5", // 签名方式，'MD5'
+                paySign: "@entity.paySign", // 支付签名
+                success: function (res) {
+                    alert(res.errMsg);
+                    if (res.errMsg == "chooseWXPay:ok") {
+                        alert("支付成功");
+                        location.href = "/order/index";
+                        // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                    }
+                    else if (res.errMsg == "chooseWXPay:cancel") {
+                        alert("cancel");
+                        // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                    }
+                    else if (res.errMsg == "chooseWXPay:fail") {
+                        alert("fail");
+                        // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                    }
+                }
+            });
+        };
+    });
+</script>
+
+
+
+@*<script type="text/javascript">
+        function jsApiCall() {
+            alert("@entity.timeStamp");
+            WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                "appId": "@entity.appId",
+                "timeStamp": "@entity.timeStamp",
+                "nonceStr": "@entity.nonceStr",
+                "package": "@entity.package",
+                "signType": "MD5",
+                "paySign": "@entity.paySign"
+            }, function (res) {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    window.location = "/pay/PayAction";
+                }
+                else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                    alert("您取消了支付!");
+                }
+                else {
+                    alert(res.err_msg);
+                    alert("您支付失败了!");
+                }
+            });
+        };
+        function callpay() {
+            if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                }
+                else if (document.attachEvent) {
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                }
             }
             else {
-                alert(res.err_msg);
-                alert("您支付失败了!");
+                jsApiCall();
             }
-        });
-    };
-    function callpay() {
-        if (typeof WeixinJSBridge == "undefined") {
-            if (document.addEventListener) {
-                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-            }
-            else if (document.attachEvent) {
-                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-            }
-        }
-        else {
-            jsApiCall();
-        }
-    };
-</script>
+        };
+    </script>*@

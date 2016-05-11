@@ -179,6 +179,9 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                     }
                     sids = sids.Remove(sids.Length - 1);
                     outModel = BLL.ShoppingCartBll.GetShoppingInfoBySID(sids);
+
+                    //向微信发起请求
+
                 }
                 return View(outModel);
             }
