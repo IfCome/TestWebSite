@@ -25,30 +25,30 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public static string urlParameters = "iscallback=1&";
         public static int CurrentPageType = 0;
         //用户中心                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-        public ActionResult usercenter()
-        {
-            try
-            {
-                Session.Clear();
-                if ((Session["user"] == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
-                {
-                    var AppID = ConfigurationManager.AppSettings["AppID"];
-                    var domainurl = ConfigurationManager.AppSettings["domainurl"];
-                    var red_url = Url.Encode(domainurl + "/oauth/usercenter");
-                    var oauth_url = ConfigurationManager.AppSettings["oauth_url"];
-                    return Redirect(oauth_url + "?backurl=" + red_url);
-                }
-                else
-                {
-                    //具体逻辑
-                    return View("~/Views/GoodsList/List.cshtml");
-                }
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        //public ActionResult usercenter()
+        //{
+        //    try
+        //    {
+        //        Session.Clear();
+        //        if ((Session["user"] == null) && String.IsNullOrEmpty(Request.QueryString["unionid"]))
+        //        {
+        //            var AppID = ConfigurationManager.AppSettings["AppID"];
+        //            var domainurl = ConfigurationManager.AppSettings["domainurl"];
+        //            var red_url = Url.Encode(domainurl + "/oauth/usercenter");
+        //            var oauth_url = ConfigurationManager.AppSettings["oauth_url"];
+        //            return Redirect(oauth_url + "?backurl=" + red_url);
+        //        }
+        //        else
+        //        {
+        //            //具体逻辑
+        //            return View("~/Views/GoodsList/List.cshtml");
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
         //微信用户授权                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         public ActionResult userlogin(string backurl)
         {
@@ -68,25 +68,21 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 var AppID = ConfigurationManager.AppSettings["AppID"];
                 var AppSecret = ConfigurationManager.AppSettings["AppSecret"];
                 string userString = "";
-                if (Session["user"] == null)
+                userString = GetUserInfo(AppID, AppSecret, code);
+                Session["user"] = userString;
+
+                // 这里就直接封装成一个 saveUser 方法，来保存用户就可以了
+                if (SaveUser(userString))
                 {
-                    userString = GetUserInfo(AppID, AppSecret, code);
-                    Session["user"] = userString;
-                    return RedirectToAction("SaveUser");
+                    string url = Session["backurl"].ToString();
+                    return Redirect(url);
                 }
                 else
                 {
-                    string url = Session["backurl"].ToString();
-                    userString = Session["user"].ToString();
-                    var Jss = new JavaScriptSerializer();
-                    var data = (Dictionary<string, object>)Jss.DeserializeObject(userString);
-                    if (data == null || data["openid"] == null)
-                        return View("~/Views/GoodsList/List.cshtml?userinfo=错误0");
-                    if (url.Contains("?"))
-                        return Redirect(url + "&unionid=" + data["openid"].ToString());
-                    else
-                        return Redirect(url + "?unionid=" + data["openid"].ToString());
+                    BLL.BackgroundUserBll_log.AddLog("保存用户出错", "", "0.0.0.0");
+                    return View("~/Views/GoodsList/List.cshtml?userinfo=保存用户出错");
                 }
+
             }
             catch (Exception e)
             {
@@ -248,11 +244,14 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         #endregion
 
         #region 保存用户信息到服务器
-        public ActionResult SaveUser()
+        public bool SaveUser(string userString)
         {
+            if (string.IsNullOrWhiteSpace(userString))
+            {
+                return false;
+            }
             try
             {
-                string userString = Session["user"].ToString();
                 var data = (Dictionary<string, object>)Jss.DeserializeObject(userString);
                 Model.ConsumerInfo consumerInfo = new Model.ConsumerInfo()
                 {
@@ -261,50 +260,31 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                     Address = data["country"].ToString() + data["province"].ToString() + data["city"].ToString(),
                     HeadIcon = data["headimgurl"].ToString()
                 };
+
+                // 查询库中是否存在该用户信息
                 Model.ConsumerInfo currentConsumer = BLL.ConsumerInfoBll.GetByWeiXinAccount(data["openid"].ToString());
                 if (currentConsumer == null)
                 {
+                    // 第一次登录，保存用户信息，并返回ID
                     string consumerid = BLL.ConsumerInfoBll.Add(consumerInfo);
-                    if (!string.IsNullOrEmpty(consumerid))
+                    if (string.IsNullOrEmpty(consumerid))
                     {
-                        consumerInfo.ID = Converter.TryToInt64(consumerid);
-                        Identity.LoginConsumer = consumerInfo;
+                        return false;
                     }
-                    else
-                    {
-                        Response.Redirect(ConfigurationManager.AppSettings["domainurl"] + "/oauth/usercenter");
-                    }
+                    consumerInfo.ID = Converter.TryToInt64(consumerid);
                 }
                 else
                 {
+
                     consumerInfo.ID = currentConsumer.ID;
-                    Identity.LoginConsumer = consumerInfo;
                 }
-                BLL.BackgroundUserBll_log.AddLog("标记当前的type", CurrentPageType.ToString(), "0.0.0.0");
-                //商品列表
-                if (CurrentPageType == 1)
-                {
-                    BLL.BackgroundUserBll_log.AddLog("真的来到这了哟", "参数有" + urlParameters, Request.UserHostAddress);
-                    return View("~/Views/AddToCart/.cshtml?" + urlParameters);
-                }
-                //我的易购
-                if (CurrentPageType == 2)
-                {
-                    return View("~/Views/UserCenter/Index.cshtml");
-                }
-                //易购记录
-                if (CurrentPageType == 3)
-                    return View("~/Views/UserCenter/PurchaseHistory.cshtml?Type=0");
-                //中奖纪录
-                if (CurrentPageType == 4)
-                    return View("~/Views/Order/MyLuckInfo.cshtml");
-                else
-                    return null;
+                Identity.LoginConsumer = consumerInfo;
+                return true;
             }
             catch (Exception e)
             {
                 BLL.BackgroundUserBll_log.AddLog("标记119", "存用户时发生错误：" + e.Message + "；" + Session["user"].ToString(), "0.0.0.0");
-                return null;
+                return false;
             }
         }
         #endregion
