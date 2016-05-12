@@ -304,6 +304,7 @@
     <Content Include="Resources\wap\js\px-verify.js" />
     <Content Include="Resources\wap\js\shoppingcart.js" />
     <Content Include="Resources\wap\js\zepto.min.js" />
+    <Content Include="testscroll.html" />
     <Content Include="Views\GoodsManager\EditGoodsInfo.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -321,6 +322,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Resources\wap\scss\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

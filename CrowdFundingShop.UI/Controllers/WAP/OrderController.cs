@@ -11,7 +11,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
     {
         //
         // GET: /Order/
-        
+
         public ActionResult Index()
         {
             return View();
@@ -37,44 +37,35 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                         {
                             total += Converter.TryToInt32(item);
                         }
-                        //请求微信支付接口
-                        bool weixinresult = true;
-                        if (weixinresult)
+                        foreach (var item in huodongstrs)
                         {
-                            huodongids = huodongids.Remove(huodongids.Length - 1);
-                            storecount = storecount.Remove(storecount.Length - 1);
-                            allprice = allprice.Remove(allprice.Length - 1);
-                            zhongchoucount = zhongchoucount.Remove(zhongchoucount.Length - 1);
-                            foreach (var item in huodongstrs)
+                            int ThisOneStoreCount = Converter.TryToInt32(storecountstrs[flagCount]);
+                            for (int i = 0; i < ThisOneStoreCount; i++)
                             {
-                                int ThisOneStoreCount = Converter.TryToInt32(storecountstrs[flagCount]);
-                                for (int i = 0; i < ThisOneStoreCount; i++)
+                                Model.OrderInfo entity = new Model.OrderInfo()
                                 {
-                                    Model.OrderInfo entity = new Model.OrderInfo()
+                                    ConsumerID = consumerid,
+                                    HuodongID = Converter.TryToInt64(item),
+                                    Number = ShoppingNumber(Converter.TryToInt64(item), consumerid)
+                                };
+                                if (msg == "OK")
+                                {
+                                    reslut = BLL.OrderInfoBll.Add(entity);
+                                    if (!reslut)
                                     {
-                                        ConsumerID = consumerid,
-                                        HuodongID = Converter.TryToInt64(item),
-                                        Number = ShoppingNumber(Converter.TryToInt64(item), consumerid)
-                                    };
-                                    if (msg == "OK")
-                                    {
-                                        reslut = BLL.OrderInfoBll.Add(entity);
-                                        if (!reslut)
-                                        {
-                                            msg = "网络连接超时";
-                                            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
-                                        }
+                                        msg = "网络连接超时";
+                                        return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
                                     }
                                 }
-                                //买完之后删除购物车该商品
-                                Model.ShoppingCart scart = new Model.ShoppingCart()
-                                {
-                                    ConsumerID = Identity.LoginConsumer.ID,
-                                    HuoDongID = Converter.TryToInt32(item)
-                                };
-                                BLL.ShoppingCartBll.DeleteByHuoDongID(scart);
-                                flagCount++;
                             }
+                            //买完之后删除购物车该商品
+                            Model.ShoppingCart scart = new Model.ShoppingCart()
+                            {
+                                ConsumerID = Identity.LoginConsumer.ID,
+                                HuoDongID = Converter.TryToInt32(item)
+                            };
+                            BLL.ShoppingCartBll.DeleteByHuoDongID(scart);
+                            flagCount++;
                         }
                         //判断是不是该商品的最后最后一个购买者，确定开不开奖
                         if (reslut)
