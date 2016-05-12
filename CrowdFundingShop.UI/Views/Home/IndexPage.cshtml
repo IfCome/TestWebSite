@@ -34,8 +34,8 @@
                 <li><a href="~/GoodsManager/IndexPage.html" class="am-text-secondary"><span class="am-icon-btn am-icon-shopping-cart"></span><br />商品管理</a></li>
                 <li><a href="~/UserInfo/AddUser.html" class="am-text-success"><span class="am-icon-btn am-icon-user-plus"></span><br />添加用户</a></li>
                 <li><a href="~/UserInfo/IndexPage.html" class="am-text-secondary"><span class="am-icon-btn am-icon-users"></span><br />用户管理</a></li>
-                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user"></span><br />后台日志</a></li>
-                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-cog"></span><br />设置</a></li>
+                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user"></span><br />客户管理</a></li>
+                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-file-text"></span><br />后台日志</a></li>
             </ul>
             <div class="am-g">
                 <div class="am-u-sm-12">
@@ -108,6 +108,53 @@
                                                 <tbody>
                                                     @if (logList == null || logList.Count == 0)
                                                     {
+                                                    <text>
+                                                        <tr>
+                                                            <th> 暂无后台日志 </th>
+                                                        </tr>
+                                                    </text>
+                                                    }
+                                                    else
+                                                    {
+                                                    <text>
+                                                        <tr>
+                                                            <th class="am-text-center">用户</th>
+                                                            <th>操作内容</th>
+                                                            <th>操作时间</th>
+                                                        </tr>
+                                                        @foreach (var log in logList)
+                                                            {
+
+                                                    <tr>
+                                                        <td class="am-text-center"><a href="/UserInfo/SeeUserInfo.html?id=@(log.UserID)" title="查看用户信息">@(string.IsNullOrWhiteSpace(log.RealName) ? log.UserName : log.RealName)</a></td>
+                                                        <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
+                                                        <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                                                    </tr>
+                                                            }
+                                                    </text>
+                                                    }
+                                                </tbody>
+                                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-md-6">
+                    <div class="am-panel am-panel-default">
+                        <div class="am-panel-hd am-cf">
+                            新增客户
+                            <span class="am-fr"><a href="#"> <small> 查看更多>></small>  </a></span>
+                        </div>
+                        <div id="collapse-panel-2" class="am-in">
+                            @{
+                                logList = ViewBag.LogList as List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
+                            }<crowdfundingshop.model.backgrounduserinfo_log>
+                                <crowdfundingshop.model.backgrounduserinfo_log>
+                                    <crowdfundingshop.model.backgrounduserinfo_log>
+                                        <crowdfundingshop.model.backgrounduserinfo_log>
+                                            <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
+                                                <tbody>
+                                                    @if (logList == null || logList.Count == 0)
+                                                    {
                                                         <text>
                                                             <tr>
                                                                 <th> 暂无后台日志 </th>
@@ -126,7 +173,7 @@
                                                             {
 
                                                                 <tr>
-                                                                    <td class="am-text-center"><a href="#" title="查看用户信息">@log.UserName</a></td>
+                                                                    <td class="am-text-center"><a href="/UserInfo/SeeUserInfo.html?id=@(log.UserID)" title="查看用户信息">@(string.IsNullOrWhiteSpace(log.RealName) ? log.UserName : log.RealName)</a></td>
                                                                     <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
                                                                     <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
                                                                 </tr>
@@ -135,51 +182,6 @@
                                                     }
                                                 </tbody>
                                             </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="am-u-md-6">
-                    <div class="am-panel am-panel-default">
-                        <div class="am-panel-hd am-cf">任务 task </div>
-                        <div id="collapse-panel-4" class="am-panel-bd am-collapse am-in">
-                            <ul class="am-list admin-content-task">
-                                <li>
-                                    <div class="admin-task-meta"> Posted on 25/1/2120 by John Clark</div>
-                                    <div class="admin-task-bd">
-                                        The starting place for exploring business management; helping new managers get started and experienced managers get better.
-                                    </div>
-                                    <div class="am-cf">
-                                        <div class="am-btn-toolbar am-fl">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-check"></span></button>
-                                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-pencil"></span></button>
-                                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-times"></span></button>
-                                            </div>
-                                        </div>
-                                        <div class="am-fr">
-                                            <button type="button" class="am-btn am-btn-default am-btn-xs">删除</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="admin-task-meta"> Posted on 25/1/2120 by 呵呵呵</div>
-                                    <div class="admin-task-bd">
-                                        基兰和狗熊出现在不同阵营时。基兰会获得BUFF，“装甲熊憎恨者”。狗熊会获得BUFF，“时光老人憎恨者”。
-                                    </div>
-                                    <div class="am-cf">
-                                        <div class="am-btn-toolbar am-fl">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-check"></span></button>
-                                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-pencil"></span></button>
-                                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-times"></span></button>
-                                            </div>
-                                        </div>
-                                        <div class="am-fr">
-                                            <button type="button" class="am-btn am-btn-default am-btn-xs">删除</button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
