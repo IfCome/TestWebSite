@@ -1,4 +1,5 @@
-﻿using CrowdFundingShop.Utility;
+﻿using CrowdFundingShop.Model;
+using CrowdFundingShop.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -180,8 +181,67 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                     sids = sids.Remove(sids.Length - 1);
                     outModel = BLL.ShoppingCartBll.GetShoppingInfoBySID(sids);
 
-                    //向微信发起请求
+                    #region 向微信发起请求
+                    string openId = Identity.LoginConsumer.WeiXinAccount;//Request.QueryString["openid"].ToString();
+                    try
+                    {
+                        //string body = string.Empty;
+                        //int total_fee = 0;
+                        //foreach (var item in outModel)
+                        //{
+                        //    body += item.GoodsName + "X" + item.StoreCount + "；";
+                        //    total_fee += Converter.TryToInt32(item.Price);
+                        //}
+                        string body = "测试机";
+                        int total_fee = 1;
+                        string orderno = DateTime.Now.ToString("yyyyMMddhhmmss");
 
+                        #region 向微信下订单
+                        WxIncomeHelp client = new WxIncomeHelp();
+                        UnifyOrder entity = new UnifyOrder();
+                        entity.appid = ConfigurationManager.AppSettings["AppID"].ToString();
+                        entity.mch_id = ConfigurationManager.AppSettings["mch_id"].ToString();
+                        //随机字符串不长于32位
+                        entity.nonce_str = JsIncomHelp.GetRandCode(32);
+                        //商户订单号32个字符内、可包含字母
+                        entity.out_trade_no = orderno;
+                        entity.body = body;
+                        entity.total_fee = total_fee;//
+                        entity.spbill_create_ip = Request.UserHostAddress;
+                        string url = ConfigurationManager.AppSettings["commonPayForReturnUrl"];
+                        entity.notify_url = url;
+                        entity.trade_type = "JSAPI";
+                        entity.openid = openId;
+                        string key = ConfigurationManager.AppSettings["key"].ToString();
+                        string xmlStr = client.DoDataForIncomeWeiXin(entity, key);
+                        string resultStr = client.IncomeWeiXin(xmlStr);
+
+                        var resultEntity = XmlEntityExchange<returnUnifyOrder>.ConvertXmlToEntity(resultStr);
+                        #endregion
+                        if (resultEntity != null && !string.IsNullOrEmpty(resultEntity.prepay_id))
+                        {
+                            JsIncomeModel q = new JsIncomeModel();
+                            q.appId = ConfigurationManager.AppSettings["AppID"].ToString();
+                            q.timeStamp = JsIncomHelp.GetTimeStamp();
+                            q.nonceStr = JsIncomHelp.GetRandCode(32);
+                            q.package = "prepay_id=" + resultEntity.prepay_id;
+                            q.signType = "MD5";
+                            q.paySign = new JsIncomHelp().DoDataForsign(q, key);
+                            ViewBag.entity = q;
+                        }
+
+                        ViewBag.body = body;
+                        ViewBag.total_fee = 0.01;//total_fee  先写死，要不然支付不起;
+                        ViewBag.orderno = orderno;
+                        ViewBag.openid = openId;
+                        BLL.BackgroundUserBll_log.AddLog("userpay", resultStr, Request.UserHostAddress);
+                    }
+                    catch (Exception ex)
+                    {
+                        BLL.BackgroundUserBll_log.AddLog("userpay", "微信公共支付有问题！错误：" + ex.Message, Request.UserHostAddress);
+                        return null;
+                    }
+                    #endregion
                 }
                 return View(outModel);
             }
@@ -190,6 +250,23 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 BLL.BackgroundUserBll_log.AddLog("标记120", "支付时发生：" + e.Message, "0.0.0.0");
                 return null;
             }
+        }
+        //说实话我也不知道这个是用来干什么的
+        public ActionResult notify()
+        {
+            try
+            {
+                string AppID = ConfigurationManager.AppSettings["AppID"];
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string xml = reader.ReadToEnd();
+                reader.Close();
+                BLL.BackgroundUserBll_log.AddLog("我就是想证明进来了么", xml, Request.UserHostAddress);
+            }
+            catch (Exception ex)
+            {
+                //CommonMethod.WriteTo_Txt("notify" + ex.Message);
+            }
+            return Content("success");
         }
     }
 }
