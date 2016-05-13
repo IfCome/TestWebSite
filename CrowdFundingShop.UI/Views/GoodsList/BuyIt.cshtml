@@ -159,7 +159,7 @@
     alert("验证是通过了")
     //通过ready接口处理成功验证
     wx.ready(function () {
-        alert("进来没")
+        alert("@(entity.appId + "," + entity.timeStamp+","+ entity.nonceStr+","+entity.package+","+entity.paySign)");
         // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后
         document.querySelector('#wxpay').onclick = function () {
         wx.chooseWXPay({

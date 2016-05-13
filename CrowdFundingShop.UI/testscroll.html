@@ -8,14 +8,12 @@
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
-    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/com/com.css" />
-    <link type="text/css" rel="stylesheet" href="~/Resources/wap/css/home/index.css" />
     <script src="Resources/js/jquery-1.9.1.min.js"></script>
     <!--@*滑动引用*@-->
     <script src="Resources/wap/js/iscroll.js"></script>
 </head>
 <body>
-    <div id="wrapper">
+    <div id="wrapper" style="background-color:green;height:200px">
         <div class="scroll">
             这个区域可以滑动
         </div>
@@ -23,5 +21,46 @@
 </body>
 </html>
 <script>
-    var Scroll = new iScroll('wrapper', { hScrollbar: false, vScrollbar: false });
+    //$(function () {
+    //    var startx = 0;
+    //    var endx = 0;
+    //    $("#wrapper").mousedown(function () {
+    //        startx = getX(event);
+    //    });
+    //    $("#wrapper").mouseup(function () {
+    //        var endx = getX(event);
+    //        if (startx > endx) {
+    //            alert("向右")
+    //        }
+    //        else if (startx < endx) {
+    //            alert("向左")
+    //        }
+    //        else {
+    //            alert(startx + "," + endx);
+    //        }
+    //    });
+    //});
+    //function getX(e) {
+    //    e = e || window.event;
+    //    return e.pageX || e.clientX + document.body.scroolLeft;
+    //}
+
+    $(document).ready(function () {
+        var startx = 0;
+        var endx = 0;
+        $(document).mousedown(function (event) {
+            startx = event.pageX;
+        }).mouseup(function () {
+            endx = event.pageX;
+            if (startx > endx) {
+                alert("由" + startx + "到" + endx + "向左")
+            }
+            else if (startx < endx) {
+                alert("由" + startx + "到" + endx + "向右")
+            }
+            else {
+                alert("由" + startx + "到" + endx + "没动")
+            }
+        });
+    });
 </script>
