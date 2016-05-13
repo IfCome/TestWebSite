@@ -92,9 +92,12 @@ namespace CrowdFundingShop.DAL
                                       [operatedetail], 
                                       [operatetime], 
                                       [ipaddress], 
-                                      UserName=(SELECT TOP 1 realname 
+                                      RealName=(SELECT TOP 1 realname 
                                                 FROM   backgrounduserinfo 
-                                                WHERE  id = userid) 
+                                                WHERE  id = userid) , 
+                                      UserName=(SELECT TOP 1 userName 
+                                                FROM   backgrounduserinfo 
+                                                WHERE  id = userid)
                         FROM   [backgrounduserinfo_log] WITH (nolock) 
                         ORDER  BY [operatetime] DESC 
                     ";
@@ -109,6 +112,7 @@ namespace CrowdFundingShop.DAL
                     OperateDetail = Converter.TryToString(row["OperateDetail"], string.Empty),
                     OperateTime = Converter.TryToDateTime(row["OperateTime"], Convert.ToDateTime("1900-01-01")),
                     IpAddress = Converter.TryToString(row["IpAddress"], string.Empty),
+                    RealName = Converter.TryToString(row["RealName"], string.Empty),
                     UserName = Converter.TryToString(row["UserName"], string.Empty),
 
                 }).ToList();

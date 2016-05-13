@@ -44,7 +44,7 @@ namespace CrowdFundingShop.UI.Models.PC
         /// <summary>
         /// 众筹进度（百分比）
         /// </summary>
-        public float Progress { get; set; }
+        public double Progress { get; set; }
 
         /// <summary>
         /// 日增量

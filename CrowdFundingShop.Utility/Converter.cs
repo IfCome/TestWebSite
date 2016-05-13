@@ -473,5 +473,17 @@ namespace CrowdFundingShop.Utility
             return sb.ToString();
         }
 
+        public static string GetFloatWithoutPoint(string floatValueStr)
+        {
+            if (floatValueStr.Contains('.'))
+            {
+                return floatValueStr.TrimEnd('0').TrimEnd('.');
+            }
+            else
+            {
+                return floatValueStr;
+            }
+        }
+
     }
 }

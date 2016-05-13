@@ -38,8 +38,13 @@ namespace CrowdFundingShop.Model
         public string IpAddress { get; set; }
 
         /// <summary>
-        /// 操作人姓名
+        /// 操作人用户名
         /// </summary>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// 操作人姓名
+        /// </summary>
+        public string RealName { get; set; }
     }
 }

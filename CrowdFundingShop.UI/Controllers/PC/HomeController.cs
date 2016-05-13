@@ -31,7 +31,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
                         LastestCustomer = Converter.TryToString(row["LastestCustomer"]),
                         ShareCount = Converter.TryToInt32(row["ShareCount"]),
                         OrderCount = Converter.TryToInt32(row["OrderCount"]),
-                        Progress = (float)Converter.TryToDouble(row["Progress"]),
+                        Progress = Converter.TryToDouble(Converter.GetFloatWithoutPoint(Converter.TryToDouble(row["Progress"]).ToString("F2"))),
                         DailyIncrease = Converter.TryToInt32(row["DailyIncrease"]),
                         Describe = Converter.TryToString(row["Describe"]),
                         HuodongNumber = Converter.TryToInt32(row["HuodongNumber"])
