@@ -148,7 +148,8 @@ namespace CrowdFundingShop.DAL
                                         Progress = ordercount * 100.0 / c.sharecount, 
                                         DailyIncrease =(SELECT Count(id) 
                                                         FROM   orderinfo 
-                                                        WHERE  huodongid = c.id) 
+                                                        WHERE  huodongid = c.id
+                                                               and CreateTime>CONVERT (nvarchar(12),GETDATE(),112)) 
                                 FROM   c 
                         ";
             var dataTable = SqlHelper.ExecuteDataTable(sql, null);
