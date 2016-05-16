@@ -1,0 +1,184 @@
+﻿@using CrowdFundingShop.Utility
+@{
+    Layout = null;
+}
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>客户管理</title>
+    <meta name="description" content="客户管理">
+    <meta name="keywords" content="客户管理 TestWebSite 测试站点">
+    @Html.Partial("~/Views/Common/SharePart.cshtml")
+    <style>
+        .am-progress {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="am-topbar admin-header">
+        @Html.Partial("~/Views/Common/TopBar.cshtml")
+    </header>
+    <div class="am-cf admin-main">
+        <!-- sidebar start -->
+        @*@Html.Partial("~/Views/Common/SideBar.cshtml")*@
+        <!-- sidebar end -->
+        <!-- content start -->
+        <div class="admin-content">
+            <ol class="am-breadcrumb">
+                <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
+                <li class="am-active">客户管理</li>
+            </ol>
+            <hr />
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-6">
+                </div>
+                <div class="am-u-sm-12 am-u-md-3">
+                </div>
+                <div class="am-u-sm-12 am-u-md-3">
+                    <div class="am-input-group am-input-group-sm">
+                        <input id="txtKeyWords" type="text" class="am-form-field" placeholder="昵称/手机号/城市" value="@ViewBag.KeyWords">
+                        <span class="am-input-group-btn">
+                            <button id="btnSearch" class="am-btn am-btn-default" type="button">搜索</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <form class="am-form">
+                        <table id="tableData" class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                                <tr>
+                                    <th class="table-id am-text-center">ID</th>
+                                    <th class="table-title">昵称</th>
+                                    <th class="table-author">手机号</th>
+                                    <th class="table-type">所在城市</th>
+                                    <th class="table-date am-hide-sm-only">购物车商品数</th>
+                                    <th class="table-set  am-hide-sm-only">未开奖商品数</th>
+                                    <th class="table-date am-hide-sm-only">已开奖商品数</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="am-cf">
+                            共 <span id="recordCount"></span> 个用户
+                            <div class="am-fr">
+                                <ul id="pagination" class="am-pagination"></ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <table id="dataTableTemplet" style="display:none">
+            <tr>
+                <td class="am-text-center">{Index}</td>
+                <td>{NickName}</td>
+                <td>{Phone}</td>
+                <td>{Address}</td>
+                <td class="am-hide-sm-only">{CartCount}</td>
+                <td class="am-hide-sm-only">{JiJiangJieXiao}</td>
+                <td class="am-hide-sm-only">{YiJieXiao}</td>
+            </tr>
+        </table>
+        <!-- content end -->
+    </div>
+    @Html.Partial("~/Views/Common/FootPart.cshtml")
+    <script type="text/javascript" src="/Resources/js/jqPaginator.js"></script>
+    <script>
+
+        var pageSize = 15;
+        var pageIndex = 1;
+        var isSearching = false;
+
+        // 分页配置
+        var pageOptions = {
+            totalPages: 1,
+            currentPage: 1,
+            visiblePages: 5,
+            onPageChange: function (num, type) {
+                if (type == 'init' || num < 1 || isSearching) {
+                    return false;
+                }
+                pageIndex = num;
+                search(false);
+            }
+        }
+
+        $(function () {
+            initCss();
+            bindFunction();
+            loadData();
+        });
+
+        function initCss() {
+            // 初始化分页
+            $.jqPaginator('#pagination', pageOptions);
+        }
+
+        function bindFunction() {
+            $('#selRoleType').change(function () {
+                search(true);
+            });
+            $('#btnSearch').click(function () {
+                search(true);
+            });
+        }
+
+        function loadData() {
+            search(true);
+        }
+
+        function search(isFirst) {
+            // 正在查询
+            if (isSearching) {
+                return;
+            }
+            if (isFirst) {
+                pageIndex = 1;
+            }
+            // 整理参数
+            var data = {
+                PageSize: pageSize,
+                CurrentPage: pageIndex,
+                RoleType: $('#selRoleType').val(),
+                KeyWords: $('#txtKeyWords').val()
+            };
+            isSearching = true;
+            $.get('@Url.RouteUrl(new { controller = "ConsumerInfo", action = "GetConsumerInfoList" })', data, function (result) {
+                if (result) {
+                    $('#recordCount').text(parseInt(result.AllCount));
+                    // 清空数据
+                    $("#tableData>tbody").html('');
+                    if (result.Rows != null && result.Rows.length > 0) {
+                        for (var i = 0; i < result.Rows.length; i++) {
+                            var row = result.Rows[i];
+                            var rowHtml = $("#dataTableTemplet>tbody").html();
+                            rowHtml = rowHtml.replace("{Index}", i + 1);
+                            rowHtml = rowHtml.replace(/{NickName}/g, row.NickName);
+                            rowHtml = rowHtml.replace("{Phone}", row.Phone);
+                            rowHtml = rowHtml.replace("{Address}", row.Address);
+                            rowHtml = rowHtml.replace("{CartCount}", row.CartCount);
+                            rowHtml = rowHtml.replace("{JiJiangJieXiao}", row.JiJiangJieXiao);
+                            rowHtml = rowHtml.replace("{YiJieXiao}", row.YiJieXiao);
+                            $("#tableData>tbody").append($(rowHtml));
+                        }
+                    }
+
+                    pageOptions.totalPages = Math.ceil(parseInt(result.AllCount) / pageSize);
+                    pageOptions.currentPage = pageIndex;
+                    $.jqPaginator('#pagination', pageOptions);
+                }
+                else {
+                    alert("查询出错");
+                }
+                isSearching = false;
+            }, 'json');
+        }
+
+    </script>
+</body>
+</html>

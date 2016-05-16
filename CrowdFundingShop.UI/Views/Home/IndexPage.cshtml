@@ -28,14 +28,14 @@
                 <li><a href="~/Home/IndexPage.html" class="am-icon-home">首页</a></li>
             </ol>
             <hr />
-            <ul class="am-avg-sm-1 am-avg-md-7 am-margin am-padding am-text-center admin-content-list ">
+            <ul class="am-avg-sm-1 am-avg-md-6 am-margin am-padding am-text-center admin-content-list ">
                 <li><a href="~/GoodsManager/Edit.html" class="am-text-success"><span class="am-icon-btn am-icon-shopping-bag"></span><br />新增商品</a></li>
                 <li><a href="~/GoodsManager/EditCategoryInfo.html" class="am-text-warning"><span class="am-icon-btn am-icon-gift"></span><br />编辑分类</a></li>
                 <li><a href="~/GoodsManager/IndexPage.html" class="am-text-secondary"><span class="am-icon-btn am-icon-shopping-cart"></span><br />商品管理</a></li>
                 <li><a href="~/UserInfo/AddUser.html" class="am-text-success"><span class="am-icon-btn am-icon-user-plus"></span><br />添加用户</a></li>
                 <li><a href="~/UserInfo/IndexPage.html" class="am-text-secondary"><span class="am-icon-btn am-icon-users"></span><br />用户管理</a></li>
-                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user"></span><br />客户管理</a></li>
-                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-file-text"></span><br />后台日志</a></li>
+                <li><a href="~/ConsumerInfo/ListPage.html" class="am-text-secondary"><span class="am-icon-btn am-icon-user"></span><br />客户管理</a></li>
+                @*<li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-file-text"></span><br />后台日志</a></li>*@
             </ul>
             <div class="am-g">
                 <div class="am-u-sm-12">
@@ -91,97 +91,95 @@
                 </div>
             </div>
             <div class="am-g">
-                <div class="am-u-md-6">
-                    <div class="am-panel am-panel-default">
-                        <div class="am-panel-hd am-cf">
-                            后台日志
-                            <span class="am-fr"><a href="#"> <small> 查看更多>></small>  </a></span>
-                        </div>
-                        <div id="collapse-panel-2" class="am-in">
-                            @{
-                                List<CrowdFundingShop.Model.BackgroundUserInfo_log> logList = ViewBag.LogList as List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
-                            }<crowdfundingshop.model.backgrounduserinfo_log>
-                                <crowdfundingshop.model.backgrounduserinfo_log>
-                                    <crowdfundingshop.model.backgrounduserinfo_log>
-                                        <crowdfundingshop.model.backgrounduserinfo_log>
-                                            <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
-                                                <tbody>
-                                                    @if (logList == null || logList.Count == 0)
-                                                    {
-                                                    <text>
-                                                        <tr>
-                                                            <th> 暂无后台日志 </th>
-                                                        </tr>
-                                                    </text>
-                                                    }
-                                                    else
-                                                    {
-                                                    <text>
-                                                        <tr>
-                                                            <th class="am-text-center">用户</th>
-                                                            <th>操作内容</th>
-                                                            <th>操作时间</th>
-                                                        </tr>
-                                                        @foreach (var log in logList)
-                                                            {
+                @*<div class="am-u-md-6">
+                        <div class="am-panel am-panel-default">
+                            <div class="am-panel-hd am-cf">
+                                后台日志
+                                <span class="am-fr"><a href="#"> <small> 查看更多>></small>  </a></span>
+                            </div>
+                            <div id="collapse-panel-2" class="am-in">
+                                @{
+                                    List<CrowdFundingShop.Model.BackgroundUserInfo_log> logList = ViewBag.LogList as List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
+                                }
+                                <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
+                                    <tbody>
+                                        @if (logList == null || logList.Count == 0)
+                                        {
+                                        <text>
+                                            <tr>
+                                                <th> 暂无后台日志 </th>
+                                            </tr>
+                                        </text>
+                                        }
+                                        else
+                                        {
+                                        <text>
+                                            <tr>
+                                                <th class="am-text-center">用户</th>
+                                                <th>操作内容</th>
+                                                <th>操作时间</th>
+                                            </tr>
+                                            @foreach (var log in logList)
+                                                {
 
-                                                    <tr>
-                                                        <td class="am-text-center"><a href="/UserInfo/SeeUserInfo.html?id=@(log.UserID)" title="查看用户信息">@(string.IsNullOrWhiteSpace(log.RealName) ? log.UserName : log.RealName)</a></td>
-                                                        <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
-                                                        <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                                    </tr>
-                                                            }
-                                                    </text>
-                                                    }
-                                                </tbody>
-                                            </table>
+                                        <tr>
+                                            <td class="am-text-center"><a href="/UserInfo/SeeUserInfo.html?id=@(log.UserID)" title="查看用户信息">@(string.IsNullOrWhiteSpace(log.RealName) ? log.UserName : log.RealName)</a></td>
+                                            <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
+                                            <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                                }
+                                        </text>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="am-u-md-6">
+                    </div>*@
+                <div class="am-u-md-12">
                     <div class="am-panel am-panel-default">
                         <div class="am-panel-hd am-cf">
                             新增客户
-                            <span class="am-fr"><a href="#"> <small> 查看更多>></small>  </a></span>
+                            <span class="am-fr"><a href="~/ConsumerInfo/ListPage.html"> <small> 查看更多>></small>  </a></span>
                         </div>
                         <div id="collapse-panel-2" class="am-in">
                             @{
-                                logList = ViewBag.LogList as List<CrowdFundingShop.Model.BackgroundUserInfo_log>;
-                            }<crowdfundingshop.model.backgrounduserinfo_log>
-                                <crowdfundingshop.model.backgrounduserinfo_log>
-                                    <crowdfundingshop.model.backgrounduserinfo_log>
-                                        <crowdfundingshop.model.backgrounduserinfo_log>
-                                            <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
-                                                <tbody>
-                                                    @if (logList == null || logList.Count == 0)
-                                                    {
-                                                        <text>
-                                                            <tr>
-                                                                <th> 暂无后台日志 </th>
-                                                            </tr>
-                                                        </text>
-                                                    }
-                                                    else
-                                                    {
-                                                        <text>
-                                                            <tr>
-                                                                <th class="am-text-center">用户</th>
-                                                                <th>操作内容</th>
-                                                                <th>操作时间</th>
-                                                            </tr>
-                                                            @foreach (var log in logList)
-                                                            {
+                                var consumerList = ViewBag.ConsumerList as List<CrowdFundingShop.Model.ConsumerInfo>;
+                            }
+                            <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
+                                <tbody>
+                                    @if (consumerList == null || consumerList.Count == 0)
+                                    {
+                                        <text>
+                                            <tr>
+                                                <th> 暂无客户信息 </th>
+                                            </tr>
+                                        </text>
+                                    }
+                                    else
+                                    {
+                                        <text>
+                                            <tr>
+                                                <th class="am-text-center">昵称</th>
+                                                <th class="am-text-center">所在城市</th>
+                                                <th class="am-text-center">购物车商品数</th>
+                                                <th class="am-text-center">未开奖商品数</th>
+                                                <th class="am-text-center">已开奖商品数</th>
+                                            </tr>
+                                            @foreach (var consumer in consumerList)
+                                            {
 
-                                                                <tr>
-                                                                    <td class="am-text-center"><a href="/UserInfo/SeeUserInfo.html?id=@(log.UserID)" title="查看用户信息">@(string.IsNullOrWhiteSpace(log.RealName) ? log.UserName : log.RealName)</a></td>
-                                                                    <td><a class="am-text-success" href="#" title="查看操作详情">@log.OperateTile</a></td>
-                                                                    <td>@(log.OperateTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
-                                                                </tr>
-                                                            }
-                                                        </text>
-                                                    }
-                                                </tbody>
-                                            </table>
+                                                <tr>
+                                                    <td class="am-text-center">@(consumer.NickName)</td>
+                                                    <td class="am-text-center">@(consumer.Address)</td>
+                                                    <td class="am-text-center">@(consumer.CartCount)</td>
+                                                    <td class="am-text-center">@(consumer.JiJiangJieXiao)</td>
+                                                    <td class="am-text-center">@(consumer.YiJieXiao)</td>
+                                                </tr>
+                                            }
+                                        </text>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

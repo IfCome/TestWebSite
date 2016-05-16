@@ -41,11 +41,12 @@ namespace CrowdFundingShop.UI.Controllers.PC
             ViewBag.HuoDongList = huodongSimpleInfoList;
 
             // 后台日志
-            List<Model.BackgroundUserInfo_log> logList = BLL.BackgroundUserBll_log.GetTop10Logs();
-            ViewBag.LogList = logList;
+            //List<Model.BackgroundUserInfo_log> logList = BLL.BackgroundUserBll_log.GetTop10Logs();
+            //ViewBag.LogList = logList;
 
-            // 不知道写啥
-
+            // 客户列表
+            List<Model.ConsumerInfo> consumerList = BLL.ConsumerInfoBll.GetTop10ConsumerInfos();
+            ViewBag.ConsumerList = consumerList;
 
             return View();
         }
