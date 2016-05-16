@@ -15,5 +15,9 @@ namespace CrowdFundingShop.BLL
         {
             return DAL.CategoryInfoDal.GetListByParentID(parentID,type);
         }
+        public static bool GetCountByCateName(string catename)
+        {
+            return DAL.CategoryInfoDal.GetCountByCateName(catename)>0;
+        }
     }
 }

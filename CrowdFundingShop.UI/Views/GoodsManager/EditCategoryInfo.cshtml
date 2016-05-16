@@ -38,37 +38,32 @@
                         <div class="am-form-group">
                             <label for="goods-name" class="am-u-sm-3 am-form-label"> 是否是第一级</label>
                             <div class="am-u-sm-9">
-                                <input type="radio" class="required" id="categoryinfo-isfirst" data-foolish-msg="该商品已存在！">
+                                <label class="am-radio-inline">
+                                    <input type="radio" name="isfirstroot" id="radfirst" value="1" checked="checked">是&nbsp;&nbsp;&nbsp;&nbsp;
+                                </label>
+                                <label class="am-radio-inline">
+                                    <input type="radio" name="isfirstroot" id="radsecond" value="0">否
+                                </label>
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 类别</label>
-                            <div class="am-u-sm-9">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label">一级名称</label>
+                            <div class="am-u-sm-9" id="divShowFirst" style="display:none">
                                 <select data-am-selected="{btnSize: 'sm'}" id="slctParent"></select>
-                                <select id="goods-category" data-am-selected="{btnSize: 'sm'}"></select>
+                            </div>
+                            <div class="am-u-sm-9" id="divShowSecond">
+                                <input type="text" class="required" id="first-name" placeholder="一级名称" data-foolish-msg="该一级名称已存在！">
                             </div>
                         </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 商品名</label>
+                        <div class="am-form-group" id="divSecond" style="display:none">
+                            <label for="goods-name" class="am-u-sm-3 am-form-label">二级名称</label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="required" id="goods-name" placeholder="该商品名称" data-foolish-msg="该商品已存在！">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label"> 商品描述</label>
-                            <div class="am-u-sm-9">
-                                <textarea class="required" id="goods-describe" placeholder="对该商品的详尽描述" rows="20"></textarea>
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="goods-name" class="am-u-sm-3 am-form-label">价格</label>
-                            <div class="am-u-sm-9">
-                                <input type="text" id="goods-price" placeholder="该商品众筹价格">
+                                <input type="text" class="required" id="second-name" placeholder="二级名称" data-foolish-msg="该二级名称已存在！">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button id="btncommit" type="button" class="am-btn am-btn-primary">下一步：添加物品图片</button>
+                                <button id="btncommit" type="button" class="am-btn am-btn-primary">确认</button>
                             </div>
                         </div>
                     </form>
@@ -87,21 +82,25 @@
     });
 
     // 绑定事件
+    var isfirst = "";
     function bindFunction() {
-        // 文本框获取焦点，隐藏tips
-        $('input').focus(function () {
-            if (tipInput && $(this).attr('id') == tipInput.attr('id')) {
-                tipInput.removeClass('am-field-error').parent().parent().removeClass('am-form-error');
-                tipInput = null;
-                hideToolTips();
-            }
-        });
         //label标签字体细化
         $("label").css("font-weight", "normal");
         //初始化下拉列表
         LoadCategory(0, 1);
         $("#slctParent").on("change", function () {
             LoadCategory($(this).val(), 2)
+        });
+        //一级二级下显示不同的东西
+        $("#radfirst").click(function () {
+            $("#divShowFirst").hide();
+            $("#divShowSecond").show();
+            $("#divSecond").hide();
+        });
+        $("#radsecond").click(function () {
+            $("#divShowFirst").show();
+            $("#divShowSecond").hide();
+            $("#divSecond").show();
         });
         // 提交用户信息
         $('#btncommit').click(commitUserInfo);
@@ -136,21 +135,23 @@
     var data = {};
     var tipInput;
     function commitUserInfo() {
-        data.GoodsName = $.trim($('#goods-name').val());
-        data.Describe = $.trim($('#goods-describe').val());
-        data.Price = $.trim($('#goods-price').val());
-        data.Category = $('#goods-category').val();
+        data.FirstName = $.trim($('#first-name').val());
+        data.SecondName = $.trim($('#second-name').val());
+        data.IsFirst = $('input[name=isfirstroot]:checked').val();
+        data.ParentID = data.IsFirst == 1 ? 0 : $("#slctParent").val();
+        data.CateName = data.IsFirst == 1 ? data.FirstName : data.SecondName;
         if (checkData()) {
             // 提交数据
-            $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "AddGoodsCallBack" })', data, function (result) {
+            $.post('@Url.RouteUrl(new { controller = "GoodsManager", action = "EditCate" })', data, function (result) {
                 if (result && result.Message == 'OK') {
-                    location.href = '/GoodsManager/EditPic?id=' + result.InsertID;
+                    alert("添加成功");
+                    location.reload();
                 }
                 else {
-                    if (result.ErrorType == 'GoodsName') {
-                        tipInput = $('#goods-name');
-                    } else if (result.ErrorType == 'Describe') {
-                        tipInput = $('#goods-describe');
+                    if (result.ErrorType == 'FirstName') {
+                        tipInput = $('#first-name');
+                    } else if (result.ErrorType == 'SecondName') {
+                        tipInput = $('#second-name');
                     } else if (result.ErrorType == 'Price') {
                         tipInput = $('#goods-price');
                     } else if (result.ErrorType == 'Category') {
@@ -169,21 +170,15 @@
 
     function checkData() {
         var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
-        if (!data.GoodsName || data.GoodsName.length == 0) {
-            tipInput = $('#goods-name');
-            showToolTips(tipInput, "请输入商品名");
+        if (data.IsFirst == 0 && (!data.SecondName || data.SecondName.length == 0)) {
+            tipInput = $('#second-name');
+            showToolTips(tipInput, "请输入二级名称");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }
-        if (!data.Describe || data.Describe.length < 10) {
-            tipInput = $('#goods-describe');
-            showToolTips(tipInput, "商品描述必须大于10个字");
-            tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
-            return false;
-        }
-        if (!reg.test(data.Price)) {
-            tipInput = $('#goods-price');
-            showToolTips(tipInput, "价格填写不正确");
+        if (data.IsFirst == 1 && (!data.FirstName || data.FirstName.length == 0)) {
+            tipInput = $('#first-name');
+            showToolTips(tipInput, "请输入一级名称");
             tipInput.addClass('am-field-error').parent().parent().addClass('am-form-error');
             return false;
         }

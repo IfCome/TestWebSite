@@ -27,8 +27,8 @@ namespace CrowdFundingShop.DAL
                                     ,@IsDelete
                                )";
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter() { ParameterName = "@GoodsID", Value = entity.CategoryName });
-            parameters.Add(new SqlParameter() { ParameterName = "@ShareCount", Value = entity.ParentId });
+            parameters.Add(new SqlParameter() { ParameterName = "@CategoryName", Value = entity.CategoryName });
+            parameters.Add(new SqlParameter() { ParameterName = "@ParentId", Value = entity.ParentId });
             parameters.Add(new SqlParameter() { ParameterName = "@IsDelete", Value = 0 });
             try
             {
@@ -78,6 +78,16 @@ namespace CrowdFundingShop.DAL
                 }).ToList();
             }
             return null;
+        }
+        public static int GetCountByCateName(string catename)
+        {
+            var sql = @"SELECT COUNT(*) FROM CategoryInfo WHERE CategoryName=@CategoryName";
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter() { ParameterName = "@CategoryName", Value = catename });
+
+            var count = SqlHelper.ExecuteScalar(sql, parameters.ToArray());
+
+            return Converter.TryToInt32(count);
         }
         #endregion
     }

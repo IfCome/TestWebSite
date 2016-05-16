@@ -68,13 +68,11 @@
             </ol>
             <hr />
             <div class="am-g">
-                <div class="am-u-sm-12 am-u-md-4">
+                @*<div class="am-u-sm-12 am-u-md-4">
                     <ol class="am-breadcrumb">
-                        <li><a href="#doc-oc-demo1" data-am-offcanvas>所有分类</a></li>
-                        <li><a href="#doc-oc-demo1" data-am-offcanvas>手机数码</a></li>
-                        <li class="am-active">手机</li>
+                        <li><a href="/goodsmanager/editcategoryinfo">编辑商品分类</a></li>
                     </ol>
-                </div>
+                </div>*@
                 <div class="am-u-sm-12 am-u-md-2">
                     <div class="am-form-group">
                         <select id="slctHuoDongState" data-am-selected="{btnSize: 'sm'}">
@@ -95,7 +93,7 @@
                     </div>
                 </div>
             </div>
-            <div class="am-g">
+            @*<div class="am-g">
                 <div class="am-u-sm-12 am-u-md-12">
                     <a href="#"><span class="am-badge am-badge-secondary"> 默认排序</span></a>
                     <a href="#"><span class="am-badge am-badge-secondary am-icon-unsorted"> 价格</span></a>
@@ -103,7 +101,7 @@
                     <a href="#"><span class="am-badge am-badge-secondary am-icon-sort-alpha-asc"> 商品名称</span></a>
                     <a href="#"><span class="am-badge am-badge-secondary am-icon-sort-numeric-desc"> 参与人数</span></a>
                 </div>
-            </div>
+            </div>*@
             <div class="am-g">
                 <div class="am-u-sm-12">
                     <form class="am-form">
@@ -133,7 +131,7 @@
                 <table id="dataTableTemplet" style="display:none">
                     <tr>
                         <td class="am-text-center">{Index}</td>
-                        <td><a href="javascript:void(0)" onclick="ShowUserDetails('{ID}');">{GoodsName}</a></td>
+                        <td><a href="javascript:void(0)" onclick="ShowGoods('{ID}');" style="color: #131313; text-decoration: none; cursor: pointer; width: 200px; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{GoodsName}</a></td>
                         <td>{Category}</td>
                         @*<td>{Describe}</td>*@
                         <td class="am-hide-sm-only">{Price}</td>

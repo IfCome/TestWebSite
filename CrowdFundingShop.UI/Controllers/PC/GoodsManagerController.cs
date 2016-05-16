@@ -116,7 +116,7 @@ namespace CrowdFundingShop.UI.Controllers.PC
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
-            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID,"PC");
+            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID, "PC");
             if (categoryInfoList != null)
             {
                 return Json(new
@@ -219,6 +219,46 @@ namespace CrowdFundingShop.UI.Controllers.PC
         public ActionResult EditCategoryInfo()
         {
             return View();
+        }
+        public ActionResult EditCate(int isfirst, int parentid, string catename)
+        {
+            string errorType = "";
+            string msg = "OK";
+            //用来返回刚插入的记录的ID
+            string insertID = "";
+            // 验证参数
+            if (isfirst == 1 && string.IsNullOrWhiteSpace(catename))
+            {
+                errorType = "FirstName";
+                msg = "请输入一级名称";
+            }
+            if (isfirst == 0 && string.IsNullOrWhiteSpace(catename))
+            {
+                errorType = "SecondName";
+                msg = "请输入二级名称";
+            }
+            else if (BLL.CategoryInfoBll.GetCountByCateName(catename))
+            {
+                errorType = isfirst == 1 ? "FirstName" : "SecondName";
+                msg = "已存在该分类";
+            }
+            else
+            {
+                // 添加用户
+                Model.CategoryInfo cateInfo = new Model.CategoryInfo()
+                {
+                    CategoryName = catename,
+                    ParentId = parentid,
+                    IsDelete = 0
+                };
+                bool result = BLL.CategoryInfoBll.Add(cateInfo);
+                if (!result)
+                {
+                    errorType = "alert";
+                    msg = "添加失败，请重试";
+                }
+            }
+            return Json(new { Message = msg, ErrorType = errorType, InsertID = insertID }, JsonRequestBehavior.AllowGet);
         }
     }
 }
