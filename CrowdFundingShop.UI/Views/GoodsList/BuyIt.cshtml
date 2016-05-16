@@ -156,7 +156,6 @@
         'chooseCard',
         'openCard'] // 必填，需要使用的JS接口列表
     });
-    alert("验证是通过了")
     //通过ready接口处理成功验证
     wx.ready(function () {
         alert("@(entity.appId + "," + entity.timeStamp+","+ entity.nonceStr+","+entity.package+","+entity.paySign)");

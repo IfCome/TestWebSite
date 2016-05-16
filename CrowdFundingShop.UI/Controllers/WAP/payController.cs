@@ -15,90 +15,110 @@ namespace CrowdFundingShop.UI.Controllers.WAP
 {
     public class payController : WAPBaseController
     {
-
-        //        /// <summary>
-        //        /// 公共确认订单
-        //        /// </summary>
-        //        /// <returns></returns>
-        //        public ActionResult NotarizePayOrder()
-        //        {
-        //            string id = Request.QueryString["id"];
-        //            string url = Request.QueryString["url"];
-        //            return Redirect(ViewBag.url);
-        //        }
-
-
-        /// <summary>
-        /// 微信公共支付
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult userpay()
+        public ActionResult userpay(string shoppingcartid = "")
         {
-            string openId = Identity.LoginConsumer.WeiXinAccount;//Request.QueryString["openid"].ToString();
-
             try
             {
-                string body = "测试机";
-                int total_fee = 1;
-                string orderno = DateTime.Now.ToString("yyyyMMddhhmmss");
-
-                #region 向微信下订单
-                WxIncomeHelp client = new WxIncomeHelp();
-                UnifyOrder entity = new UnifyOrder();
-                entity.appid = ConfigurationManager.AppSettings["AppID"].ToString();
-                entity.mch_id = ConfigurationManager.AppSettings["mch_id"].ToString();
-                //随机字符串不长于32位
-                entity.nonce_str = GetRandCode(32);
-                //商户订单号32个字符内、可包含字母
-                entity.out_trade_no = orderno;
-                entity.body = body;
-                entity.total_fee = total_fee;
-                entity.spbill_create_ip = Request.UserHostAddress;
-                string url = ConfigurationManager.AppSettings["commonPayForReturnUrl"];
-                entity.notify_url = url;
-                entity.trade_type = "JSAPI";
-                entity.openid = openId;
-                string key = ConfigurationManager.AppSettings["key"].ToString();
-                string xmlStr = client.DoDataForIncomeWeiXin(entity, key);
-                string resultStr = client.IncomeWeiXin(xmlStr);
-
-                var resultEntity = XmlEntityExchange<returnUnifyOrder>.ConvertXmlToEntity(resultStr);
-                #endregion
-                if (resultEntity != null && !string.IsNullOrEmpty(resultEntity.prepay_id))
+                List<Model.ShoppingCart> outModel = null;
+                if (shoppingcartid != "")
                 {
-                    JsIncomeModel q = new JsIncomeModel();
-                    q.appId = ConfigurationManager.AppSettings["AppID"].ToString();
-                    q.timeStamp = JsIncomHelp.GetTimeStamp();
-                    q.nonceStr = GetRandCode(32);
-                    q.package = "prepay_id=" + resultEntity.prepay_id;
-                    q.signType = "MD5";
-                    q.paySign = new JsIncomHelp().DoDataForsign(q, key);
-                    ViewBag.entity = q;
-                }
+                    //1、更新购物车数量shopping
+                    string[] strs = shoppingcartid.Remove(shoppingcartid.Length - 1).Split(',');
+                    foreach (var item in strs)
+                    {
+                        Model.ShoppingCart entity = new Model.ShoppingCart()
+                        {
+                            ID = Converter.TryToInt64(item.Split(':')[0]),
+                            StoreCount = Converter.TryToInt32(item.Split(':')[1]),
+                            ConsumerID = Identity.LoginConsumer.ID,//通过微信账号来判断该角色的顾客ID
+                            Type = 2
+                        };
+                        if (!BLL.ShoppingCartBll.UpdateStoreCount(entity))
+                        {
+                            Response.Write("<script>Model.message('网络不稳定，请稍后再试');<script>");
+                            return null;
+                        }
+                    }
+                    //2、查当前购物车的信息返回前台
+                    string sids = string.Empty;
+                    foreach (var item in strs)
+                    {
+                        sids += item.Split(':')[0] + ",";
+                    }
+                    sids = sids.Remove(sids.Length - 1);
+                    outModel = BLL.ShoppingCartBll.GetShoppingInfoBySID(sids);
 
-                ViewBag.body = body;
-                ViewBag.total_fee = total_fee / 100;
-                ViewBag.orderno = orderno;
-                ViewBag.openid = openId;
+                    #region 向微信发起请求
+                    string openId = Identity.LoginConsumer.WeiXinAccount;//Request.QueryString["openid"].ToString();
+                    try
+                    {
+                        string body = string.Empty;
+                        int total_fee = 0;
+                        foreach (var item in outModel)
+                        {
+                            body += item.GoodsName + "X" + item.StoreCount + "；";
+                            total_fee += Converter.TryToInt32(item.StoreCount) * 100;
+                        }
+                        //string body = "测试机";
+                        //int total_fee = 1;
+                        string orderno = DateTime.Now.ToString("yyyyMMddhhmmss");
+
+                        #region 向微信下订单
+                        WxIncomeHelp client = new WxIncomeHelp();
+                        UnifyOrder entity = new UnifyOrder();
+                        entity.appid = ConfigurationManager.AppSettings["AppID"].ToString();
+                        entity.mch_id = ConfigurationManager.AppSettings["mch_id"].ToString();
+                        //随机字符串不长于32位
+                        entity.nonce_str = JsIncomHelp.GetRandCode(32);
+                        //商户订单号32个字符内、可包含字母
+                        entity.out_trade_no = orderno;
+                        entity.body = body;
+                        entity.total_fee = total_fee;//
+                        entity.spbill_create_ip = Request.UserHostAddress;
+                        string url = ConfigurationManager.AppSettings["commonPayForReturnUrl"];
+                        entity.notify_url = url;
+                        entity.trade_type = "JSAPI";
+                        entity.openid = openId;
+                        string key = ConfigurationManager.AppSettings["key"].ToString();
+                        string xmlStr = client.DoDataForIncomeWeiXin(entity, key);
+                        string resultStr = client.IncomeWeiXin(xmlStr);
+
+                        var resultEntity = XmlEntityExchange<returnUnifyOrder>.ConvertXmlToEntity(resultStr);
+                        #endregion
+                        if (resultEntity != null && !string.IsNullOrEmpty(resultEntity.prepay_id))
+                        {
+                            JsIncomeModel q = new JsIncomeModel();
+                            q.appId = ConfigurationManager.AppSettings["AppID"].ToString();
+                            q.timeStamp = JsIncomHelp.GetTimeStamp();
+                            q.nonceStr = JsIncomHelp.GetRandCode(32);
+                            q.package = "prepay_id=" + resultEntity.prepay_id;
+                            q.signType = "MD5";
+                            q.paySign = new JsIncomHelp().DoDataForsign(q, key);
+                            ViewBag.entity = q;
+                        }
+
+                        ViewBag.body = body;
+                        ViewBag.total_fee = total_fee / 100;//total_fee  先写死，要不然支付不起;
+                        ViewBag.orderno = orderno;
+                        ViewBag.openid = openId;
+                        BLL.BackgroundUserBll_log.AddLog("userpay", resultStr, Request.UserHostAddress);
+                    }
+                    catch (Exception ex)
+                    {
+                        BLL.BackgroundUserBll_log.AddLog("userpay", "微信公共支付有问题！错误：" + ex.Message, Request.UserHostAddress);
+                        return null;
+                    }
+                    #endregion
+                }
+                return View(outModel);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                BLL.BackgroundUserBll_log.AddLog("userpay", "微信公共支付有问题！错误：" + ex.Message, Request.UserHostAddress);
+                BLL.BackgroundUserBll_log.AddLog("标记120", "支付时发生：" + e.Message, "0.0.0.0");
                 return null;
             }
-            return View();
         }
-
-        /// <summary>
-        /// 公共支付成功返回页面
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult PayAction()
-        {
-            return Redirect("/user/orders");
-            //return View();
-        }
-
+        //说实话我也不知道这个是用来干什么的
         public ActionResult notify()
         {
             try
@@ -108,128 +128,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 string xml = reader.ReadToEnd();
                 reader.Close();
                 BLL.BackgroundUserBll_log.AddLog("我就是想证明进来了么", xml, Request.UserHostAddress);
-                //var resultEntity = XmlEntityExchange<PayNotify>.ConvertXmlToEntity(xml);
-                //ViewModelOrder ordermodel = new ViewModelOrder();
-                //using (OrderServiceClient client = new OrderServiceClient())
-                //{
-                //    ordermodel = client.GetByOrderNo(resultEntity.out_trade_no);
-                //    int ispay = Convert.ToInt32(ordermodel.IsPay);
-                //    if (ordermodel != null && ordermodel.ID > 0 && ispay == 0)
-                //    {
-                //        ordermodel.IsPay = 1;
-                //        ordermodel.PayTime = DateTime.Now;
-                //        ordermodel.PayType = 8;//微信支付
-                //        int result = client.Update(ordermodel);
-
-                //        //分销订单
-                //        if ((ordermodel.OrderType == 7 || ordermodel.OrderType == 8) && result > 0)
-                //        {
-                //            ViewModelTOCUser fromuser = new ViewModelTOCUser();
-                //            using (TOCUserServiceClient service = new TOCUserServiceClient())
-                //            {
-                //                fromuser = service.GetById(Convert.ToInt32(ordermodel.UserId));
-                //            }
-                //            string openid = "";
-                //            string opneids = fromuser.WXOpenIds;
-                //            string[] openidsarray = opneids.Split(',');
-                //            foreach (var a in openidsarray)
-                //            {
-                //                if (a.Split('#')[0] == AppID)
-                //                    openid = a.Split('#')[1];
-                //            }
-
-                //            SqlParameter[] params_arc ={
-                //                new SqlParameter("@AppKey",SqlDbType.NVarChar),
-                //                new SqlParameter("@OrderID",SqlDbType.Int,4),
-                //                new SqlParameter("@OrderNo",SqlDbType.NVarChar),
-                //                new SqlParameter("@ActivityProductID",SqlDbType.Int,4),
-                //                new SqlParameter("@ActivityProductName",SqlDbType.NVarChar),
-                //                new SqlParameter("@OrderAmount",SqlDbType.Decimal),
-                //                new SqlParameter("@FromUserID",SqlDbType.Int,4),
-                //                new SqlParameter("@FromUserSex",SqlDbType.Int,4),
-                //                new SqlParameter("@FromOpenID",SqlDbType.NVarChar),
-                //                new SqlParameter("@FromUserLevel",SqlDbType.Int,4),
-                //                new SqlParameter("@FromNickName",SqlDbType.NVarChar)
-                //            };
-
-                //            params_arc[0].Value = AppID;
-                //            params_arc[1].Value = ordermodel.ID;
-                //            params_arc[2].Value = ordermodel.OrderNo;
-                //            params_arc[3].Value = ordermodel.ActivityProductID;
-                //            params_arc[4].Value = ordermodel.ProductName;
-                //            params_arc[5].Value = ordermodel.TotalFee;
-                //            params_arc[6].Value = fromuser.ID;
-                //            params_arc[7].Value = fromuser.Sex == null ? 0 : Convert.ToInt32(fromuser.Sex);
-                //            params_arc[8].Value = openid;
-                //            params_arc[9].Value = fromuser.Level == null ? 0 : fromuser.Level;
-                //            params_arc[10].Value = fromuser.LoginName;
-                //            DataSet dsinfo = BIStone.Data.SurveyDbHelper.ExecuteDataset("pro_AddBackCashRecords", params_arc);
-
-                //            //返现通知
-                //            if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
-                //            {
-
-                //                for (int i = 0; i < dsinfo.Tables[0].Rows.Count; i++)
-                //                {
-                //                    string msgopenid = dsinfo.Tables[0].Rows[i]["openid"].ToString();
-                //                    string msgcontent = dsinfo.Tables[0].Rows[i]["msgcontent"].ToString();
-                //                    string content = ReturnJson.ReturnMessage(ReturnJson.ReText(msgopenid, msgcontent), AccessTokenStr);
-                //                }
-                //            }
-
-                //            int coupon = 0;
-                //            int amount = 0;
-                //            string coupons = "";
-                //            //生成专车优惠券
-                //            if (ordermodel.TotalFee == 200)
-                //            {
-                //                coupon = 3;
-                //                amount = 100;
-                //            }
-                //            if (ordermodel.TotalFee == 400)
-                //            {
-                //                coupon = 3;
-                //                amount = 200;
-                //            }
-                //            if (ordermodel.TotalFee == 800)
-                //            {
-                //                coupon = 6;
-                //                amount = 200;
-                //            }
-                //            for (int i = 0; i < coupon; i++)
-                //            {
-                //                string couponno = GetTimeStamp();
-                //                System.Random random = new Random(Guid.NewGuid().GetHashCode());
-                //                for (int c = 0; c < 4; c++)
-                //                {
-                //                    couponno += random.Next(10).ToString();
-                //                }
-                //                if (coupons == "")
-                //                    coupons = couponno;
-                //                else
-                //                    coupons += "," + couponno;
-                //            }
-
-                //            SqlParameter[] paramsc ={
-                //                new SqlParameter("@ActivityProductID",SqlDbType.Int,4),
-                //                new SqlParameter("@userid",SqlDbType.Int,4),
-                //                new SqlParameter("@coupons",SqlDbType.NVarChar),
-                //                new SqlParameter("@Amount",SqlDbType.Int,4)
-                //            };
-
-                //            paramsc[0].Value = ordermodel.ActivityProductID;
-                //            paramsc[1].Value = ordermodel.UserId;
-                //            paramsc[2].Value = coupons;
-                //            paramsc[3].Value = amount;
-                //            BIStone.Data.SurveyDbHelper.ExecuteDataset("pro_ADProductCoupons", paramsc);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        BIStone.Data.SurveyDbHelper.ExecuteScalar("update WinningInfo set Status = 1 where scene_str ='" + resultEntity.out_trade_no + "'");
-                //    }
-
-                //}
             }
             catch (Exception ex)
             {
@@ -237,7 +135,6 @@ namespace CrowdFundingShop.UI.Controllers.WAP
             }
             return Content("success");
         }
-
         public ActionResult orderDetail()
         {
             Response.Write("orderDetail");
@@ -265,37 +162,3 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         }
     }
 }
-//        /// <summary>
-//        /// 根据订单Id获取订单信息
-//        /// 根据业务类型获取返回的配置好的返回地址
-//        /// </summary>
-//        /// <param name="id">订单编号</param>
-//        /// <param name="btype">业务类型</param>
-//        /// <param name="url">返回地址</param>
-//        /// <returns></returns>
-//        public ViewModelOrder GetData(string id, string btype)
-//        {
-//            var obj = new ViewModelOrder();
-//            if (!string.IsNullOrEmpty(id))
-//            {
-//                #region 获取订单相关信息
-//                using (OrderServiceClient client = new OrderServiceClient())
-//                {
-//                    var entity = client.GetById(Convert.ToInt32(id));
-//                    if (entity != null)
-//                        obj = entity;
-//                    else
-//                        obj = null;
-//                }
-//                #endregion
-//            }
-//            else
-//            {
-//                obj = null;
-//            }
-//            return obj;
-//        }
-
-
-//    }
-//}

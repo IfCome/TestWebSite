@@ -1,139 +1,119 @@
 ﻿@{
-    ViewBag.Title = "View1";
     Layout = null;
     CrowdFundingShop.Model.JsIncomeModel entity = ViewBag.entity as CrowdFundingShop.Model.JsIncomeModel;
 }
-<!DOCTYPE html>
-<!-- saved from url=(0046)https://secure.ctrip.com/webapp/payment2/index
--->
-<html style="font-size: 24.1875px;">
+@model IEnumerable<CrowdFundingShop.Model.ShoppingCart>
+
+<!doctype html>
+<html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>
-        一元易购物，用户付款
-    </title>
+    <title>一元易购物</title>
     <meta charset="utf-8">
-    <meta name="description" content="支付">
-    <meta name="keywords" content="支付">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-    <meta name="full-screen" content="yes">
-    <meta name="x5-fullscreen" content="true">
-    <meta name="browsermode" content="application">
-    <meta name="x5-page-mode" content="app">
-    <link rel="stylesheet" href="/Content/css/paymain.css">
-    <link rel="stylesheet" href="/Content/css/pay.css">
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script type="text/javascript">
-        var useragent = navigator.userAgent.toLowerCase();
-        if (useragent.indexOf("micromessenger") <= 0) {
-            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=noauth&connect_redirect=1#wechat_redirect";
-        }
-    </script>
+    <meta content=" width = device-width , initial-scale = 1.0 , maximum-scale = 1.0 , user-scalable = no " id="viewport" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="~/Resources/wap/css/cart/zip.touch.cart.css" rel="stylesheet" />
+    <link href="~/Resources/wap/css/cart/index.css" rel="stylesheet" />
+    <!--改版后 com1-3.css可以去掉-->
+    <link href="~/Resources/wap/css/cart/com1-3.css" rel="stylesheet" />
+    <!--新改的-->
+    <link href="~/Resources/wap/css/cart/com1-4.css" rel="stylesheet" />
+    <script src="~/Resources/js/jquery-1.9.1.min.js"></script>
+    <!--弹出款-->
+    <script src="~/Resources/wap/js/zepto.min.js"></script>
+    <script src="~/Resources/wap/js/shoppingcart.js"></script>
 </head>
-<body class="gray" onselectstart="return false">
-    <div id="headerview" style="height: 44px; visibility: visible;">
-        <div class="cm-header cm-header--no-right" id="ui-view-14" style="">
-            <span class=" cm-header-icon fl  js_back">
-                <i class="icon-back">
-                </i>
-            </span>
-            <h1 class="cm-page-title" style="padding-right:40px">
-                订单支付
-            </h1>
-        </div>
-    </div>
-    <div id="main">
-        <div class="main-frame">
-            <div class="main-viewport">
-                <div id="client_id_viewport_1_1454470873887" page-url="index" data-view-name="index"
-                     style="">
-                    <article class="cont_wrapnew" style="margin-top: 0px;">
-                        <div class="payable">
-                            <div class="p0_15">
-                                <div id="order_title" class="font16 ellips">
-                                    @ViewBag.body
-                                </div>
-                                <div id="sub_order_title" class="cgray ellips_line2 font13">
-                                    订单编号： @ViewBag.orderno
-                                </div>
-                            </div>
-                            <div class="relative plr_15 pay-c666 mb5" id="c_payment_index_amount">
-                                应付总额：
-                                <div style="display:inline">
-                                    <i class="corange">
-                                        ￥
-                                        <span class="ft18">
-                                            @Convert.ToInt32(ViewBag.total_fee)
-                                        </span>
-                                    </i>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="c_pay_index_lpk" style="display: none;" class="mb10">
-                        </div>
-                        <div class="pay-c666 plr_15 mb5" id="order_leaveamount_p" style="display:none">
-                        </div>
-                        <ul id="paywaylist_ul" class="payicon mb10 pay_autowidth dsp_none" style="display: block;">
-                            @*<li id="c_payment_global_bankcard" data-defaultsort="3" data-sort="1">
-                                  <i class="pay_2 i_box">
-                                  </i>
-                                  <div class="r_content padtop9 padtop9">
-                                    银联支付
-                                  </div>
-                                </li>*@
-                            <li id="wxpay" data-defaultsort="1" data-sort="3"
-                                class="">
-                                <i class="pay_3 i_box">
-                                </i>
-                                <div class="r_content padtop9 pt3 padtop9">
-                                    <a href="javascript:void(0)">微信支付</a>
-                                    @* <em class="payicon_tips3">
-                                          推荐
-                                        </em>*@
-                                </div>
-                            </li>
-                            @*   <li id="c_payment_global_mobileali" data-defaultsort="4" data-sort="4"
-                                class="opacity_9">
-                                  <i class="pay_4 i_box">
-                                  </i>
-                                  <div class="r_content padtop9 padtop9">
-                                    支付宝支付
-                                  </div>
-                                </li>*@
-                        </ul>
-                    </article>
+<body>
+    <div class="com-content">
+        <div class="clearboth"></div>
+        <div class="com-content-area" id="js-com-content-area">
+            <div class="mask hidden"></div>
+            <div class="page-role payed-page">
+                <div class="com-title">
+                    <a title="返回" href="javascript:history.back();void(0)" class="return">
+                    </a>
+                    <a title="菜单" href="javascript:void(0);" class="home_menu">
+                        <span></span>
+                    </a>
+                    提交订单
+                </div>
+                <div class="spaceholder"></div>
+                <div class="pxui-area">
+                    <h2><i></i>恭喜您！<br />订单已提交成功！</h2>
+                    @{
+                        int price = 0;
+                        if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                price += item.StoreCount;
+                            }
+                        }
+                    }
+                    <input type="button" id="wxpay" class="pxui-light-button" value="立即支付(@(price+"元)")" />
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <b>商品详情：</b><span>@(item.GoodsName + "(" + item.StoreCount + "件)")</span>
+                            <br />
+                            <b>支付方式：</b><span>微信支付</span><br />
+                            <b>支付金额：</b><strong class="pxui-color-red">@("￥" + item.StoreCount)</strong><br />
+                            <hr style="width:97%;" />
+                        }
+                    }
+                    <div class="app_result_tip">
+                        <span>安全提醒：下单后，为了您的财产安全，任何有涉及汇款、退款等内容的信息或电话，请不要相信，谨防假冒客服电话诈骗！</span>
+                    </div>
                 </div>
             </div>
-            <div class="main-state">
-            </div>
         </div>
-    </div>
-    <div id="footer">
     </div>
 </body>
 </html>
-<script src="~/Resources/wap/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $(".js_back").click(function () {
-            window.history.go(-1);
-        });
-
-        $("#wxpay").click(function () {
-            callpay();
-        });
-    });
+    top.ztetbdata = null;
 </script>
-
+<script src="~/Resources/wap/js/jquery-1.8.3.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
-    wx.checkJsApi({
-        jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-        success: function (res) {
-            alert(res.checkResult);
-            // 以键值对的形式返回，可用的api值true，不可用为false
-            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+    var useragent = navigator.userAgent.toLowerCase();
+    if (useragent.indexOf("micromessenger") <= 0) {
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=noauth&connect_redirect=1#wechat_redirect";
+    }
+</script>
+<script>
+    function pay() {
+        var data = {};
+        @{
+                string huodongids = string.Empty;
+                string storecount = string.Empty;
+                string  allprice=string.Empty;
+                string zhongchoucount = string.Empty;
+                foreach (var item in Model)
+                {
+                    storecount += item.StoreCount + ",";
+                    huodongids+= item.HuoDongID + ",";
+                    allprice += item.Price+",";
+                    zhongchoucount += item.ZhongChouCount.ToString()+",";
+                }
         }
-    });
+        data.HuoDongIDs = "@huodongids";
+        data.StoreCount = "@storecount";
+        data.allprice = "@allprice";
+        data.zhongchoucount = "@zhongchoucount";
+        // 提交数据
+        $.post('@Url.RouteUrl(new { controller = "Order", action = "Pay" })', data, function (result) {
+            if (result && result.Message == 'OK') {
+                location.href = "/order/index";
+            }
+            else {
+                Model.message(result.Message);
+            }
+        }, 'JSON');
+    }
+
     //通过config接口注入权限验证配置
     wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -188,10 +168,9 @@
                 signType: "MD5", // 签名方式，'MD5'
                 paySign: "@entity.paySign", // 支付签名
                 success: function (res) {
-                    alert(res.errMsg);
                     if (res.errMsg == "chooseWXPay:ok") {
-                        alert("支付成功");
-                        location.href = "/order/index";
+                        //交钱成功后再添加本地商品
+                        pay();
                         // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                     }
                     else if (res.errMsg == "chooseWXPay:cancel") {
@@ -207,44 +186,3 @@
         };
     });
 </script>
-
-
-
-@*<script type="text/javascript">
-        function jsApiCall() {
-            alert("@entity.timeStamp");
-            WeixinJSBridge.invoke('getBrandWCPayRequest', {
-                "appId": "@entity.appId",
-                "timeStamp": "@entity.timeStamp",
-                "nonceStr": "@entity.nonceStr",
-                "package": "@entity.package",
-                "signType": "MD5",
-                "paySign": "@entity.paySign"
-            }, function (res) {
-                if (res.err_msg == "get_brand_wcpay_request:ok") {
-                    window.location = "/pay/PayAction";
-                }
-                else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                    alert("您取消了支付!");
-                }
-                else {
-                    alert(res.err_msg);
-                    alert("您支付失败了!");
-                }
-            });
-        };
-        function callpay() {
-            if (typeof WeixinJSBridge == "undefined") {
-                if (document.addEventListener) {
-                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                }
-                else if (document.attachEvent) {
-                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                }
-            }
-            else {
-                jsApiCall();
-            }
-        };
-    </script>*@

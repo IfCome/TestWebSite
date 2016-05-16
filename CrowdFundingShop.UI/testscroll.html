@@ -44,23 +44,57 @@
     //    e = e || window.event;
     //    return e.pageX || e.clientX + document.body.scroolLeft;
     //}
+    var startx = 0;
+    var endx = 0;
+    $(function () {
+        document.addEventListener("touchstart", fn, false);
+        document.addEventListener("touchend", fn, false);
+        document.addEventListener("touchmove", fn, false);
+    })
+    function fn(event) {
+        var event = event || window.event;
+        switch (event.type) {
+            case "touchstart":
+                startx = event.pageX;
+                break;
+            case "touchend":
+                endx = event.pageX;
+                break;
+            case "touchmove":
+                event.preventDefault();//取消事件的默认动作
+                break;
+        }
+        //alert(event.type);
+        test();
+    }
 
-    $(document).ready(function () {
-        var startx = 0;
-        var endx = 0;
-        $(document).mousedown(function (event) {
-            startx = event.pageX;
-        }).mouseup(function () {
-            endx = event.pageX;
-            if (startx > endx) {
-                alert("由" + startx + "到" + endx + "向左")
-            }
-            else if (startx < endx) {
-                alert("由" + startx + "到" + endx + "向右")
-            }
-            else {
-                alert("由" + startx + "到" + endx + "没动")
-            }
-        });
-    });
+    function test() {
+        if (startx > endx) {
+            alert("由" + startx + "到" + endx + "向左")
+        }
+        else if (startx < endx) {
+            alert("由" + startx + "到" + endx + "向右")
+        }
+        else {
+            alert("由" + startx + "到" + endx + "没动")
+        }
+    }
+    //$(document).ready(function () {
+    //    var startx = 0;
+    //    var endx = 0;
+    //    $(document).touchstart(function (event) {
+    //        startx = event.pageX;
+    //    }).touchend(function () {
+    //        endx = event.pageX;
+    //        if (startx > endx) {
+    //            alert("由" + startx + "到" + endx + "向左")
+    //        }
+    //        else if (startx < endx) {
+    //            alert("由" + startx + "到" + endx + "向右")
+    //        }
+    //        else {
+    //            alert("由" + startx + "到" + endx + "没动")
+    //        }
+    //    });
+    //});
 </script>
