@@ -25,7 +25,7 @@ namespace CrowdFundingShop.BLL
             }
             else if (type == 2)
             {
-                huodongstate = "30";
+                huodongstate = "30,40";
             }
             List<Model.GoodsBaseInfo> list = DAL.OrderInfoDal.GetList(type, huodongstate, consumerid, isMine);
             if (list != null)

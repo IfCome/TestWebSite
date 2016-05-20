@@ -161,51 +161,63 @@ namespace CrowdFundingShop.DAL
         public static List<Model.ConsumerInfo> GetPageListByCondition(int pageSize, int currentPage, out int allCount, string keyWords = "")
         {
             var sql = @"
-                        WITH    A AS ( SELECT   COUNT(1) AS 'JiJiangJieXiao' ,
-                                                ConsumerID
-                                       FROM     OrderInfo O
-                                                JOIN HuodongInfo H ON O.HuodongID = H.ID
-                                       WHERE    H.State = 10
-                                       GROUP BY ConsumerID
-                                     ),
-                                B AS ( SELECT   COUNT(1) AS 'YiJieXiao' ,
-                                                ConsumerID
-                                       FROM     OrderInfo O
-                                                JOIN HuodongInfo H ON O.HuodongID = H.ID
-                                       WHERE    H.State = 30
-                                       GROUP BY ConsumerID
-                                     ),
-                                C AS ( SELECT   SUM(StoreCount) AS 'CartCount' ,
-                                                ConsumerID
-                                       FROM     ShoppingCart S
-                                                JOIN HuodongInfo H ON S.HuodongID = H.ID
-                                       WHERE    STATE = 10
-                                       GROUP BY ConsumerID
-                                     ),
-                                D AS ( SELECT   ID ,
-                                                WeiXinAccount ,
-                                                Nickname ,
-                                                Phone ,
-                                                HeadIcon ,
-                                                [Address]
-                                       FROM     ConsumerInfo
-                                       {0}
-                                     ),
-                                result
-                                  AS ( SELECT   D.* ,
-                                                JiJiangJieXiao = ISNULL(A.JiJiangJieXiao, 0) ,
-                                                YiJieXiao = ISNULL(B.YiJieXiao, 0) ,
-                                                CartCount = ISNULL(C.CartCount, 0) ,
-                                                ROW_NUMBER() OVER ( ORDER BY ID DESC ) AS [RowNumber]
-                                       FROM     D
-                                                LEFT	JOIN A ON D.ID = A.ConsumerID
-                                                LEFT	JOIN B ON D.ID = B.ConsumerID
-                                                LEFT	JOIN C ON D.ID = C.ConsumerID
-                                     )
-                            SELECT  *
-                            FROM    result 
-                            WHERE   @PageSize * ( @CurrentPage - 1 ) < RowNumber
-                                    AND RowNumber <= @PageSize * @CurrentPage
+                        WITH a 
+                             AS (SELECT Count(t.huodongid) AS 'JiJiangJieXiao', 
+                                        t.consumerid 
+                                 FROM   (SELECT DISTINCT O.consumerid, 
+                                                         O.huodongid 
+                                         FROM   huodonginfo AS H 
+                                                INNER JOIN orderinfo AS O 
+                                                        ON H.id = O.huodongid 
+                                         WHERE  H.state = 10) AS t 
+                                 GROUP  BY t.consumerid), 
+                             b 
+                             AS (SELECT Count(t.huodongid) AS 'YiJieXiao', 
+                                        t.consumerid 
+                                 FROM   (SELECT DISTINCT O.consumerid, 
+                                                         O.huodongid 
+                                         FROM   huodonginfo AS H 
+                                                INNER JOIN orderinfo AS O 
+                                                        ON H.id = O.huodongid 
+                                         WHERE  H.state IN ( 30, 40 )) AS t 
+                                 GROUP  BY t.consumerid), 
+                             c 
+                             AS (SELECT Sum(storecount) AS 'CartCount', 
+                                        consumerid 
+                                 FROM   shoppingcart S 
+                                        JOIN huodonginfo H 
+                                          ON S.huodongid = H.id 
+                                 WHERE  state = 10 
+                                 GROUP  BY consumerid), 
+                             d 
+                             AS (SELECT id, 
+                                        weixinaccount, 
+                                        nickname, 
+                                        phone, 
+                                        headicon, 
+                                        [address] 
+                                 FROM   consumerinfo 
+				                        {0}
+		                         ), 
+                             result 
+                             AS (SELECT d.*, 
+                                        JiJiangJieXiao = Isnull(a.jijiangjiexiao, 0), 
+                                        YiJieXiao = Isnull(b.yijiexiao, 0), 
+                                        CartCount = Isnull(c.cartcount, 0), 
+                                        Row_number() 
+                                          OVER ( 
+                                            ORDER BY id DESC ) AS [RowNumber] 
+                                 FROM   d 
+                                        LEFT JOIN a 
+                                               ON d.id = a.consumerid 
+                                        LEFT JOIN b 
+                                               ON d.id = b.consumerid 
+                                        LEFT JOIN c 
+                                               ON d.id = c.consumerid) 
+                        SELECT * 
+                        FROM   result 
+                        WHERE  @PageSize * ( @CurrentPage - 1 ) < rownumber 
+                               AND rownumber <= @PageSize * @CurrentPage 
                     ";
 
             //条件查询部分

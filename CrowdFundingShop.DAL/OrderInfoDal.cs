@@ -109,8 +109,7 @@ namespace CrowdFundingShop.DAL
             //}
             if (!string.IsNullOrEmpty(huodongstate))
             {
-                sqlWhere1 += " AND State=@State";
-                parameters.Add(new SqlParameter() { ParameterName = "@State", Value = huodongstate });
+                sqlWhere1 += string.Format( " AND State IN({0}) ",huodongstate);
             }
             if (isMine == 1)
             {
@@ -176,29 +175,65 @@ namespace CrowdFundingShop.DAL
         }
         public static Model.ConsumerInfo GetKeyCount(long consumerid)
         {
-            string sql = @"WITH A AS
-                                    (
-                                                    SELECT COUNT(1) AS 'JiJiangJieXiao' FROM OrderInfo O join HuodongInfo H
-                                                    ON O.HuodongID=H.ID
-                                        WHERE H.State=10 AND ConsumerID=@ConsumerID
-                                    )
-                                    , B AS
-                                    (
-                                       SELECT COUNT(1) AS 'YiJieXiao' FROM OrderInfo O join HuodongInfo H
-                                                    ON O.HuodongID=H.ID
-                                        WHERE H.State=30 AND ConsumerID=@ConsumerID
-                                    )
-                                    ,C AS
-                                    (
-                                                    SELECT SUM(StoreCount) AS 'CartCount' FROM ShoppingCart S JOIN HuodongInfo H
-                                                    ON S.HuodongID=H.ID
-                                                    WHERE ConsumerID=@ConsumerID AND STATE=10
-                                    )
-                                    ,D AS
-                                    (
-                                                    SELECT ID,WeiXinAccount,Nickname,Phone,HeadIcon FROM ConsumerInfo WHERE ID=@ConsumerID
-                                    )
-                                    SELECT * FROM A,B,C,D";
+//            string sql = @"WITH A AS
+//                                    (
+//                                                    SELECT COUNT(1) AS 'JiJiangJieXiao' FROM OrderInfo O join HuodongInfo H
+//                                                    ON O.HuodongID=H.ID
+//                                        WHERE H.State=10 AND ConsumerID=@ConsumerID
+//                                    )
+//                                    , B AS
+//                                    (
+//                                       SELECT COUNT(1) AS 'YiJieXiao' FROM OrderInfo O join HuodongInfo H
+//                                                    ON O.HuodongID=H.ID
+//                                        WHERE H.State=30 AND ConsumerID=@ConsumerID
+//                                    )
+//                                    ,C AS
+//                                    (
+//                                                    SELECT SUM(StoreCount) AS 'CartCount' FROM ShoppingCart S JOIN HuodongInfo H
+//                                                    ON S.HuodongID=H.ID
+//                                                    WHERE ConsumerID=@ConsumerID AND STATE=10
+//                                    )
+//                                    ,D AS
+//                                    (
+//                                                    SELECT ID,WeiXinAccount,Nickname,Phone,HeadIcon FROM ConsumerInfo WHERE ID=@ConsumerID
+//                                    )
+//                                    SELECT * FROM A,B,C,D";
+            string sql = @"
+                            WITH a 
+                                    AS (SELECT Count(1) AS 'JiJiangJieXiao' 
+                                        FROM   huodonginfo 
+                                        WHERE  state = 10 
+                                            AND id IN(SELECT DISTINCT huodongid 
+                                                        FROM   orderinfo 
+                                                        WHERE  consumerid = @ConsumerID)), 
+                                    b 
+                                    AS (SELECT Count(1) AS 'YiJieXiao' 
+                                        FROM   huodonginfo 
+                                        WHERE  state IN ( 30, 40 ) 
+                                            AND id IN(SELECT DISTINCT huodongid 
+                                                        FROM   orderinfo 
+                                                        WHERE  consumerid = @ConsumerID)), 
+                                    c 
+                                    AS (SELECT Sum(storecount) AS 'CartCount' 
+                                        FROM   shoppingcart S 
+                                            JOIN huodonginfo H 
+                                                ON S.huodongid = H.id 
+                                        WHERE  consumerid = @ConsumerID 
+                                            AND state = 10), 
+                                    d 
+                                    AS (SELECT id, 
+                                            weixinaccount, 
+                                            nickname, 
+                                            phone, 
+                                            headicon 
+                                        FROM   consumerinfo 
+                                        WHERE  id = @ConsumerID) 
+                            SELECT * 
+                            FROM   a, 
+                                    b, 
+                                    c, 
+                                    d 				
+                            ";
             List<SqlParameter> parameter = new List<SqlParameter>();
             parameter.Add(new SqlParameter() { ParameterName = "@ConsumerID", Value = consumerid });
             DataTable dataTable = new DataTable();
