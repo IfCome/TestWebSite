@@ -60,7 +60,9 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                             total_fee += Converter.TryToInt32(item.StoreCount) * 100;
                         }
                         //string body = "测试机";
-                        //int total_fee = 1;
+                        /*******************************************测试测试测试*************************************************/
+                        total_fee = 1;
+                        /*******************************************测试测试测试*************************************************/
                         string orderno = DateTime.Now.ToString("yyyyMMddhhmmss");
 
                         #region 向微信下订单

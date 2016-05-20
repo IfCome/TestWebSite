@@ -143,6 +143,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="File\XMLToken.xml" />
+    <Content Include="GameRule.html" />
     <Content Include="Global.asax" />
     <Content Include="images\UserIcons\2016032111151815.png" />
     <Content Include="images\UserIcons\2016032111151815_t.png" />
@@ -304,8 +305,13 @@
     <Content Include="Resources\wap\js\jquery-1.8.3.min.js" />
     <Content Include="Resources\wap\js\jquery.js" />
     <Content Include="Resources\wap\js\px-verify.js" />
+    <Content Include="Resources\wap\js\search\common.js" />
+    <Content Include="Resources\wap\js\search\jquery-1.6.2.min.js" />
+    <Content Include="Resources\wap\js\search\spin.min.js" />
     <Content Include="Resources\wap\js\shoppingcart.js" />
     <Content Include="Resources\wap\js\zepto.min.js" />
+    <Content Include="Resources\wap\search\all_html5.css" />
+    <Content Include="Resources\wap\search\base2013.css" />
     <Content Include="testscroll.html" />
     <Content Include="Views\GoodsManager\EditGoodsInfo.cshtml">
       <SubType>Code</SubType>
@@ -411,6 +417,7 @@
     <Content Include="Views\GoodsManager\EditCategoryInfo.cshtml" />
     <Content Include="Views\pay\userpay.cshtml" />
     <Content Include="Views\ConsumerInfo\ListPage.cshtml" />
+    <Content Include="Views\GoodsList\Search.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

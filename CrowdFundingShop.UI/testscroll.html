@@ -1,100 +1,250 @@
-﻿<!DOCTYPE html>
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>一元易购物</title>
-    <meta charset="utf-8">
-    <meta content="width=device-width, minimum-scale=1,initial-scale=1, maximum-scale=1, user-scalable=1;" id="viewport" name="viewport" />
-    <!--离线应用的另一个技巧-->
-    <meta content="yes" name="apple-mobile-web-app-capable" />
-    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
-    <meta content="telephone=no" name="format-detection" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>三种背景颜色左右滑动菜单导航</title>
+    <style>
+        .webwidget_menu_glide {
+            padding: 5px;
+            -moz-border-radius-topright: 10px;
+            -moz-border-radius-topleft: 10px;
+            -webkit-border-top-left-radius: 10px;
+            -webkit-border-top-right-radius: 10px;
+            -khtml-border-radius-topright: 10px;
+            -khtml-border-radius-topleft: 10px;
+            border-radius-topright: 10px;
+            border-radius-topleft: 10px;
+            -moz-border-radius-bottomright: 10px;
+            -moz-border-radius-bottomleft: 10px;
+            -webkit-border-bottom-left-radius: 10px;
+            -webkit-border-bottom-right-radius: 10px;
+            -khtml-border-radius-bottomright: 10px;
+            -khtml-border-radius-bottomleft: 10px;
+            border-radius-bottomright: 10px;
+            border-radius-bottomleft: 10px;
+            border-radius: 10px;
+        }
+
+            .webwidget_menu_glide .webwidget_menu_glide_sprite {
+                width: 100px;
+                height: 20px;
+                background-color: fuchsia;
+                position: absolute;
+                -moz-border-radius-topright: 10px;
+                -moz-border-radius-topleft: 10px;
+                -webkit-border-top-left-radius: 10px;
+                -webkit-border-top-right-radius: 10px;
+                -khtml-border-radius-topright: 10px;
+                -khtml-border-radius-topleft: 10px;
+                border-radius-topright: 10px;
+                border-radius-topleft: 10px;
+                -moz-border-radius-bottomright: 10px;
+                -moz-border-radius-bottomleft: 10px;
+                -webkit-border-bottom-left-radius: 10px;
+                -webkit-border-bottom-right-radius: 10px;
+                -khtml-border-radius-bottomright: 10px;
+                -khtml-border-radius-bottomleft: 10px;
+                border-radius-bottomright: 10px;
+                border-radius-bottomleft: 10px;
+                border-radius: 10px;
+            }
+
+            .webwidget_menu_glide ul {
+                padding: 0px;
+                margin: 0px;
+                font-family: Arial;
+            }
+
+                .webwidget_menu_glide ul li {
+                    float: left;
+                    list-style: none;
+                    position: relative;
+                    text-align: center;
+                    margin-right: 10px;
+                    width: 100px;
+                }
+
+                    .webwidget_menu_glide ul li a {
+                        color: black;
+                        text-decoration: none;
+                        font-weight: bold;
+                    }
+
+                    .webwidget_menu_glide ul li ul {
+                        -moz-border-radius-bottomright: 7px;
+                        -moz-border-radius-bottomleft: 7px;
+                        -webkit-border-bottom-left-radius: 7px;
+                        -webkit-border-bottom-right-radius: 7px;
+                        -khtml-border-radius-bottomright: 7px;
+                        -khtml-border-radius-bottomleft: 7px;
+                        border-radius-bottomright: 7px;
+                        border-radius-bottomleft: 7px;
+                        border-radius: 7px;
+                        padding-bottom: 5px;
+                        position: absolute;
+                        z-index: 999999;
+                        display: none;
+                    }
+
+                        .webwidget_menu_glide ul li ul li {
+                            -moz-border-radius-topright: 0px;
+                            -moz-border-radius-topleft: 0px;
+                            -webkit-border-top-left-radius: 0px;
+                            -webkit-border-top-right-radius: 0px;
+                            -khtml-border-radius-topright: 0px;
+                            -khtml-border-radius-topleft: 0px;
+                            border-radius-topright: 0px;
+                            border-radius-topleft: 0px;
+                            border-radius: 0px;
+                            margin: 0px;
+                            float: none;
+                            border: none;
+                            word-wrap: break-word;
+                        }
+
+                            .webwidget_menu_glide ul li ul li a {
+                                padding-left: 5px;
+                                padding-right: 5px;
+                                font-weight: normal;
+                            }
+    </style>
+    </link>
+    <!--<script type="text/javascript" src="jquery-1.6.2.min.js"></script>-->
     <script src="Resources/js/jquery-1.9.1.min.js"></script>
-    <!--@*滑动引用*@-->
-    <script src="Resources/wap/js/iscroll.js"></script>
+    <script type="text/javascript">
+        (function (a) {
+            a.fn.webwidget_menu_glide = function (p) {
+                var p = p || {};
+                var f = p && p.menu_text_size ? p.menu_text_size : "12px";
+                var g = p && p.menu_text_color ? p.menu_text_color : "blue";
+                var h = p && p.menu_margin ? p.menu_margin : "10px";
+                var i = p && p.menu_width ? p.menu_width : "100px";
+                var j = p && p.menu_height ? p.menu_height : "20px";
+                var k = p && p.menu_sprite_color ? p.menu_sprite_color : "red";
+                var l = p && p.menu_background_color ? p.menu_background_color : "black";
+                var m = p && p.sprite_speed ? p.sprite_speed : "fast";
+                f += "px";
+                h += "px";
+                i += "px";
+                j += "px";
+                var n = a(this);
+                if (n.children("ul").length == 0 || n.find("li").length == 0) {
+                    n.append("Require menu content");
+                    return null
+                }
+                s_m(n.children("ul").children("li"), h, i, j);
+                s_m_t_c(n.find("a"), g, j, f);
+                n.css("background-color", l);
+                if (n.children("ul").children("li").is(".current")) {
+                    var o = n.children("ul").children("li").filter(".current").offset()
+                } else {
+                    var o = n.children("ul").children("li:first").offset()
+                }
+                var q = o.left + 'px';
+                s_m_s_c(n.find(".webwidget_menu_glide_sprite"), k, i, j, q);
+                n.children("ul").children("li").hover(function () {
+                    var b = $(this).offset();
+                    var c = b.left + 'px';
+                    n.find(".webwidget_menu_glide_sprite").stop().animate({
+                        left: c
+                    }, m)
+                }, function () {
+                    n.find(".webwidget_menu_glide_sprite").stop().animate({
+                        left: q
+                    }, m)
+                });
+                n.children("ul").children("li").children("ul").children("li").hover(function () { }, function () { });
+                function s_m_t_c(a, b, c, d) {
+                    a.css("color", b);
+                    a.css("line-height", c);
+                    a.css("font-size", d)
+                }
+                function s_m(a, b, c, d) {
+                    style = "margin-right:" + b + "; width: " + c + "; height: " + d + ";";
+                    a.attr("style", style)
+                }
+                function s_m_s_c(a, b, c, d, e) {
+                    a.css("background-color", b);
+                    a.css("width", c);
+                    a.css("height", d);
+                    a.css("left", e)
+                }
+            }
+        })(jQuery);
+    </script>
 </head>
 <body>
-    <div id="wrapper" style="background-color:green;height:200px">
-        <div class="scroll">
-            这个区域可以滑动
-        </div>
-    </div>
+    <table width="600">
+        <tr>
+            <td>
+                <h2>Demo1</h2>
+                <br />
+                <br />
+                <script language="javascript" type="text/javascript">
+                    $(function () {
+                        $("#webwidget_menu_glide1").webwidget_menu_glide({ menu_width: "100", menu_height: "30", menu_text_size: "15", menu_text_color: "#FFF", menu_sprite_color: "red", menu_background_color: "#C91A3E", menu_margin: "5", sprite_speed: "normal", container: "webwidget_menu_glide1" });
+                    });
+                </script>
+                <div id="webwidget_menu_glide1" class="webwidget_menu_glide">
+                    <div class="webwidget_menu_glide_sprite"></div>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">News</a></li>
+                        <li class="current"><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">More...</a></li>
+                    </ul>
+                    <div style="clear: both"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h2>Demo2</h2>
+                <br />
+                <br />
+                <script language="javascript" type="text/javascript">
+                    $(function () {
+                        $("#webwidget_menu_glide2").webwidget_menu_glide({ menu_width: "100", menu_height: "30", menu_text_size: "15", menu_text_color: "#CCC", menu_sprite_color: "#666", menu_background_color: "#000", menu_margin: "5", sprite_speed: "normal", container: "webwidget_menu_glide2" });
+                    });
+                </script>
+                <div id="webwidget_menu_glide2" class="webwidget_menu_glide">
+                    <div class="webwidget_menu_glide_sprite"></div>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">News</a></li>
+                        <li class="current"><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">More...</a></li>
+                    </ul>
+                    <div style="clear: both"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h2>Demo3</h2>
+                <br />
+                <br />
+                <script language="javascript" type="text/javascript">
+                    $(function () {
+                        $("#webwidget_menu_glide3").webwidget_menu_glide({ menu_width: "100", menu_height: "23", menu_text_size: "12", menu_text_color: "#FFF", menu_sprite_color: "#86C7EF", menu_background_color: "#0F67A1", menu_margin: "2", sprite_speed: "normal", container: "webwidget_menu_glide3" });
+                    });
+                </script>
+                <div id="webwidget_menu_glide3" class="webwidget_menu_glide">
+                    <div class="webwidget_menu_glide_sprite"></div>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">News</a></li>
+                        <li class="current"><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">More...</a></li>
+                    </ul>
+                    <div style="clear: both"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
-<script>
-    //$(function () {
-    //    var startx = 0;
-    //    var endx = 0;
-    //    $("#wrapper").mousedown(function () {
-    //        startx = getX(event);
-    //    });
-    //    $("#wrapper").mouseup(function () {
-    //        var endx = getX(event);
-    //        if (startx > endx) {
-    //            alert("向右")
-    //        }
-    //        else if (startx < endx) {
-    //            alert("向左")
-    //        }
-    //        else {
-    //            alert(startx + "," + endx);
-    //        }
-    //    });
-    //});
-    //function getX(e) {
-    //    e = e || window.event;
-    //    return e.pageX || e.clientX + document.body.scroolLeft;
-    //}
-    var startx = 0;
-    var endx = 0;
-    $(function () {
-        document.addEventListener("touchstart", fn, false);
-        document.addEventListener("touchend", fn, false);
-        document.addEventListener("touchmove", fn, false);
-    })
-    function fn(event) {
-        var event = event || window.event;
-        switch (event.type) {
-            case "touchstart":
-                startx = event.pageX;
-                break;
-            case "touchend":
-                endx = event.pageX;
-                break;
-            case "touchmove":
-                event.preventDefault();//取消事件的默认动作
-                break;
-        }
-        //alert(event.type);
-        test();
-    }
-
-    function test() {
-        if (startx > endx) {
-            alert("由" + startx + "到" + endx + "向左")
-        }
-        else if (startx < endx) {
-            alert("由" + startx + "到" + endx + "向右")
-        }
-        else {
-            alert("由" + startx + "到" + endx + "没动")
-        }
-    }
-    //$(document).ready(function () {
-    //    var startx = 0;
-    //    var endx = 0;
-    //    $(document).touchstart(function (event) {
-    //        startx = event.pageX;
-    //    }).touchend(function () {
-    //        endx = event.pageX;
-    //        if (startx > endx) {
-    //            alert("由" + startx + "到" + endx + "向左")
-    //        }
-    //        else if (startx < endx) {
-    //            alert("由" + startx + "到" + endx + "向右")
-    //        }
-    //        else {
-    //            alert("由" + startx + "到" + endx + "没动")
-    //        }
-    //    });
-    //});
-</script>

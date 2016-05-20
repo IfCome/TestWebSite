@@ -1,0 +1,270 @@
+﻿@{
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gbk">
+    <title>分类</title>
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="~/Resources/wap/search/all_html5.css" rel="stylesheet" />
+    <link href="~/Resources/wap/search/base2013.css" rel="stylesheet" />
+
+    <link rel="apple-touch-icon-precomposed" href="">
+    <script type="text/javascript">
+        var _winLocation = window.location.href;//获得当前页面的路径，根据路径规则进行逐页替换
+        var _isWebKit = '__proto__' in {};//是否是webkit内核
+        if (_isWebKit) {//如果是webkit内核，则分模块使用zepto
+            //要使用zeptojs的路径列表，可以做为分模块替换的开关
+            var _locationList = new Array();
+            //活动模块
+            _locationList.push('../activity/proActList');
+            _locationList.push('../activity/proActWareList');
+            _locationList.push('../activity/list');
+            //商品分类模块
+            _locationList.push('./');
+            //快讯模块
+            _locationList.push('../newslist.html');
+            _locationList.push('../newslist/');
+            _locationList.push('../news/');
+            //机票模块
+            _locationList.push('../airline/');
+            //酒店模块
+            _locationList.push('../hotel/');
+            //团购模块
+            _locationList.push('../tuan/');
+            //首页相关
+            _locationList.push('../hotbrand.html');//品牌馆
+            //商品筛选相关
+            _locationList.push('../ware/expandSort.action');
+            _locationList.push('../ware/categoryFilter.action');
+            _locationList.push('../ware/search.action');
+            _locationList.push('../products/');
+
+            _locationList.push('../notice/');//通告模块
+            _locationList.push('../coupons/');//随地惠模块
+            _locationList.push('../chongzhi/');//手机充值模块
+            _locationList.push('../comment/');//手机推荐模块
+            _locationList.push('../pay/');//支付
+            _locationList.push('../order/');//订单
+            var _needReplace = false;
+            //如果当前路径符合要使用的路径规则，则进行替换
+            for (var i = 0; i < _locationList.length; i++) {
+                if (_winLocation.indexOf(_locationList[i]) != -1) {
+                    _needReplace = true;
+                    break;
+                }
+            }
+            //如果是首页的话，则使用zepto
+            var _tmp = _winLocation.replace(/(^http:\/\/)|(\/*$)/g, '');
+            if (_tmp.indexOf('/') < 0 || (_tmp.split('/').length <= 2 && _tmp.indexOf('/index') >= 0)) {
+                _needReplace = true;
+            }
+            //如果是商品详情页的话，则使用zepto
+            var _dlocationList = new Array();
+            _dlocationList.push(/\/product\/([0-9]+)\.html/);
+            _dlocationList.push(/\/orderComment\/([0-9]+)\.html/);
+            _dlocationList.push(/\/consultations\/([0-9]+)\.html/);
+            _dlocationList.push(/\/consultations\/([0-9]+)-([0-9]+)\.html/);
+            _dlocationList.push(/\/comments\/([0-9]+)\.html/);
+            for (var i = 0, len = _dlocationList.length; i < len; i++) {
+                if (_dlocationList[i].test(_winLocation)) {
+                    _needReplace = true;
+                    break;
+                }
+            }
+            if (_needReplace) {
+                document.write('<script src="../js/zepto.min.js"><\/script>');
+                document.write('<script type="text/javascript">window.jQuery=window.Zepto;<\/script>');
+            } else {
+                document.write('<script src="../js/jquery-1.6.2.min.js"><\/script>');
+            }
+        } else {//如果是非webkit内核直接使用jquery
+            document.write('<script src="../js/jquery-1.6.2.min.js"><\/script>');
+        }
+    </script>
+
+    <script src="~/Resources/wap/js/search/jquery-1.6.2.min.js"></script>
+    <script src="~/Resources/wap/js/search/common.js"></script>
+    <script src="~/Resources/wap/js/search/spin.min.js"></script>
+    <style></style>
+</head>
+
+<body id="body" class="s">
+    <a name="top"></a>
+    <header>
+        <div class="new-header">
+            <a href="javascript:pageBack();" class="new-a-back" id="backUrl"><span>返回</span></a>
+            <h2>商品分类</h2>
+            <a href="javascript:void(0)" id="btnJdkey" class="new-a-jd"><span>商城键</span></a>
+        </div>
+        <div class="new-jd-tab" style="display:none" id="jdkey">
+            <div class="new-tbl-type">
+                <a href="" class="new-tbl-cell">
+                    <span class="icon">首页</span>
+                    <p style="color:#6e6e6e;">首页</p>
+                </a>
+                <a href="" class="new-tbl-cell">
+                    <span class="icon2">分类搜索</span>
+                    <p style="color:#6e6e6e;">分类搜索</p>
+                </a>
+                <a href="javascript:void(0)" id="html5_cart" class="new-tbl-cell">
+                    <span class="icon3">购物车</span>
+                    <p style="color:#6e6e6e;">购物车</p>
+                </a>
+                <a href="" class="new-tbl-cell">
+                    <span class="icon4">我的商城</span>
+                    <p style="color:#6e6e6e;">我的商城</p>
+                </a>
+            </div>
+        </div>
+    </header>
+    <form action="/ware/search.action" id="searchForm">
+        <input name="sid" value="e0d0f025d6d3e8e8d7be5428c43ef911" type="hidden">
+        <div class="new-cate-srch">
+            <div class="new-srch-box">
+                <input name="keyword" id="newkeyword" type="text" required="" class="new-srch-input" value="点击此处搜索商品"><a href="javascript:void(0);" target="_self" onclick="cancelHotWord()" class="new-s-close"></a><a href="javascript:void(0)" target="_self" onclick="$('#searchForm').submit();" class="new-s-srch"><span></span></a>
+            </div>
+            <div class="new-srch-lst" id="shelper" style="display:none">
+            </div>
+        </div>
+    </form>
+
+    <div class="new-ct">
+        <div class="new-category">
+            <ul class="new-category-lst"></ul>
+        </div>
+    </div>
+    <select id="slctParent"></select>
+    <select id="goods-category"></select>
+    <script src="~/Resources/wap/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        function touch() {
+            $("li.new-category-li>a").click(function () {
+                var obj = $(this).parent().children().eq(1);
+                if (obj.css('display') == 'none') {
+                    $(".new-category2-lst").hide();
+                    obj.fadeIn();
+                    $("li.new-category-li>a").removeClass("new-category-a new-on").addClass("new-category-a");
+                    $(this).addClass("new-category-a new-on");
+                }
+                else {
+                    obj.fadeOut();
+                    $("li.new-category-li>a").removeClass("new-category-a new-on").addClass("new-category-a");
+                    $(this).removeClass("new-category-a new-on").addClass("new-category-a");
+                }
+            })
+        }
+    </script>
+
+    <div style="display:none;">
+        @*<img src="../ja.jsp@&amp;utmn=547066117&amp;utmr=-&amp;utmp=_252Fcategory_252Fall.action_253Fsid_253De0d0f025d6d3e8e8d7be5428c43ef911%26res057A14E15A">*@
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            LoadCategory(0, 1);
+            $("#slctParent").on("change", function () {
+                LoadCategory($(this).val(), 2)
+            });
+
+            $("#unsupport").hide();
+            if (!testLocalStorage()) { //not support html5
+                if (0 != 0 && !$clearCart && !$teamId) {
+                    $("#html5_cart_num").text(0 > 0 > 0);
+                }
+            } else {
+                updateToolBar('');
+            }
+
+            $("#html5_cart").click(function () {
+                //	syncCart('e0d0f025d6d3e8e8d7be5428c43ef911',true);
+                location.href = '../cart/cart.action';
+            });
+        });
+        function reSearch() {
+            var depCity = window.sessionStorage.getItem("airline_depCityName");
+            if (testSessionStorage() && isNotBlank(depCity) && !/^\s*$/.test(depCity) && depCity != "") {
+                var airStr = '<form action="../airline/list.action" method="post" id="reseach">'
+                + '<input type="hidden" name="sid"  value="e0d0f025d6d3e8e8d7be5428c43ef911"/>'
+                + '<input type="hidden" name="depCity" value="' + window.sessionStorage.getItem("airline_depCityName") + '"/>'
+                + '<input type="hidden" name="arrCity" value="' + window.sessionStorage.getItem("airline_arrCityName") + '"/>'
+                + '<input type="hidden" name="depDate" value="' + window.sessionStorage.getItem("airline_depDate") + '"/>'
+                + '<input type="hidden" name="depTime" value="' + window.sessionStorage.getItem("airline_depTime") + '"/>'
+                + '<input type="hidden" name="classNo" value="' + window.sessionStorage.getItem("airline_classNo") + '"/>'
+                + '</form>';
+                $("body").append(airStr);
+                $("#reseach").submit();
+            } else {
+                window.location.href = '../airline/index.action@sid=e0d0f025d6d3e8e8d7be5428c43ef911';
+            }
+        }
+        //banner 关闭点击
+        $('.div_banner_close').click(function () {
+            $('#div_banner_header').unbind('click');
+            jQuery.post('../index/addClientCookieVal.json', function (d) {
+                $('#div_banner_header').slideUp(500);
+            });
+        });
+        //banner 下载点击
+        $('.div_banner_download').click(function () {
+            var downloadUrl = $(this).attr('url');
+            jQuery.post('../index/addClientCookieVal.json', function (d) {
+                window.location.href = downloadUrl;
+            });
+        });
+
+
+        function LoadCategory(parentID, type) {
+            $.get('@Url.RouteUrl(new { controller = "GoodsList", action = "GetCategoryInfo" })', { ParentID: parentID }, function (result) {
+                //清除第二级列表
+                $('#goods-category option').remove();
+                if (result) {
+                    if (type == 1) {
+                        if (result.Rows != null && result.Rows.length > 0) {
+                            var selected = "";
+                            for (var i = 0; i < result.Rows.length; i++) {
+                                var row = result.Rows[i];
+                                $(".new-category-lst").append('<li  id="aParent' + row.ID + '" class="new-category-li">' +
+                                                                                      '<a href="javascript:void(0)" class="new-category-a"><span class="icon"></span>' + row.CategoryName +
+                                                                                      '</a>' +
+                                                                                 '</li>');
+                                LoadCategory(row.ID, 2);
+                            }
+                        }
+                    }
+                    else if (type == 2) {
+                        if (result.Rows != null && result.Rows.length > 0) {
+                            var top = '<ul class="new-category2-lst" id="category9987" style="display: ;">' +
+                                                '<li class="new-category2-li">'
+                            var foot = '</li>' +
+                                            '</ul>';
+                            var liHtml = "";
+                            for (var i = 0; i < result.Rows.length; i++) {
+                                var row = result.Rows[i];
+                                if (i == 0) {
+                                    liHtml += (top + '<a href="" class="new-category2-a"><span class="new-bar"></span>' + row.CategoryName + '</a>');
+                                }
+                                else if (i % 3 == 0) {
+                                    liHtml += (foot + top + '<a href="" class="new-category2-a"><span class="new-bar"></span>' + row.CategoryName + '</a>');
+                                }
+                                else if (i == result.Rows.length - 1) {
+                                    liHtml += ('<a href="" class="new-category2-a"><span class="new-bar"></span>' + row.CategoryName + '</a>' + foot);
+                                }
+                                else {
+                                    liHtml += ('<a href="" class="new-category2-a"><span class="new-bar"></span>' + row.CategoryName + '</a>');
+                                }
+                                //$('#goods-category').append("<option id='opParent" + i + "' value='" + row.ID + "' " + selected + ">" + row.CategoryName + "</option>")
+                            }
+                            $("#aParent" + parentID).append(liHtml);
+                        }
+                    }
+                }
+            }, 'json');
+        }
+    </script>
+</body>
+</html>

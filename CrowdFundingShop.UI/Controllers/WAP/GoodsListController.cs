@@ -12,7 +12,7 @@ using System.Web.Script.Serialization;
 
 namespace CrowdFundingShop.UI.Controllers.WAP
 {
-    public class GoodsListController : WAPBaseController
+    public class GoodsListController : Controller
     {
         //
         // GET: /GoodsList/
@@ -59,7 +59,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
-            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID, "WAP");
+            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID, "PC");
             if (categoryInfoList != null)
             {
                 return Json(new
@@ -146,6 +146,11 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                 msg = "删除失败，请重试";
             }
             return Json(new { Message = msg, ErrorType = errorType }, JsonRequestBehavior.AllowGet);
+        }
+        //搜索页
+        public ActionResult Search()
+        {
+            return View();
         }
     }
 }
