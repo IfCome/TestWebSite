@@ -59,7 +59,7 @@ namespace CrowdFundingShop.UI.Controllers.WAP
         public ActionResult GetCategoryInfo(int parentID)
         {
             List<Model.CategoryInfo> categoryInfoList = new List<Model.CategoryInfo>();
-            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID, "PC");
+            categoryInfoList = BLL.CategoryInfoBll.GetListByParentID(parentID, "WAP");
             if (categoryInfoList != null)
             {
                 return Json(new

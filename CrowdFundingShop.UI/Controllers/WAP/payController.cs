@@ -56,12 +56,12 @@ namespace CrowdFundingShop.UI.Controllers.WAP
                         int total_fee = 0;
                         foreach (var item in outModel)
                         {
-                            body += item.GoodsName + "X" + item.StoreCount + "；";
+                            body += item.GoodsName + "*" + item.StoreCount + "； ";
                             total_fee += Converter.TryToInt32(item.StoreCount) * 100;
                         }
                         //string body = "测试机";
                         /*******************************************测试测试测试*************************************************/
-                        total_fee = 1;
+                        //total_fee = 1;
                         /*******************************************测试测试测试*************************************************/
                         string orderno = DateTime.Now.ToString("yyyyMMddhhmmss");
 
